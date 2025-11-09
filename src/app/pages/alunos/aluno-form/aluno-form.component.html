@@ -1,0 +1,192 @@
+<div class="container mt-4 mb-5">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="mb-0">
+        {{ isEditMode ? 'Editar Aluno' : 'Novo Aluno' }} - Etapa {{ currentStep }} de 3
+      </h4>
+    </div>
+
+    <div class="card-body" *ngIf="!isLoading">
+      <div class="progress mb-4" style="height: 25px;">
+        <div class="progress-bar" role="progressbar"
+             [style.width.%]="(currentStep / 3) * 100"
+            [class.bg-success]="currentStep === 3">
+          Etapa {{ currentStep }}
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+
+        <div [hidden]="currentStep !== 1" formGroupName="dadosPessoais">
+          <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-person-fill"></i> Etapa 1: Dados Pessoais</h5>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nome" class="form-label">Nome Completo</label>
+              <input type="text" class="form-control" id="nome" formControlName="nome"
+                    [class.is-invalid]="dadosPessoais.get('nome')!.invalid && dadosPessoais.get('nome')!.touched">
+              <div class="invalid-feedback">Nome é obrigatório.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="nomeSocial" class="form-label">Nome Social</label>
+              <input type="text" class="form-control" id="nomeSocial" formControlName="nomeSocial">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+              <input type="date" class="form-control" id="dataNascimento" formControlName="dataNascimento">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="cpf" class="form-label">CPF</label>
+              <input type="text" class="form-control" id="cpf" formControlName="cpf" placeholder="000.000.000-00">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="telefoneEstudante" class="form-label">Telefone (Estudante)</label>
+              <input type="tel" class="form-control" id="telefoneEstudante" formControlName="telefoneEstudante">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="foto" class="form-label">URL da Foto (Opcional)</label>
+            <input type="text" class="form-control" id="foto" formControlName="foto" placeholder="http://...">
+          </div>
+        </div>
+
+        <div [hidden]="currentStep !== 2" formGroupName="dadosAcademicos">
+          <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-mortarboard-fill"></i> Etapa 2: Dados Académicos</h5>
+
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="matricula" class="form-label">Matrícula</label>
+                <input type="text" class="form-control" id="matricula" formControlName="matricula"
+                       [class.is-invalid]="dadosAcademicos.get('matricula')!.invalid && dadosAcademicos.get('matricula')!.touched">
+              <div class="invalid-feedback">Matrícula é obrigatória.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="processoSipac" class="form-label">Nº Processo Sipac</label>
+                <input type="text" class="form-control" id="processoSipac" formControlName="processoSipac">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="cursoId" class="form-label">Curso</label>
+              <select id="cursoId" class="form-select" formControlName="cursoId"
+                      [class.is-invalid]="dadosAcademicos.get('cursoId')!.invalid && dadosAcademicos.get('cursoId')!.touched">
+                <option [ngValue]="null" disabled>Selecione...</option>
+                <option *ngFor="let curso of (cursos$ | async)" [ngValue]="curso.id">{{ curso.nome }}</option>
+              </select>
+              <div class="invalid-feedback">Curso é obrigatório.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="turmaId" class="form-label">Turma</label>
+              <select id="turmaId" class="form-select" formControlName="turmaId"
+                      [class.is-invalid]="dadosAcademicos.get('turmaId')!.invalid && dadosAcademicos.get('turmaId')!.touched">
+                <option [ngValue]="null" disabled>Selecione...</option>
+                <option *ngFor="let turma of (turmas$ | async)" [ngValue]="turma.id">{{ turma.nome }}</option>
+              </select>
+            <div class="invalid-feedback">Turma é obrigatória.</div>
+          </div>
+        </div>
+
+          <hr>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Prioridade de Atendimento</label>
+              <select class="form-select" formControlName="prioridade">
+                <option value="Baixa">Baixa</option>
+                <option value="Média">Média</option>
+                <option value="Alta">Alta</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Necessita de prova em espaço separado?</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="provaSim" [value]="true" formControlName="provaOutroEspaco">
+                  <label class="form-check-label" for="provaSim">Sim</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" id="provaNao" [value]="false" formControlName="provaOutroEspaco">
+                  <label class="form-check-label" for="provaNao">Não</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div [hidden]="currentStep !== 3" formGroupName="dadosNaapi">
+          <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-shield-shaded"></i> Etapa 3: Informações do NAAPI</h5>
+          <p class="text-muted">Informações de uso interno do NAAPI, baseadas em laudos e relatórios.</p>
+
+          <div class="mb-3">
+            <label class="form-label">Diagnósticos</label>
+            <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+              <div *ngIf="(diagnosticos$ | async) as diagnosticos">
+                <div *ngFor="let diag of diagnosticos" class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                        [value]="diag.id"
+                        [id]="'diag-' + diag.id"
+                        [checked]="isChecked(diag.id)"
+                        (change)="onDiagnosticoChange($event)">
+                  <label class="form-check-label" [for]="'diag-' + diag.id">
+                    {{ diag.sigla ? diag.sigla + ' - ' : '' }} {{ diag.nome }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="adaptacoes" class="form-label">Adaptações Necessárias</label>
+            <textarea class="form-control" id="adaptacoes" rows="3" formControlName="adaptacoesNecessarias"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="necessidades" class="form-label">Necessidades (conforme Relatórios Médicos)</label>
+            <textarea class="form-control" id="necessidades" rows="3" formControlName="necessidadesRelatoriosMedicos"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="anotacoes" class="form-label">Anotações Gerais (NAAPI)</label>
+            <textarea class="form-control" id="anotacoes" rows="3" formControlName="anotacoesNaapi"></textarea>
+          </div>
+        </div>
+
+        <div class="card-footer bg-light d-flex justify-content-between">
+          <div>
+            <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+              <i class="bi bi-x-lg"></i> Cancelar
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" [hidden]="currentStep === 1" (click)="prevStep()">
+              <i class="bi bi-chevron-left"></i> Voltar
+            </button>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary" [hidden]="currentStep === 3" (click)="nextStep()">
+              Próximo <i class="bi bi-chevron-right"></i>
+            </button>
+            <button type="submit" class="btn btn-success" [disabled]="isLoading" [hidden]="currentStep !== 3">
+              <i class="bi bi-check-lg"></i>
+              {{ isEditMode ? 'Salvar Alterações' : 'Concluir Cadastro' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="isLoading" class="card-body text-center p-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+    </div>
+
+  </div>
+</div>
