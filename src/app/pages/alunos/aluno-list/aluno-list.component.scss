@@ -1,0 +1,50 @@
+.aluno-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--naapi-shadow-lg) !important;
+  }
+}
+
+.aluno-card-img-container {
+  position: relative;
+  width: 100%;
+  padding-top: 60%; /* Proporção da imagem (ex: 3:2) */
+  overflow: hidden;
+}
+
+.aluno-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Garante que a imagem cubra o espaço */
+  transition: transform 0.3s ease;
+}
+
+.aluno-card:hover .aluno-card-img {
+  transform: scale(1.05); /* Efeito de zoom suave */
+}
+
+.aluno-card-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-size: 0.8rem;
+}
+
+/* NOVO: Estilo para os diagnósticos (cor do botão) */
+.aluno-card-diagnosticos {
+  max-height: 70px;
+  overflow-y: auto;
+
+  .aluno-diag-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: var(--naapi-primary); /* Cor do botão! */
+    color: #fff;
+  }
+}

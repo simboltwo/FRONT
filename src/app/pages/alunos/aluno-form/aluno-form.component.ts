@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Aluno, AlunoInsert, Curso, Diagnostico, Turma } from '../../../core/models/aluno.model';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { Aluno, AlunoInsert, Curso, Diagnostico, Turma } from '../../../core/models/aluno.model'; // Importa o modelo CORRIGIDO
 import { AlunoService } from '../../../core/services/aluno.service';
 import { CursoService, DiagnosticoService, TurmaService } from '../../../core/services/api.service';
 
@@ -33,6 +33,10 @@ export class AlunoFormComponent implements OnInit {
   protected isLoading = false;
   protected errorMessage: string | null = null;
 
+  // Para o Upload
+  protected previewUrl: string | ArrayBuffer | null = "https://via.placeholder.com/150.png?text=Preview";
+  protected currentFotoUrl: string | null = null;
+
   // Dados
   protected cursos$!: Observable<Curso[]>;
   protected turmas$!: Observable<Turma[]>;
@@ -54,20 +58,20 @@ export class AlunoFormComponent implements OnInit {
         dataNascimento: [''],
         cpf: [''],
         telefoneEstudante: [''],
-        foto: ['']
+        fotoFile: [null] // Control para o ficheiro
       }),
       // Etapa 2: Dados Académicos
       dadosAcademicos: this.fb.group({
         matricula: ['', [Validators.required]],
         cursoId: [null, [Validators.required]],
         turmaId: [null, [Validators.required]],
-        prioridade: ['Baixa', [Validators.required]], // "Baixa", "Média", "Alta"
-        provaOutroEspaco: [false, [Validators.required]], // Sim/Não
-        processoSipac: [''] // Nº Processo Sipac
+        prioridade: ['Baixa', [Validators.required]],
+        provaOutroEspaco: [false, [Validators.required]],
+        processoSipac: ['']
       }),
       // Etapa 3: Dados NAAPI
       dadosNaapi: this.fb.group({
-        diagnosticosId: this.fb.control([]), // Checkboxes
+        diagnosticosId: this.fb.control([]),
         adaptacoesNecessarias: [''],
         necessidadesRelatoriosMedicos: [''],
         anotacoesNaapi: ['']
@@ -75,7 +79,7 @@ export class AlunoFormComponent implements OnInit {
     });
   }
 
-  // 2. Carrega dados (sem mudanças)
+  // 2. Carrega dados
   private loadDropdownData(): void {
     this.cursos$ = this.cursoService.findAll();
     this.turmas$ = this.turmaService.findAll();
@@ -91,16 +95,16 @@ export class AlunoFormComponent implements OnInit {
     }
   }
 
-  // 4. Carrega dados do Aluno (Atualizado para os novos campos)
+  // 4. Carrega dados do Aluno
   private loadAlunoData(id: number): void {
     this.isLoading = true;
+    // Usamos o modelo 'Aluno' CORRIGIDO
     this.alunoService.findById(id).subscribe({
-      next: (aluno: any) => { // Usando 'any' por enquanto, AlunoDTO precisa ser atualizado
+      next: (aluno: Aluno) => {
         this.mainForm.patchValue({
           dadosPessoais: {
             nome: aluno.nome,
             nomeSocial: aluno.nomeSocial,
-            foto: aluno.foto,
             dataNascimento: aluno.dataNascimento,
             cpf: aluno.cpf,
             telefoneEstudante: aluno.telefoneEstudante
@@ -120,6 +124,12 @@ export class AlunoFormComponent implements OnInit {
             anotacoesNaapi: aluno.anotacoesNaapi
           }
         });
+
+        if (aluno.foto) {
+          this.currentFotoUrl = aluno.foto;
+          this.previewUrl = aluno.foto;
+        }
+
         this.isLoading = false;
       },
       error: (err) => this.handleError('Falha ao carregar dados do aluno.')
@@ -157,21 +167,38 @@ export class AlunoFormComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Combina os dados das 3 etapas
-    const payload: AlunoInsert = {
+    // --- Lógica do FormData ---
+    const formData = new FormData();
+
+    // 1. Combina os dados JSON (baseado no AlunoInsert CORRIGIDO)
+    const alunoData: AlunoInsert = {
       ...this.dadosPessoais.value,
       ...this.dadosAcademicos.value,
-      ...this.dadosNaapi.value
+      ...this.dadosNaapi.value,
     };
+    // O 'fotoFile' não faz parte do DTO, é enviado separado
+    delete (alunoData as any).fotoFile;
 
+    formData.append('alunoDTO', new Blob([JSON.stringify(alunoData)], {
+      type: 'application/json'
+    }));
+
+    // 2. Adiciona o ficheiro da imagem (se houver um novo)
+    const fotoFile = this.dadosPessoais.get('fotoFile')?.value;
+    if (fotoFile) {
+      formData.append('file', fotoFile);
+    }
+
+    // 3. Chama o serviço de upload (backend deve estar pronto)
+    // Erro 2 é resolvido aqui
     const saveAction = this.isEditMode
-      ? this.alunoService.update(this.alunoId!, payload)
-      : this.alunoService.create(payload);
+      ? this.alunoService.updateWithFile(this.alunoId!, formData)
+      : this.alunoService.createWithFile(formData);
 
+    // Erro 3 é resolvido aqui (adicionando o tipo :Aluno)
     saveAction.subscribe({
-      next: (alunoSalvo) => {
+      next: (alunoSalvo: Aluno) => {
         this.isLoading = false;
-        // Redireciona para a página de detalhes
         this.router.navigate(['/alunos', 'detalhe', alunoSalvo.id]);
       },
       error: (err) => this.handleError(err.error?.message || 'Erro ao salvar aluno.')
@@ -185,7 +212,7 @@ export class AlunoFormComponent implements OnInit {
     let A_ids: number[] = this.dadosNaapi.get('diagnosticosId')?.value || [];
 
     if (target.checked) {
-      A_ids.push(id);
+      if (!A_ids.includes(id)) A_ids.push(id);
     } else {
       A_ids = A_ids.filter(item => item !== id);
     }
@@ -195,6 +222,24 @@ export class AlunoFormComponent implements OnInit {
   isChecked(id: number): boolean {
     const A_ids: number[] = this.dadosNaapi.get('diagnosticosId')?.value || [];
     return A_ids.includes(id);
+  }
+
+  // 8. Lógica para o Upload de Foto
+  onFileChange(event: Event): void {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+
+    if (fileList && fileList.length > 0) {
+      const file = fileList[0];
+
+      this.dadosPessoais.patchValue({ fotoFile: file });
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   // --- Funções Auxiliares ---

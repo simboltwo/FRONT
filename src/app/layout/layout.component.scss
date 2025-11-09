@@ -1,0 +1,84 @@
+/* Estilos para a Navbar Moderna */
+.main-navbar .navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--naapi-primary);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.main-navbar .navbar-logo {
+  height: 35px;
+  width: auto;
+}
+.main-navbar .naapi-logo {
+  height: 40px;
+  margin-left: 10px;
+}
+
+/* Centraliza as abas */
+.main-navbar .navbar-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-navbar .nav-link {
+  font-weight: 500;
+  /* Usa a cor de link pedida */
+  color: var(--naapi-text-link, #555);
+  position: relative;
+  transition: color 0.2s ease;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.main-navbar .nav-link:hover {
+  color: var(--naapi-primary, #000);
+}
+
+/* Cor da aba ativa (cor do botão) */
+.main-navbar .nav-link.active {
+  color: var(--naapi-primary, #000) !important;
+  font-weight: 700;
+}
+
+/* Animação de sublinhado moderno */
+.main-navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; /* Posição do sublinhado */
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 3px;
+  background-color: var(--naapi-primary);
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.main-navbar .nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Ajustes para telemóvel */
+@media (max-width: 991px) {
+  .main-navbar .navbar-center {
+    margin: 0 !important;
+    align-items: flex-start;
+  }
+  .main-navbar .navbar-profile {
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid #eee;
+  }
+  .main-navbar .nav-link {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .main-navbar .nav-link::after {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+}

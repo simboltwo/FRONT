@@ -3,10 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Aluno, AlunoInsert } from '../models/aluno.model';
 
-/**
- * Interface para os filtros de busca de alunos,
- * baseada nos @RequestParams do AlunoController.java.
- */
 export interface AlunoFilter {
   nome?: string;
   matricula?: string;
@@ -15,105 +11,60 @@ export interface AlunoFilter {
   diagnosticoId?: number;
 }
 
-/**
- * URL base da API para Alunos.
- * Estamos usando '/api/alunos' por causa do proxy (proxy.conf.json)
- * que redireciona para http://localhost:8080/alunos.
- */
 const API_URL = '/api/alunos';
 
-/**
- * Serviço responsável por toda a comunicação com a API
- * referente à entidade Aluno.
- */
 @Injectable({
   providedIn: 'root'
 })
 export class AlunoService {
 
-  // Injeta o HttpClient para fazer as requisições
   private http = inject(HttpClient);
 
-  /**
-   * Documentação:
-   * Busca uma lista de alunos.
-   * Suporta filtros opcionais conforme definido no AlunoController.
-   *
-   * @param filters - Um objeto contendo os filtros (nome, matricula, etc.)
-   * @returns Um Observable com a lista de Alunos (AlunoDTO)
-   */
   findAll(filters: AlunoFilter = {}): Observable<Aluno[]> {
-
-    // Constrói os parâmetros de query (HttpParams)
     let params = new HttpParams();
-
-    // Adiciona os filtros se eles existirem
-    if (filters.nome) {
-      params = params.set('nome', filters.nome);
-    }
-    if (filters.matricula) {
-      params = params.set('matricula', filters.matricula);
-    }
-    if (filters.cursoId) {
-      params = params.set('cursoId', filters.cursoId.toString());
-    }
-    if (filters.turmaId) {
-      params = params.set('turmaId', filters.turmaId.toString());
-    }
-    if (filters.diagnosticoId) {
-      params = params.set('diagnosticoId', filters.diagnosticoId.toString());
-    }
-
-    // Faz a chamada GET para /api/alunos?nome=...&matricula=...
+    if (filters.nome) params = params.set('nome', filters.nome);
+    if (filters.matricula) params = params.set('matricula', filters.matricula);
+    if (filters.cursoId) params = params.set('cursoId', filters.cursoId.toString());
+    if (filters.turmaId) params = params.set('turmaId', filters.turmaId.toString());
+    if (filters.diagnosticoId) params = params.set('diagnosticoId', filters.diagnosticoId.toString());
     return this.http.get<Aluno[]>(API_URL, { params });
   }
 
-  /**
-   * Documentação:
-   * Busca um único aluno pelo seu ID.
-   * Mapeia o endpoint: @GetMapping("/{id}")
-   *
-   * @param id - O ID do aluno a ser buscado.
-   * @returns Um Observable com o Aluno (AlunoDTO)
-   */
   findById(id: number): Observable<Aluno> {
     return this.http.get<Aluno>(`${API_URL}/${id}`);
   }
 
-  /**
-   * Documentação:
-   * Cria um novo aluno.
-   * Mapeia o endpoint: @PostMapping
-   *
-   * @param aluno - O objeto AlunoInsert (baseado no AlunoInsertDTO)
-   * @returns Um Observable com o Aluno criado (AlunoDTO)
-   */
-  create(aluno: AlunoInsert): Observable<Aluno> {
-    return this.http.post<Aluno>(API_URL, aluno);
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/${id}`);
   }
 
-  /**
-   * Documentação:
-   * Atualiza um aluno existente.
-   * Mapeia o endpoint: @PutMapping("/{id}")
-   *
-   * @param id - O ID do aluno a ser atualizado.
-   * @param aluno - O objeto AlunoInsert com os dados atualizados (baseado no AlunoInsertDTO)
-   * @returns Um Observable com o Aluno atualizado (AlunoDTO)
-   */
+  // --- MÉTODOS ANTIGOS (Mantidos para referência, mas não usados pelo novo form) ---
+  create(aluno: AlunoInsert): Observable<Aluno> {
+    console.warn('O método "create" está obsoleto. Use "createWithFile".');
+    return this.http.post<Aluno>(API_URL, aluno);
+  }
   update(id: number, aluno: AlunoInsert): Observable<Aluno> {
+    console.warn('O método "update" está obsoleto. Use "updateWithFile".');
     return this.http.put<Aluno>(`${API_URL}/${id}`, aluno);
   }
 
+  // --- NOVOS MÉTODOS PARA UPLOAD DE FICHEIRO ---
+
   /**
-   * Documentação:
-   * Deleta (inativa) um aluno.
-   * Mapeia o endpoint: @DeleteMapping("/{id}")
-   *
-   * @param id - O ID do aluno a ser deletado.
-   * @returns Um Observable<void> (sem conteúdo)
+   * Cria um novo aluno enviando FormData (DTO + Ficheiro)
+   * @param formData O FormData contendo 'alunoDTO' (JSON) e 'file' (Imagem)
    */
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${API_URL}/${id}`);
+  createWithFile(formData: FormData): Observable<Aluno> {
+    // Não definimos Content-Type, o navegador faz isso automaticamente para FormData
+    return this.http.post<Aluno>(API_URL, formData);
+  }
+
+  /**
+   * Atualiza um aluno enviando FormData (DTO + Ficheiro)
+   * @param id O ID do aluno
+   * @param formData O FormData contendo 'alunoDTO' (JSON) e 'file' (Imagem)
+   */
+  updateWithFile(id: number, formData: FormData): Observable<Aluno> {
+    return this.http.put<Aluno>(`${API_URL}/${id}`, formData);
   }
 }

@@ -34,7 +34,7 @@ import { Atendimento } from '../../../core/models/atendimento.model';
     <ng-template #loading><p>Carregando histórico...</p></ng-template>
   `
 })
-export class AtendimentoListComponent implements OnChanges {
+export class AtendimentoList implements OnChanges {
   @Input() alunoId!: number;
 
   protected atendimentos$!: Observable<Atendimento[]>;

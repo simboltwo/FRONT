@@ -1,0 +1,135 @@
+<div class="container-fluid">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4 mb-0"><i class="bi bi-people-fill me-2"></i> Painel de Alunos</h2>
+
+    <button class="btn btn-outline-primary" type="button"
+            data-bs-toggle="collapse" data-bs-target="#filterCollapse"
+            aria-expanded="false" aria-controls="filterCollapse">
+      <i class="bi bi-filter me-1"></i> Filtrar e Buscar
+    </button>
+  </div>
+
+  <div class="collapse" id="filterCollapse">
+    <div class="card shadow-sm mb-4" [formGroup]="filterForm">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-4">
+            <label for="filtroNome" class="form-label">Buscar por Nome</label>
+            <input type="text" id="filtroNome" class="form-control"
+                  formControlName="nome" placeholder="Digite o nome...">
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <label for="filtroCurso" class="form-label">Curso</label>
+            <select id="filtroCurso" class="form-select" formControlName="cursoId">
+              <option [ngValue]="null">Todos os Cursos</option>
+              <option *ngFor="let curso of (cursos$ | async)" [ngValue]="curso.id">
+                {{ curso.nome }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <label for="filtroDiag" class="form-label">Diagnóstico</label>
+            <select id="filtroDiag" class="form-select" formControlName="diagnosticoId">
+              <option [ngValue]="null">Todos os Diagnósticos</option>
+              <option *ngFor="let diag of (diagnosticos$ | async)" [ngValue]="diag.id">
+                {{ diag.sigla }} - {{ diag.nome }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6 col-lg-2 d-flex align-items-end">
+            <button type="button" class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+              <i class="bi bi-x-lg me-1"></i> Limpar Filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let aluno of (alunos$ | async)">
+      <div class="card aluno-card h-100" (click)="viewAluno(aluno)">
+        <div class="aluno-card-img-container">
+          <img [src]="aluno.foto || 'https://via.placeholder.com/300x200.png?text=NAAPI'"
+               class="card-img-top aluno-card-img" alt="Foto do Aluno">
+          <span class="badge aluno-card-badge"
+                [ngClass]="{
+                  'text-bg-danger': aluno.prioridade === 'Alta',
+                  'text-bg-warning': aluno.prioridade === 'Média',
+                  'text-bg-success': aluno.prioridade === 'Baixa'
+                }">
+            <i class="bi bi-shield-fill-exclamation me-1" *ngIf="aluno.prioridade === 'Alta'"></i>
+            Prioridade {{ aluno.prioridade }}
+          </span>
+        </div>
+
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title mb-1 text-link">{{ aluno.nome }}</h5>
+          <small *ngIf="aluno.nomeSocial" class="text-muted d-block mb-2">
+            ({{ aluno.nomeSocial }})
+          </small>
+
+          <p class="card-text text-muted mb-1">
+            <i class="bi bi-person-badge me-2"></i> {{ aluno.matricula }}
+          </p>
+          <p class="card-text text-muted">
+            <i class="bi bi-mortarboard me-2"></i> {{ aluno.curso?.nome || 'N/A' }}
+          </p>
+
+          <div class="aluno-card-diagnosticos mt-2">
+            <span *ngFor="let diag of aluno.diagnosticos.slice(0, 3)"
+                  class="badge aluno-diag-badge me-1 mb-1"
+                  title="{{diag.nome}}">
+              {{ diag.sigla || diag.nome }}
+            </span>
+            <span *ngIf="aluno.diagnosticos.length > 3"
+                  class="badge aluno-diag-badge me-1 mb-1">
+              +{{ aluno.diagnosticos.length - 3 }}
+            </span>
+            <span *ngIf="aluno.diagnosticos.length === 0"
+                  class="badge text-bg-light me-1 mb-1 fst-italic fw-normal">
+              Sem diagnóstico
+            </span>
+          </div>
+
+          <div class="mt-auto d-flex justify-content-end pt-3">
+            <button (click)="editAluno($event, aluno)"
+                    class="btn btn-sm btn-outline-primary me-2"
+                    title="Editar">
+              <i class="bi bi-pencil-fill me-1"></i> Editar
+            </button>
+            <button (click)="deleteAluno($event, aluno)"
+                    class="btn btn-sm btn-outline-danger"
+                    title="Excluir">
+              <i class="bi bi-trash-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12" *ngIf="(alunos$ | async)?.length === 0">
+      <div class="card shadow-sm">
+        <div class="card-body text-center text-muted p-5">
+          <i class="bi bi-info-circle fs-1"></i>
+          <h4 class="mt-3">Nenhum aluno encontrado</h4>
+          <p>Tente ajustar os filtros ou adicione um novo aluno.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!(alunos$ | async)" class="text-center p-5">
+    <div class="spinner-border" style="width: 3rem; height: 3rem; color: var(--naapi-primary);" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+    <p class="mt-2 text-muted">Carregando alunos...</p>
+  </div>
+
+</div>
+
+<button class="fab-add-button" title="Adicionar Novo Aluno" (click)="goToNewAlunoPage()">
+  <i class="bi bi-plus-lg"></i>
+</button>

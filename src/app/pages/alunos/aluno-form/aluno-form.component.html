@@ -10,7 +10,7 @@
       <div class="progress mb-4" style="height: 25px;">
         <div class="progress-bar" role="progressbar"
              [style.width.%]="(currentStep / 3) * 100"
-            [class.bg-success]="currentStep === 3">
+             [class.bg-success]="currentStep === 3">
           Etapa {{ currentStep }}
         </div>
       </div>
@@ -25,55 +25,67 @@
           <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-person-fill"></i> Etapa 1: Dados Pessoais</h5>
 
           <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="nome" class="form-label">Nome Completo</label>
-              <input type="text" class="form-control" id="nome" formControlName="nome"
-                    [class.is-invalid]="dadosPessoais.get('nome')!.invalid && dadosPessoais.get('nome')!.touched">
-              <div class="invalid-feedback">Nome é obrigatório.</div>
+            <div class="col-md-3 text-center mb-3">
+              <label class="form-label">Foto de Perfil</label>
+              <div class="file-upload-quadrant">
+                <img [src]="previewUrl" alt="Preview" class="preview-img">
+                <label for="fotoFile" class="file-upload-label">
+                  <i class="bi bi-camera-fill"></i> Alterar
+                </label>
+                <input type="file" id="fotoFile"
+                       class="form-control"
+                       (change)="onFileChange($event)"
+                       accept="image/png, image/jpeg">
+              </div>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="nomeSocial" class="form-label">Nome Social</label>
-              <input type="text" class="form-control" id="nomeSocial" formControlName="nomeSocial">
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <label for="dataNascimento" class="form-label">Data de Nascimento</label>
-              <input type="date" class="form-control" id="dataNascimento" formControlName="dataNascimento">
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="cpf" class="form-label">CPF</label>
-              <input type="text" class="form-control" id="cpf" formControlName="cpf" placeholder="000.000.000-00">
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="telefoneEstudante" class="form-label">Telefone (Estudante)</label>
-              <input type="tel" class="form-control" id="telefoneEstudante" formControlName="telefoneEstudante">
-            </div>
-          </div>
+            <div class="col-md-9">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="nome" class="form-label">Nome Completo</label>
+                  <input type="text" class="form-control" id="nome" formControlName="nome"
+                         [class.is-invalid]="dadosPessoais.get('nome')!.invalid && dadosPessoais.get('nome')!.touched">
+                  <div class="invalid-feedback">Nome é obrigatório.</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="nomeSocial" class="form-label">Nome Social</label>
+                  <input type="text" class="form-control" id="nomeSocial" formControlName="nomeSocial">
+                </div>
+              </div>
 
-          <div class="mb-3">
-            <label for="foto" class="form-label">URL da Foto (Opcional)</label>
-            <input type="text" class="form-control" id="foto" formControlName="foto" placeholder="http://...">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                  <input type="date" class="form-control" id="dataNascimento" formControlName="dataNascimento">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="cpf" class="form-label">CPF</label>
+                  <input type="text" class="form-control" id="cpf" formControlName="cpf" placeholder="000.000.000-00">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="telefoneEstudante" class="form-label">Telefone (Estudante)</label>
+                <input type="tel" class="form-control" id="telefoneEstudante" formControlName="telefoneEstudante">
+              </div>
+            </div>
           </div>
         </div>
 
         <div [hidden]="currentStep !== 2" formGroupName="dadosAcademicos">
           <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-mortarboard-fill"></i> Etapa 2: Dados Académicos</h5>
-
           <div class="row">
-              <div class="col-md-6 mb-3">
+             <div class="col-md-6 mb-3">
                 <label for="matricula" class="form-label">Matrícula</label>
                 <input type="text" class="form-control" id="matricula" formControlName="matricula"
                        [class.is-invalid]="dadosAcademicos.get('matricula')!.invalid && dadosAcademicos.get('matricula')!.touched">
-              <div class="invalid-feedback">Matrícula é obrigatória.</div>
-            </div>
-            <div class="col-md-6 mb-3">
+                <div class="invalid-feedback">Matrícula é obrigatória.</div>
+             </div>
+             <div class="col-md-6 mb-3">
                 <label for="processoSipac" class="form-label">Nº Processo Sipac</label>
                 <input type="text" class="form-control" id="processoSipac" formControlName="processoSipac">
-            </div>
+             </div>
           </div>
-
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="cursoId" class="form-label">Curso</label>
@@ -91,12 +103,10 @@
                 <option [ngValue]="null" disabled>Selecione...</option>
                 <option *ngFor="let turma of (turmas$ | async)" [ngValue]="turma.id">{{ turma.nome }}</option>
               </select>
-            <div class="invalid-feedback">Turma é obrigatória.</div>
+               <div class="invalid-feedback">Turma é obrigatória.</div>
+            </div>
           </div>
-        </div>
-
-          <hr>
-
+          <hr class="my-3">
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Prioridade de Atendimento</label>
@@ -124,18 +134,16 @@
 
         <div [hidden]="currentStep !== 3" formGroupName="dadosNaapi">
           <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-shield-shaded"></i> Etapa 3: Informações do NAAPI</h5>
-          <p class="text-muted">Informações de uso interno do NAAPI, baseadas em laudos e relatórios.</p>
-
           <div class="mb-3">
             <label class="form-label">Diagnósticos</label>
             <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
               <div *ngIf="(diagnosticos$ | async) as diagnosticos">
                 <div *ngFor="let diag of diagnosticos" class="form-check">
                   <input class="form-check-input" type="checkbox"
-                        [value]="diag.id"
-                        [id]="'diag-' + diag.id"
-                        [checked]="isChecked(diag.id)"
-                        (change)="onDiagnosticoChange($event)">
+                         [value]="diag.id"
+                         [id]="'diag-' + diag.id"
+                         [checked]="isChecked(diag.id)"
+                         (change)="onDiagnosticoChange($event)">
                   <label class="form-check-label" [for]="'diag-' + diag.id">
                     {{ diag.sigla ? diag.sigla + ' - ' : '' }} {{ diag.nome }}
                   </label>
@@ -143,17 +151,14 @@
               </div>
             </div>
           </div>
-
           <div class="mb-3">
             <label for="adaptacoes" class="form-label">Adaptações Necessárias</label>
             <textarea class="form-control" id="adaptacoes" rows="3" formControlName="adaptacoesNecessarias"></textarea>
           </div>
-
           <div class="mb-3">
             <label for="necessidades" class="form-label">Necessidades (conforme Relatórios Médicos)</label>
             <textarea class="form-control" id="necessidades" rows="3" formControlName="necessidadesRelatoriosMedicos"></textarea>
           </div>
-
           <div class="mb-3">
             <label for="anotacoes" class="form-label">Anotações Gerais (NAAPI)</label>
             <textarea class="form-control" id="anotacoes" rows="3" formControlName="anotacoesNaapi"></textarea>
@@ -170,22 +175,32 @@
             </button>
           </div>
           <div>
-            <button type="button" class="btn btn-primary" [hidden]="currentStep === 3" (click)="nextStep()">
+            <button type="button" class="btn btn-primary"
+                    [hidden]="currentStep !== 1" (click)="nextStep()"
+                    [disabled]="dadosPessoais.invalid">
               Próximo <i class="bi bi-chevron-right"></i>
             </button>
-            <button type="submit" class="btn btn-success" [disabled]="isLoading" [hidden]="currentStep !== 3">
+            <button type="button" class="btn btn-primary"
+                    [hidden]="currentStep !== 2" (click)="nextStep()"
+                    [disabled]="dadosAcademicos.invalid">
+              Próximo <i class="bi bi-chevron-right"></i>
+            </button>
+            <button type="submit" class="btn btn-success"
+                    [disabled]="dadosNaapi.invalid || isLoading"
+                    [hidden]="currentStep !== 3">
               <i class="bi bi-check-lg"></i>
               {{ isEditMode ? 'Salvar Alterações' : 'Concluir Cadastro' }}
             </button>
           </div>
         </div>
+
       </form>
     </div>
 
     <div *ngIf="isLoading" class="card-body text-center p-5">
-      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-        <span class="visually-hidden">Carregando...</span>
-      </div>
+       <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
     </div>
 
   </div>

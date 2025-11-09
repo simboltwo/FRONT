@@ -67,7 +67,7 @@ import { Usuario } from '../../../core/models/usuario.model';
     </form>
   `
 })
-export class AtendimentoFormComponent implements OnInit {
+export class AtendimentoForm implements OnInit {
   @Input() alunoId!: number;
   @Output() atendimentoSalvo = new EventEmitter<void>();
 

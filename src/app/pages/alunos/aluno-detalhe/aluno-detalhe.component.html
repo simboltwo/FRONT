@@ -1,67 +1,108 @@
-<div class="container mt-4" *ngIf="aluno$ | async as aluno; else loading">
+<div class="container-fluid" *ngIf="aluno$ | async as aluno; else loading">
 
   <div class="card shadow-sm mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h4 class="mb-0">
-        <i class="bi bi-person-badge"></i> {{ aluno.nome }}
-        <span *ngIf="aluno.nomeSocial" class="text-muted fs-6"> ({{ aluno.nomeSocial }})</span>
-      </h4>
-      <a [routerLink]="['/alunos/editar', aluno.id]" class="btn btn-outline-primary btn-sm">
-        <i class="bi bi-pencil-fill"></i> Editar Aluno
-      </a>
+    <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <img [src]="aluno.foto || 'https://via.placeholder.com/80.png?text=Aluno'"
+             alt="Foto do Aluno"
+             class="rounded-circle me-3"
+             style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #eee;">
+        <div>
+          <h2 class="h4 mb-0">{{ aluno.nome }}</h2>
+          <span *ngIf="aluno.nomeSocial" class="text-muted fs-6"> ({{ aluno.nomeSocial }})</span>
+          <p class="mb-0 text-muted">{{ aluno.matricula }} | {{ aluno.curso.nome }}</p>
+        </div>
+      </div>
+      <div class="mt-2 mt-md-0">
+        <a [routerLink]="['/alunos/editar', aluno.id]" class="btn btn-primary">
+          <i class="bi bi-pencil-fill me-1"></i> Editar Cadastro
+        </a>
+      </div>
     </div>
     <div class="card-body">
       <div class="row">
-        <div class="col-md-6">
-          <p><strong>Matrícula:</strong> {{ aluno.matricula }}</p>
-          <p><strong>Curso:</strong> {{ aluno.curso.nome }}</p>
-          <p><strong>Turma:</strong> {{ aluno.turma.nome }}</p>
+        <div class="col-md-3">
+          <strong>Prioridade:</strong>
+          <span class="badge ms-2" [ngClass]="{
+            'text-bg-danger': aluno.prioridade === 'Alta',
+            'text-bg-warning': aluno.prioridade === 'Média',
+            'text-bg-success': aluno.prioridade === 'Baixa'
+          }">
+            {{ aluno.prioridade }}
+          </span>
         </div>
-        <div class="col-md-6">
-          <p>
-            <strong>Prioridade:</strong>
-            <span [class.text-danger]="aluno.prioridadeAtendimento">
-              {{ aluno.prioridadeAtendimento ? 'Sim' : 'Não' }}
-            </span>
-          </p>
-          <p><strong>Diagnósticos:</strong></p>
-          <ul *ngIf="aluno.diagnosticos.length > 0; else noDiag">
-            <li *ngFor="let diag of aluno.diagnosticos">
-              {{ diag.sigla }} - {{ diag.nome }}
-            </li>
-          </ul>
-          <ng-template #noDiag><p class="text-muted">Nenhum diagnóstico associado.</p></ng-template>
+        <div class="col-md-3">
+          <strong>CPF:</strong> {{ aluno.cpf || 'Não informado' }}
+        </div>
+        <div class="col-md-3">
+          <strong>Data Nasc:</strong> {{ aluno.dataNascimento }}
+        </div>
+        <div class="col-md-3">
+          <strong>Prova Separada:</strong>
+          <span class="badge" [ngClass]="aluno.provaOutroEspaco ? 'text-bg-info' : 'text-bg-secondary'">
+            {{ aluno.provaOutroEspaco ? 'Sim' : 'Não' }}
+          </span>
         </div>
       </div>
     </div>
   </div>
 
   <div class="card shadow-sm">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h4 class="mb-0"><i class="bi bi-calendar-check"></i> Atendimentos</h4>
-      <button class="btn btn-success" (click)="showAtendimentoForm = !showAtendimentoForm">
-        <i class="bi bi-plus-lg"></i>
-        {{ showAtendimentoForm ? 'Cancelar Atendimento' : 'Novo Atendimento' }}
-      </button>
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs" id="naapiTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="atendimentos-tab" data-bs-toggle="tab" data-bs-target="#atendimentos" type="button" role="tab">
+            <i class="bi bi-calendar-check me-1"></i> Atendimentos
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="laudos-tab" data-bs-toggle="tab" data-bs-target="#laudos" type="button" role="tab">
+            <i class="bi bi-file-earmark-medical me-1"></i> Laudos
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pei-tab" data-bs-toggle="tab" data-bs-target="#pei" type="button" role="tab">
+            <i class="bi bi-clipboard2-data me-1"></i> PEI
+          </button>
+        </li>
+      </ul>
     </div>
 
-    <div class="card-body">
-      <div *ngIf="showAtendimentoForm" class="mb-4 p-3 border rounded bg-light">
-        <app-atendimento-form
-          [alunoId]="aluno.id"
-          (atendimentoSalvo)="onAtendimentoSalvo()">
-        </app-atendimento-form>
+    <div class="card-body tab-content" id="naapiTabsContent">
+
+      <div class="tab-pane fade show active" id="atendimentos" role="tabpanel">
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-success btn-sm" (click)="showAtendimentoForm = !showAtendimentoForm">
+            <i class="bi bi-plus-lg"></i>
+            {{ showAtendimentoForm ? 'Cancelar Atendimento' : 'Novo Atendimento' }}
+          </button>
+        </div>
+
+        <div *ngIf="showAtendimentoForm" class="mb-4 p-3 border rounded" style="background-color: var(--naapi-light)">
+          <app-atendimento-form
+            [alunoId]="aluno.id"
+            (atendimentoSalvo)="onAtendimentoSalvo()">
+          </app-atendimento-form>
+        </div>
+
+        <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
       </div>
 
-      <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
+      <div class="tab-pane fade" id="laudos" role="tabpanel">
+        <app-laudo-list [alunoId]="aluno.id"></app-laudo-list>
+      </div>
+
+      <div class="tab-pane fade" id="pei" role="tabpanel">
+        <app-pei-list [alunoId]="aluno.id"></app-pei-list>
+      </div>
+
     </div>
   </div>
-
 </div>
 
 <ng-template #loading>
-  <div class="text-center mt-5">
-    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+  <div class="d-flex justify-content-center mt-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
       <span class="visually-hidden">Carregando dados do aluno...</span>
     </div>
   </div>

@@ -2,18 +2,29 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Aluno } from '../../../core/models/aluno.model';
 import { AlunoService } from '../../../core/services/aluno.service';
 
 // Importa os componentes de Atendimento
-import { AtendimentoFormComponent } from '../../atendimentos/atendimento-form/atendimento-form.component';
-import { AtendimentoListComponent } from '../../atendimentos/atendimento-list/atendimento-list.component';
+import { AtendimentoForm } from '../../atendimentos/atendimento-form/atendimento-form.component';
+import { AtendimentoList} from '../../atendimentos/atendimento-list/atendimento-list.component';
+
+// --- IMPORTE OS NOVOS COMPONENTES ---
+import { LaudoList } from '../../laudos/laudo-list/laudo-list.component';
+import { PeiList } from '../../peis/pei-list/pei-list.component';
 
 @Component({
   selector: 'app-aluno-detalhe',
   standalone: true,
-  imports: [CommonModule, RouterLink, AtendimentoFormComponent, AtendimentoListComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    AtendimentoForm,
+    AtendimentoList,
+    LaudoList, // <-- Adicione
+    PeiList  // <-- Adicione
+  ],
   templateUrl: './aluno-detalhe.component.html'
 })
 export class AlunoDetalheComponent implements OnInit {
@@ -33,11 +44,8 @@ export class AlunoDetalheComponent implements OnInit {
     );
   }
 
-  // O formulário de atendimento emitirá um evento 'atendimentoSalvo'
-  // Isso fará o componente de lista recarregar (demonstrado no .html)
-  protected onAtendimentoSalvo(): void {
+  onAtendimentoSalvo(): void {
     this.showAtendimentoForm = false;
-    // Recarrega os dados do aluno (e seus atendimentos, se necessário)
-     this.aluno$ = this.alunoService.findById(this.alunoId);
+    // (Idealmente, o atendimento-list deveria recarregar sozinho)
   }
 }

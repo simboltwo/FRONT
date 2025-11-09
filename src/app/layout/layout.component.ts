@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router'; // <-- IMPORTE RouterLinkActive
 import { AuthService } from '../core/services/auth.service';
 import { Observable } from 'rxjs';
 import { Usuario } from '../core/models/usuario.model';
@@ -8,9 +8,14 @@ import { Usuario } from '../core/models/usuario.model';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink], // RouterOutlet é essencial
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive // <-- ADICIONE AQUI
+  ],
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss'] // Crie este ficheiro
+  styleUrls: ['./layout.component.scss'] // Vamos criar este ficheiro
 })
 export class LayoutComponent {
   protected authService = inject(AuthService);

@@ -1,29 +1,38 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top main-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/alunos">
-      <i class="bi bi-shield-check"></i> NAAPI Frontend
+
+    <a class="navbar-brand d-flex align-items-center" routerLink="/alunos">
+      <img src="../../../public/assets/img/CEFET-MG_simplificada-positivo.png" alt="Logo CEFET" class="navbar-logo">
+      <img src="assets/img/logo-naapi.png" alt="Logo NAAPI" class="navbar-logo naapi-logo">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+      <ul class="navbar-nav navbar-center mx-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/alunos" routerLinkActive="active">
-            <i class="bi bi-people-fill"></i> Alunos
+          <a class="nav-link" routerLink="/alunos" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-people-fill me-1"></i> Alunos
           </a>
         </li>
         </ul>
 
-      <ul class="navbar-nav" *ngIf="currentUser$ | async as user">
+      <ul class="navbar-nav navbar-profile mb-2 mb-lg-0" *ngIf="currentUser$ | async as user">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown">
-            <i class="bi bi-person-circle"></i> {{ user.nome }}
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5 me-2" [style.color]="'var(--naapi-text-link)'"></i>
+            {{ user.nome }}
           </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" (click)="logout()">
-              <i class="bi bi-box-arrow-right"></i> Sair
-            </a></li>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="navbarUserDropdown">
+            <li>
+              <a class="dropdown-item" (click)="logout()">
+                <i class="bi bi-box-arrow-right me-2"></i> Sair
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -31,6 +40,6 @@
   </div>
 </nav>
 
-<main class="container-fluid mt-4">
+<main class="container-fluid mt-4 mb-5">
   <router-outlet></router-outlet>
 </main>
