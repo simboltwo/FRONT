@@ -1,49 +1,95 @@
 <div class="container-fluid">
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="h4 mb-0"><i class="bi bi-people-fill me-2"></i> Painel de Alunos</h2>
+  <div class="text-center my-4">
+    <h2 class="h3 fw-bold mb-0 page-title">PAINEL DE ALUNOS</h2>
+  </div>
 
-    <button class="btn btn-outline-primary" type="button"
+  <div class="filter-toggle-mobile-container d-lg-none">
+    <button class="btn btn-light filter-toggle-mobile" type="button"
             data-bs-toggle="collapse" data-bs-target="#filterCollapse"
             aria-expanded="false" aria-controls="filterCollapse">
-      <i class="bi bi-filter me-1"></i> Filtrar e Buscar
+      <i class="bi bi-sliders2-vertical me-1"></i>
+      Filtros
     </button>
   </div>
 
-  <div class="collapse" id="filterCollapse">
-    <div class="card shadow-sm mb-4" [formGroup]="filterForm">
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-md-6 col-lg-4">
-            <label for="filtroNome" class="form-label">Buscar por Nome</label>
-            <input type="text" id="filtroNome" class="form-control"
-                  formControlName="nome" placeholder="Digite o nome...">
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <label for="filtroCurso" class="form-label">Curso</label>
-            <select id="filtroCurso" class="form-select" formControlName="cursoId">
-              <option [ngValue]="null">Todos os Cursos</option>
-              <option *ngFor="let curso of (cursos$ | async)" [ngValue]="curso.id">
-                {{ curso.nome }}
-              </option>
-            </select>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <label for="filtroDiag" class="form-label">Diagnóstico</label>
-            <select id="filtroDiag" class="form-select" formControlName="diagnosticoId">
-              <option [ngValue]="null">Todos os Diagnósticos</option>
-              <option *ngFor="let diag of (diagnosticos$ | async)" [ngValue]="diag.id">
-                {{ diag.sigla }} - {{ diag.nome }}
-              </option>
-            </select>
-          </div>
-          <div class="col-md-6 col-lg-2 d-flex align-items-end">
-            <button type="button" class="btn btn-outline-secondary w-100" (click)="clearFilters()">
-              <i class="bi bi-x-lg me-1"></i> Limpar Filtros
-            </button>
-          </div>
+  <div class="collapse d-lg-flex" id="filterCollapse">
+    <form [formGroup]="filterForm" class="w-100">
+      <div class="filter-bar-container">
+
+        <div class="filter-item filter-item-input">
+          <input type="text" id="filtroNome" class="form-control"
+                 formControlName="nome" placeholder="BUSCAR POR NOME...">
         </div>
+
+        <div class="filter-item dropdown">
+          <button class="btn btn-link filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ getCursoSelecionadoTexto() }}
+          </button>
+          <ul class="dropdown-menu filter-dropdown-menu" data-bs-auto-close="outside">
+            <li *ngFor="let curso of (cursos$ | async)">
+              <a class="dropdown-item" href="javascript:void(0)" (click)="$event.preventDefault()">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="curso.id" [id]="'curso-' + curso.id"
+                         [checked]="isCursoChecked(curso.id)"
+                         (change)="onCursoChange($event)">
+                  <label class="form-check-label" [for]="'curso-' + curso.id">
+                    {{ curso.nome }}
+                  </label>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="filter-item dropdown">
+          <button class="btn btn-link filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ getDiagnosticoSelecionadoTexto() }}
+          </button>
+          <ul class="dropdown-menu filter-dropdown-menu filter-menu-columns" data-bs-auto-close="outside">
+            <li *ngFor="let diag of (diagnosticos$ | async)">
+              <a class="dropdown-item" href="javascript:void(0)" (click)="$event.preventDefault()">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="diag.id" [id]="'diag-' + diag.id"
+                         [checked]="isDiagnosticoChecked(diag.id)"
+                         (change)="onDiagnosticoChange($event)">
+                  <label class="form-check-label" [for]="'diag-' + diag.id">
+                    {{ diag.sigla || diag.nome }}
+                  </label>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="filter-item">
+          <button type="button" class="btn btn-link filter-btn" (click)="clearFilters()">
+            Limpar Filtros
+          </button>
+        </div>
+
       </div>
+    </form>
+  </div> <div class="sub-filter-bar">
+    <div class="aluno-count">
+      {{ (alunosCount$ | async) || 0 }} alunos
+    </div>
+
+    <div class="dropdown" [formGroup]="filterForm">
+      <span class="sort-label">Ordenar por:</span>
+      <button class="btn btn-link filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ getSortSelecionadoNome() }}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end filter-dropdown-menu">
+        <li *ngFor="let opt of sortOptions">
+          <a class="dropdown-item" href="javascript:void(0)"
+             (click)="filterForm.get('sort')?.setValue(opt.value)">
+            {{ opt.label }}
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -94,14 +140,14 @@
             </span>
           </div>
 
-          <div class="mt-auto d-flex justify-content-end pt-3">
+          <div class="mt-auto d-flex justify-content-end pt-3 aluno-card-actions">
             <button (click)="editAluno($event, aluno)"
-                    class="btn btn-sm btn-outline-primary me-2"
+                    class="btn btn-sm btn-primary me-2"
                     title="Editar">
               <i class="bi bi-pencil-fill me-1"></i> Editar
             </button>
             <button (click)="deleteAluno($event, aluno)"
-                    class="btn btn-sm btn-outline-danger"
+                    class="btn btn-sm btn-danger"
                     title="Excluir">
               <i class="bi bi-trash-fill"></i>
             </button>

@@ -4,6 +4,7 @@ import { Router, RouterLink, RouterOutlet, RouterLinkActive } from '@angular/rou
 import { AuthService } from '../core/services/auth.service';
 import { Observable } from 'rxjs';
 import { Usuario } from '../core/models/usuario.model';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-layout',
@@ -32,5 +33,21 @@ export class LayoutComponent {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  closeOffcanvas(): void {
+    const menuElement = document.getElementById('naapiOffcanvasMenu');
+    if (menuElement) {
+      // MUDANÇA: Use o 'bootstrap' que importámos
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(menuElement);
+      if (bsOffcanvas) {
+        bsOffcanvas.hide();
+      }
+    }
+  }
+
+  logoutAndCloseOffcanvas(): void {
+    this.closeOffcanvas();
+    this.logout();
   }
 }
