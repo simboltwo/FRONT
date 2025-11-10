@@ -5,8 +5,7 @@
       <div class="d-flex align-items-center">
         <img [src]="aluno.foto || 'https://via.placeholder.com/80.png?text=Aluno'"
              alt="Foto do Aluno"
-             class="rounded-circle me-3"
-             style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #eee;">
+             class="rounded-circle me-3 profile-photo-detail">
         <div>
           <h2 class="h4 mb-0">{{ aluno.nome }}</h2>
           <span *ngIf="aluno.nomeSocial" class="text-muted fs-6"> ({{ aluno.nomeSocial }})</span>
@@ -20,8 +19,8 @@
       </div>
     </div>
     <div class="card-body">
-      <div class="row">
-        <div class="col-md-3">
+      <div class="row gy-3">
+        <div class="col-md-3 col-6">
           <strong>Prioridade:</strong>
           <span class="badge ms-2" [ngClass]="{
             'text-bg-danger': aluno.prioridade === 'Alta',
@@ -31,17 +30,17 @@
             {{ aluno.prioridade }}
           </span>
         </div>
-        <div class="col-md-3">
-          <strong>CPF:</strong> {{ aluno.cpf || 'Não informado' }}
-        </div>
-        <div class="col-md-3">
-          <strong>Data Nasc:</strong> {{ aluno.dataNascimento }}
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-6">
           <strong>Prova Separada:</strong>
           <span class="badge" [ngClass]="aluno.provaOutroEspaco ? 'text-bg-info' : 'text-bg-secondary'">
             {{ aluno.provaOutroEspaco ? 'Sim' : 'Não' }}
           </span>
+        </div>
+        <div class="col-md-3 col-6">
+          <strong>CPF:</strong> {{ (aluno.cpf | slice:0:3) + '.***.***-**' || 'Não informado' }}
+        </div>
+        <div class="col-md-3 col-6">
+          <strong>Data Nasc:</strong> {{ aluno.dataNascimento | date: 'dd/MM/yyyy' }}
         </div>
       </div>
     </div>
@@ -71,18 +70,13 @@
     <div class="card-body tab-content" id="naapiTabsContent">
 
       <div class="tab-pane fade show active" id="atendimentos" role="tabpanel">
-        <div class="d-flex justify-content-end mb-3">
-          <button class="btn btn-success btn-sm" (click)="showAtendimentoForm = !showAtendimentoForm">
-            <i class="bi bi-plus-lg"></i>
-            {{ showAtendimentoForm ? 'Cancelar Atendimento' : 'Novo Atendimento' }}
-          </button>
-        </div>
 
-        <div *ngIf="showAtendimentoForm" class="mb-4 p-3 border rounded" style="background-color: var(--naapi-light)">
-          <app-atendimento-form
-            [alunoId]="aluno.id"
-            (atendimentoSalvo)="onAtendimentoSalvo()">
-          </app-atendimento-form>
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-success btn-sm"
+                  data-bs-toggle="modal" data-bs-target="#modalAtendimento">
+            <i class="bi bi-plus-lg"></i>
+            Novo Atendimento
+          </button>
         </div>
 
         <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
@@ -107,3 +101,14 @@
     </div>
   </div>
 </ng-template>
+
+
+<div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalAtendimentoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <app-atendimento-form
+      *ngIf="alunoId"
+      [alunoId]="alunoId"
+      (atendimentoSalvo)="onAtendimentoSalvo()">
+    </app-atendimento-form>
+  </div>
+</div>

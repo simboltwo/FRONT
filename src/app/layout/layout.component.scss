@@ -1,6 +1,6 @@
 /* ===================================================================
  * LAYOUT.COMPONENT.SCSS (Navbar)
- * ATUALIZADO para o novo layout de desktop
+ * ATUALIZADO com Fonte Poppins e Animação de Sublinhado
  * =================================================================== */
 
 .main-navbar {
@@ -18,15 +18,20 @@
   height: 40px;
   width: auto;
 }
+.naapi-logo {
+    width: 150px; /* Tamanho básico */
+  }
 
-/* Título "NAAPI" */
+/* Título "NAAPI" - Mantendo Oswald para o logo, mas com cor escura */
 .navbar-title-naapi {
   display: flex;
   align-items: center;
+  /* (Manter 'Oswald' para a marca fica bom,
+     mas trocamos a cor para a primária escura) */
   font-family: 'Oswald', 'Roboto Condensed', sans-serif;
   font-size: 2.25rem;
   font-weight: 700;
-  color: var(--cor-primaria); /* Usa a cor da marca */
+  color: var(--cor-primaria);
   text-transform: uppercase;
   letter-spacing: 4px;
   margin-left: 0.5rem;
@@ -34,28 +39,55 @@
   line-height: 1;
 }
 
-/* Links do menu (Desktop) */
-.main-navbar .navbar-nav:not(.offcanvas-nav-links) {
-  /*margin-left: 1.5rem;*/
-}
+/* ==============================================
+ * ANIMAÇÃO DE SUBLINHADO (Links do Desktop)
+ * ============================================== */
 .main-navbar .nav-link {
   font-weight: 500;
   color: var(--cor-texto-suave);
-  position: relative;
+  position: relative; /* Necessário para a animação */
   transition: all 0.2s ease;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-radius: var(--raio-borda);
+  /* Adiciona espaço para o sublinhado não colar no texto */
+  padding-bottom: 6px;
 }
+
+/* O sublinhado animado */
+.main-navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%; /* Começa no centro */
+  transform: translateX(-50%);
+  width: 0; /* Começa com largura 0 */
+  height: 2px;
+  background-color: var(--cor-primaria);
+  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* No Hover ou Ativo: Expande o sublinhado */
+.main-navbar .nav-link:hover::after,
+.main-navbar .nav-link.active::after {
+  width: 100%; /* Expande (pode ser 100% se preferir) */
+
+}
+
 .main-navbar .nav-link:hover {
   color: var(--cor-texto);
-  background-color: var(--cor-fundo);
+  background-color: transparent; /* Remove o fundo cinza do hover */
 }
 .main-navbar .nav-link.active {
   color: var(--cor-primaria) !important;
+  font-weight: 700;
 }
+/* ==============================================
+ * Fim da Animação
+ * ============================================== */
+
 
 /* Link do Perfil (Desktop) */
 .navbar-profile .nav-link {
@@ -98,7 +130,7 @@
 
 
 /* ===================================================================
- * Mobile
+ * Mobile (Offcanvas)
  * =================================================================== */
 @media (max-width: 991.98px) {
   .main-navbar {
@@ -115,11 +147,15 @@
     box-shadow: none;
   }
 
-  /* Centraliza a logo no mobile */
   .navbar-brand-container {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  /* Esconde a animação de sublinhado no mobile */
+  .main-navbar .nav-link::after {
+    display: none;
   }
 }
 

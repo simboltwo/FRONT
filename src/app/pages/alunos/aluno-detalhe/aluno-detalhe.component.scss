@@ -1,40 +1,71 @@
 /* ==============================================
  * ALUNO-DETALHE.COMPONENT.SCSS
- * Estilos para o cabeçalho e as abas.
+ * REFINADO: Novas abas, badges e estilo de formulário.
  * ============================================== */
+@import '../../../styles/animations.scss'; // Importa animações
 
-/* Cabeçalho do Aluno */
-.card-header {
-  .h4 {
-    color: var(--cor-texto);
-    font-weight: 700;
+/* ==============================================
+ * Cabeçalho do Aluno (Card Superior)
+ * ============================================== */
+.profile-photo-detail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 3px solid var(--cor-borda);
+}
+
+/* * REFINAMENTO: Badges de Status (Tons Suaves)
+ * Substitui as cores sólidas do Bootstrap por versões "light".
+ */
+.badge {
+  font-weight: 600;
+  padding: 0.4em 0.7em;
+  font-size: 0.85rem;
+
+  &.text-bg-danger {
+    background-color: #f8d7da !important;
+    color: #58151c !important;
+  }
+  &.text-bg-warning {
+    background-color: #fff3cd !important;
+    color: #664d03 !important;
+  }
+  &.text-bg-success {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+  }
+  &.text-bg-info {
+    background-color: #cff4fc !important;
+    color: #055160 !important;
+  }
+  &.text-bg-secondary {
+    background-color: #e2e3e5 !important;
+    color: #41464b !important;
   }
 }
 
-/* * Novo Estilo de Abas (Tabs)
- * Vamos usar um estilo "pills" moderno.
- */
-.card-header-tabs {
-  border-bottom: none !important; /* Remove a borda feia do Bootstrap */
-  margin: 0;
-  padding: 0;
-}
-
+/* ==============================================
+ * REFINAMENTO: Abas de Navegação (Estilo Sublinhado)
+ * ============================================== */
 .nav-tabs {
-  border-bottom: 1px solid var(--cor-borda) !important;
+  border-bottom: 2px solid var(--cor-borda) !important;
 }
 
 .nav-tabs .nav-item {
-  margin-bottom: -1px; /* Puxa o item para cobrir a borda */
+  /* Puxa o item para baixo para o sublinhado ativo cobrir a borda */
+  margin-bottom: -2px;
 }
 
 .nav-tabs .nav-link {
-  border: 1px solid transparent !important;
-  border-bottom: none !important;
-  color: var(--cor-texto-suave);
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
-  padding: 0.75rem 1.25rem;
-  transition: all 0.2s ease;
+  color: var(--cor-texto-suave);
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  padding: 0.75rem 0; /* Mais compacto que o padrão */
+  margin-right: 2rem; /* Espaço entre os links */
+  transition: all 0.2s ease-in-out;
 
   i {
     margin-right: 0.5rem;
@@ -42,24 +73,74 @@
 }
 
 .nav-tabs .nav-link:hover {
-  background-color: var(--cor-fundo);
-  border-color: var(--cor-fundo) !important;
   color: var(--cor-texto);
+  border-bottom-color: var(--cor-texto-suave) !important;
 }
 
 .nav-tabs .nav-link.active {
   color: var(--cor-primaria) !important;
   font-weight: 600;
-  background-color: #fff !important;
-  border-color: var(--cor-borda) var(--cor-borda) #fff !important;
-  border-top: 3px solid var(--cor-primaria) !important; /* Linha superior ativa */
-  padding-top: calc(0.75rem - 2px); /* Compensa a borda */
+  border-bottom-color: var(--cor-primaria) !important;
 }
 
-/* Estilo do formulário de atendimento */
+/* ==============================================
+ * REFINAMENTO: Formulário de Novo Atendimento
+ * ============================================== */
 .form-atendimento-container {
-  background-color: var(--cor-fundo);
-  border-radius: var(--raio-borda);
-  border: 1px solid var(--cor-borda);
-  animation: fadeInUp 0.5s ease-out;
+  
+}
+
+/* ==============================================
+ * REFINAMENTO: Estilo do Histórico (app-atendimento-list)
+ * =References:
+ * - simboltwo/front/FRONT-05920946bd160262cfc32118013f2a295aa35b6b/src/app/pages/atendimentos/atendimento-list/atendimento-list.component.ts
+ *============================================= */
+/* * Usamos ::ng-deep para forçar o estilo
+ * dentro do componente-filho (app-atendimento-list)
+ */
+:host ::ng-deep app-atendimento-list {
+
+  /* Remove o estilo de lista padrão */
+  .list-group {
+    border-radius: 0;
+  }
+
+  /* Transforma cada item em um "mini-card" */
+  .list-group-item {
+    border-radius: var(--raio-borda) !important;
+    margin-bottom: 1rem;
+    border: 1px solid var(--cor-borda) !important;
+    box-shadow: var(--sombra-sm);
+    transition: all 0.2s ease;
+    padding: 1rem 1.25rem;
+
+    &:hover {
+      box-shadow: var(--sombra-md);
+      border-color: var(--cor-primaria-suave);
+    }
+  }
+
+  /* Refina os badges de status dentro da lista */
+  .badge {
+    font-weight: 600;
+    padding: 0.4em 0.7em;
+    font-size: 0.8rem;
+    border-radius: var(--raio-borda);
+  }
+
+  /* * Precisamos usar os seletores exatos que o Angular
+   * gera para o [ngClass]
+   */
+  .bg-success.text-white {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+  }
+  .bg-danger.text-white {
+    background-color: #f8d7da !important;
+    color: #58151c !important;
+  }
+  .bg-secondary.text-white {
+    background-color: #e2e3e5 !important;
+    color: #41464b !important;
+  }
 }

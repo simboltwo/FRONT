@@ -2,8 +2,10 @@
  * STYLES.SCSS (Global)
  * =================================================================== */
 
-/* 1. Importa as fontes (movido para o theme) */
-/* 2. Importa o nosso NOVO tema (em vez do naapi-theme) */
+/* 1. Importa a NOVA fonte (Poppins) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* 2. Importa o nosso tema */
 @import 'app/styles/modern-theme';
 
 /* 3. Importa as animações */
@@ -12,9 +14,10 @@
 /* 4. Importa os estilos da Navbar (mantido) */
 @import 'app/layout/layout.component.scss';
 
-/* 5. Define a fonte e o fundo para toda a aplicação */
+/* 5. Define a NOVA fonte e o fundo para toda a aplicação */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* MUDANÇA: Usando Poppins como fonte principal */
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background-color: var(--cor-fundo);
   color: var(--cor-texto);
   -webkit-font-smoothing: antialiased;
@@ -25,6 +28,3 @@ body {
   color: #aaa !important;
   opacity: 1;
 }
-
-/* Removemos o teu override de .form-check-input daqui,
-   pois ele já está dentro do modern-theme.scss */

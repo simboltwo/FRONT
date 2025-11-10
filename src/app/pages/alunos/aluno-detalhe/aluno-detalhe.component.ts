@@ -8,11 +8,14 @@ import { AlunoService } from '../../../core/services/aluno.service';
 
 // Importa os componentes de Atendimento
 import { AtendimentoForm } from '../../atendimentos/atendimento-form/atendimento-form.component';
-import { AtendimentoList} from '../../atendimentos/atendimento-list/atendimento-list.component';
+import { AtendimentoList } from '../../atendimentos/atendimento-list/atendimento-list.component';
 
-// --- IMPORTE OS NOVOS COMPONENTES ---
+// Importe os outros componentes
 import { LaudoList } from '../../laudos/laudo-list/laudo-list.component';
 import { PeiList } from '../../peis/pei-list/pei-list.component';
+
+// MUDANÇA: Importar o Bootstrap para controlar o modal
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-aluno-detalhe',
@@ -22,8 +25,8 @@ import { PeiList } from '../../peis/pei-list/pei-list.component';
     RouterLink,
     AtendimentoForm,
     AtendimentoList,
-    LaudoList, // <-- Adicione
-    PeiList  // <-- Adicione
+    LaudoList,
+    PeiList
   ],
   templateUrl: './aluno-detalhe.component.html',
   styleUrls: ['./aluno-detalhe.component.scss']
@@ -31,7 +34,9 @@ import { PeiList } from '../../peis/pei-list/pei-list.component';
 export class AlunoDetalheComponent implements OnInit {
   protected aluno$!: Observable<Aluno>;
   protected alunoId!: number;
-  protected showAtendimentoForm = false;
+
+  // MUDANÇA: Esta variável não é mais necessária
+  // protected showAtendimentoForm = false;
 
   private route = inject(ActivatedRoute);
   private alunoService = inject(AlunoService);
@@ -45,8 +50,18 @@ export class AlunoDetalheComponent implements OnInit {
     );
   }
 
+  // MUDANÇA: Esta função agora fecha o modal
   onAtendimentoSalvo(): void {
-    this.showAtendimentoForm = false;
-    // (Idealmente, o atendimento-list deveria recarregar sozinho)
+    const modalElement = document.getElementById('modalAtendimento');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) {
+        modal.hide();
+      }
+    }
+    // Idealmente, a lista de atendimentos (child) deve ser notificada para recarregar
+    // No nosso caso, o AtendimentoList já recarrega quando o ID muda,
+    // mas se quisermos recarregar após salvar, precisaríamos de um BehaviorSubject
+    // Por agora, o modal a fechar é o principal.
   }
 }
