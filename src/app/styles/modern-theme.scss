@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* 1. Paleta de Cores (COM AS TUAS CORES OFICIAIS) */
+  --cor-primaria: #004d85;          /* O teu azul principal */
+  --cor-primaria-hover: #02244a;   /* O teu azul hover */
+  --cor-primaria-suave: #e6eef7;    /* Um tom muito claro de azul para fundos */
+
+  --cor-secundaria: #008a6e;       /* Verde do teu 'naapi-theme.scss' original */
+
+  /* Corrigido: Usa o azul de link original para texto */
+  --cor-link: #337ab8;
+
+  --cor-sucesso: #28a745;
+  --cor-perigo: #dc3545;
+  --cor-aviso: #ffc107;
+
+  /* ... (O resto do ficheiro :root fica igual) ... */
+  --cor-fundo: #f9faff;
+  --cor-fundo-card: #ffffff;
+  --cor-fundo-header: #ffffff;
+
+  --cor-texto: #212529;
+  --cor-texto-suave: #6c757d;
+  --cor-borda: #e9ecef;
+
+  --sombra-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --sombra-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --sombra-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+  --raio-borda: 8px;
+}
+
+/* ===================================================================
+ * Overrides Globais do Bootstrap
+ * =================================================================== */
+
+/* 1. Botões */
+.btn {
+  border-radius: var(--raio-borda) !important;
+  border-width: 1px !important;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  box-shadow: var(--sombra-sm) !important;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-md) !important;
+}
+
+.btn-primary {
+  background-color: var(--cor-primaria) !important;
+  border-color: var(--cor-primaria) !important;
+}
+.btn-primary:hover {
+  background-color: var(--cor-primaria-hover) !important;
+  border-color: var(--cor-primaria-hover) !important;
+}
+.btn-outline-primary {
+  color: var(--cor-primaria) !important;
+  border-color: var(--cor-primaria) !important;
+}
+.btn-outline-primary:hover {
+  background-color: var(--cor-primaria) !important;
+  color: #fff !important;
+}
+.btn-success {
+   background-color: var(--cor-secundaria) !important;
+  border-color: var(--cor-secundaria) !important;
+}
+
+/* 2. Links (Usando a tua cor de link) */
+a, .text-link, .text-primary {
+  color: var(--cor-link) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover, .text-link:hover, .text-primary:hover {
+  color: var(--cor-primaria-hover) !important;
+  text-decoration: none;
+}
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* 3. Cards */
+.card {
+  border-radius: var(--raio-borda) !important;
+  box-shadow: var(--sombra-md) !important;
+  border: 1px solid var(--cor-borda) !important;
+  transition: all 0.3s ease;
+}
+.card:hover {
+  box-shadow: var(--sombra-lg) !important;
+}
+.card-header {
+  background-color: #fff !important;
+  border-bottom: 1px solid var(--cor-borda) !important;
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+}
+.card-body {
+  padding: 1.25rem;
+}
+
+/* 4. Formulários */
+.form-control, .form-select {
+  border-radius: var(--raio-borda) !important;
+  border-color: var(--cor-borda) !important;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--cor-primaria) !important;
+  box-shadow: 0 0 0 3px var(--cor-primaria-suave) !important;
+  background-color: #fff;
+}
+.form-label {
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+/* 5. Checkbox (Estilo "Hering" que tinhas, mas com as cores novas) */
+.form-check-input {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  width: 20px; height: 20px;
+  border: 2px solid #adb5bd;
+  background-color: #fff;
+  border-radius: 4px;
+  margin-top: 0.15em;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.form-check-input:hover { border-color: var(--cor-primaria-hover); }
+.form-check-input:checked {
+  background-color: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+}
+.form-check-input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px; top: 2px;
+  width: 5px; height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.form-check-input[type="radio"] { border-radius: 50%; }
+.form-check-input[type="radio"]:checked { background-color: var(--cor-primaria); }
+.form-check-input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background-color: white;
+}
+.form-check-label {
+  padding-left: 0.5em;
+  cursor: pointer;
+}
+
+/* ===================================================================
+ * NOVO: Estilo para o Botão Flutuante (FAB)
+ * (Copiado do teu naapi-theme.scss original e adaptado)
+ * =================================================================== */
+.fab-add-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--cor-primaria); /* Usa a cor nova */
+  color: white;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.fab-add-button:hover {
+  background-color: var(--cor-primaria-hover); /* Usa a cor nova */
+  transform: scale(1.05) translateY(-2px);
+  color: white;
+  box-shadow: 0 8px 20px rgba(var(--cor-primaria-hover), 0.3);
+}

@@ -19,7 +19,7 @@
 
         <div class="filter-item filter-item-input">
           <input type="text" id="filtroNome" class="form-control"
-                 formControlName="nome" placeholder="BUSCAR POR NOME...">
+                 formControlName="nome" placeholder="Buscar por nome...">
         </div>
 
         <div class="filter-item dropdown">
@@ -27,19 +27,19 @@
             {{ getCursoSelecionadoTexto() }}
           </button>
           <ul class="dropdown-menu filter-dropdown-menu" data-bs-auto-close="outside">
-            <li *ngFor="let curso of (cursos$ | async)">
-              <a class="dropdown-item" href="javascript:void(0)" (click)="$event.preventDefault()">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox"
-                         [value]="curso.id" [id]="'curso-' + curso.id"
-                         [checked]="isCursoChecked(curso.id)"
-                         (change)="onCursoChange($event)">
-                  <label class="form-check-label" [for]="'curso-' + curso.id">
-                    {{ curso.nome }}
-                  </label>
-                </div>
-              </a>
+
+            <li *ngFor="let curso of (cursos$ | async)" class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       [value]="curso.id" [id]="'curso-' + curso.id"
+                       [checked]="isCursoChecked(curso.id)"
+                       (change)="onCursoChange($event)">
+                <label class="form-check-label w-100" [for]="'curso-' + curso.id">
+                  {{ curso.nome }}
+                </label>
+              </div>
             </li>
+
           </ul>
         </div>
 
@@ -48,19 +48,19 @@
             {{ getDiagnosticoSelecionadoTexto() }}
           </button>
           <ul class="dropdown-menu filter-dropdown-menu filter-menu-columns" data-bs-auto-close="outside">
-            <li *ngFor="let diag of (diagnosticos$ | async)">
-              <a class="dropdown-item" href="javascript:void(0)" (click)="$event.preventDefault()">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox"
-                         [value]="diag.id" [id]="'diag-' + diag.id"
-                         [checked]="isDiagnosticoChecked(diag.id)"
-                         (change)="onDiagnosticoChange($event)">
-                  <label class="form-check-label" [for]="'diag-' + diag.id">
-                    {{ diag.sigla || diag.nome }}
-                  </label>
-                </div>
-              </a>
+
+            <li *ngFor="let diag of (diagnosticos$ | async)" class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox"
+                       [value]="diag.id" [id]="'diag-' + diag.id"
+                       [checked]="isDiagnosticoChecked(diag.id)"
+                       (change)="onDiagnosticoChange($event)">
+                <label class="form-check-label w-100" [for]="'diag-' + diag.id">
+                  {{ diag.sigla || diag.nome }}
+                </label>
+              </div>
             </li>
+
           </ul>
         </div>
 
@@ -72,7 +72,9 @@
 
       </div>
     </form>
-  </div> <div class="sub-filter-bar">
+  </div>
+
+  <div class="sub-filter-bar">
     <div class="aluno-count">
       {{ (alunosCount$ | async) || 0 }} alunos
     </div>
@@ -83,11 +85,10 @@
         {{ getSortSelecionadoNome() }}
       </button>
       <ul class="dropdown-menu dropdown-menu-end filter-dropdown-menu">
-        <li *ngFor="let opt of sortOptions">
-          <a class="dropdown-item" href="javascript:void(0)"
-             (click)="filterForm.get('sort')?.setValue(opt.value)">
+        <li *ngFor="let opt of sortOptions" class="dropdown-item">
+          <div (click)="filterForm.get('sort')?.setValue(opt.value)" style="cursor: pointer; padding: 0.25rem 0.75rem;">
             {{ opt.label }}
-          </a>
+          </div>
         </li>
       </ul>
     </div>
@@ -95,8 +96,12 @@
 
 
   <div class="row g-4">
-    <div class="col-12 col-md-6 col-lg-4" *ngFor="let aluno of (alunos$ | async)">
+    <div class="col-12 col-md-6 col-lg-4"
+         *ngFor="let aluno of (alunos$ | async); let i = index"
+         [style.animation-delay]="(i % 12) * 0.05 + 's'">
+
       <div class="card aluno-card h-100" (click)="viewAluno(aluno)">
+
         <div class="aluno-card-img-container">
           <img [src]="aluno.foto || 'https://via.placeholder.com/300x200.png?text=NAAPI'"
                class="card-img-top aluno-card-img" alt="Foto do Aluno">
@@ -112,18 +117,16 @@
         </div>
 
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title mb-1 text-link">{{ aluno.nome }}</h5>
+          <h5 class="card-title mb-1">{{ aluno.nome }}</h5>
           <small *ngIf="aluno.nomeSocial" class="text-muted d-block mb-2">
             ({{ aluno.nomeSocial }})
           </small>
-
-          <p class="card-text text-muted mb-1">
-            <i class="bi bi-person-badge me-2"></i> {{ aluno.matricula }}
+          <p class="card-text mb-1">
+            <i class="bi bi-person-badge"></i> {{ aluno.matricula }}
           </p>
-          <p class="card-text text-muted">
-            <i class="bi bi-mortarboard me-2"></i> {{ aluno.curso?.nome || 'N/A' }}
+          <p class="card-text">
+            <i class="bi bi-mortarboard"></i> {{ aluno.curso?.nome || 'N/A' }}
           </p>
-
           <div class="aluno-card-diagnosticos mt-2">
             <span *ngFor="let diag of aluno.diagnosticos.slice(0, 3)"
                   class="badge aluno-diag-badge me-1 mb-1"
@@ -139,15 +142,14 @@
               Sem diagnóstico
             </span>
           </div>
-
           <div class="mt-auto d-flex justify-content-end pt-3 aluno-card-actions">
             <button (click)="editAluno($event, aluno)"
-                    class="btn btn-sm btn-primary me-2"
+                    class="btn btn-sm btn-outline-primary me-2"
                     title="Editar">
               <i class="bi bi-pencil-fill me-1"></i> Editar
             </button>
             <button (click)="deleteAluno($event, aluno)"
-                    class="btn btn-sm btn-danger"
+                    class="btn btn-sm btn-outline-danger"
                     title="Excluir">
               <i class="bi bi-trash-fill"></i>
             </button>
@@ -156,23 +158,7 @@
       </div>
     </div>
 
-    <div class="col-12" *ngIf="(alunos$ | async)?.length === 0">
-      <div class="card shadow-sm">
-        <div class="card-body text-center text-muted p-5">
-          <i class="bi bi-info-circle fs-1"></i>
-          <h4 class="mt-3">Nenhum aluno encontrado</h4>
-          <p>Tente ajustar os filtros ou adicione um novo aluno.</p>
-        </div>
-      </div>
     </div>
-  </div>
-
-  <div *ngIf="!(alunos$ | async)" class="text-center p-5">
-    <div class="spinner-border" style="width: 3rem; height: 3rem; color: var(--naapi-primary);" role="status">
-      <span class="visually-hidden">Carregando...</span>
-    </div>
-    <p class="mt-2 text-muted">Carregando alunos...</p>
-  </div>
 
 </div>
 

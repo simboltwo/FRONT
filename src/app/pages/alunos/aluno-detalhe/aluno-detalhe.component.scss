@@ -1,0 +1,65 @@
+/* ==============================================
+ * ALUNO-DETALHE.COMPONENT.SCSS
+ * Estilos para o cabeçalho e as abas.
+ * ============================================== */
+
+/* Cabeçalho do Aluno */
+.card-header {
+  .h4 {
+    color: var(--cor-texto);
+    font-weight: 700;
+  }
+}
+
+/* * Novo Estilo de Abas (Tabs)
+ * Vamos usar um estilo "pills" moderno.
+ */
+.card-header-tabs {
+  border-bottom: none !important; /* Remove a borda feia do Bootstrap */
+  margin: 0;
+  padding: 0;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid var(--cor-borda) !important;
+}
+
+.nav-tabs .nav-item {
+  margin-bottom: -1px; /* Puxa o item para cobrir a borda */
+}
+
+.nav-tabs .nav-link {
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  color: var(--cor-texto-suave);
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  transition: all 0.2s ease;
+
+  i {
+    margin-right: 0.5rem;
+  }
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: var(--cor-fundo);
+  border-color: var(--cor-fundo) !important;
+  color: var(--cor-texto);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--cor-primaria) !important;
+  font-weight: 600;
+  background-color: #fff !important;
+  border-color: var(--cor-borda) var(--cor-borda) #fff !important;
+  border-top: 3px solid var(--cor-primaria) !important; /* Linha superior ativa */
+  padding-top: calc(0.75rem - 2px); /* Compensa a borda */
+}
+
+/* Estilo do formulário de atendimento */
+.form-atendimento-container {
+  background-color: var(--cor-fundo);
+  border-radius: var(--raio-borda);
+  border: 1px solid var(--cor-borda);
+  animation: fadeInUp 0.5s ease-out;
+}

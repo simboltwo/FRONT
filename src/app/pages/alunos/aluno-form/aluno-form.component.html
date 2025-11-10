@@ -1,28 +1,48 @@
-<div class="container mt-4 mb-5">
+<div class="wizard-container">
+
   <div class="card shadow-sm">
     <div class="card-header">
       <h4 class="mb-0">
-        {{ isEditMode ? 'Editar Aluno' : 'Novo Aluno' }} - Etapa {{ currentStep }} de 3
+        {{ isEditMode ? 'Editar Aluno' : 'Novo Aluno' }}
       </h4>
     </div>
 
     <div class="card-body" *ngIf="!isLoading">
-      <div class="progress mb-4" style="height: 25px;">
-        <div class="progress-bar" role="progressbar"
-             [style.width.%]="(currentStep / 3) * 100"
-             [class.bg-success]="currentStep === 3">
-          Etapa {{ currentStep }}
+
+      <div class="stepper-bar">
+        <div class="stepper-item" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+          <div class="stepper-dot">
+            <i class="bi" [ngClass]="currentStep > 1 ? 'bi-check' : 'bi-person'"></i>
+          </div>
+          <div class="stepper-label">Dados Pessoais</div>
+        </div>
+
+        <div class="stepper-line"></div>
+
+        <div class="stepper-item" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+          <div class="stepper-dot">
+            <i class="bi" [ngClass]="currentStep > 2 ? 'bi-check' : 'bi-mortarboard'"></i>
+          </div>
+          <div class="stepper-label">Dados Académicos</div>
+        </div>
+
+        <div class="stepper-line"></div>
+
+        <div class="stepper-item" [class.active]="currentStep === 3">
+          <div class="stepper-dot">
+            <i class="bi bi-shield-shaded"></i>
+          </div>
+          <div class="stepper-label">Infos. NAAPI</div>
         </div>
       </div>
-
       <div *ngIf="errorMessage" class="alert alert-danger">
         {{ errorMessage }}
       </div>
 
       <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
 
-        <div [hidden]="currentStep !== 1" formGroupName="dadosPessoais">
-          <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-person-fill"></i> Etapa 1: Dados Pessoais</h5>
+        <div *ngIf="currentStep === 1" formGroupName="dadosPessoais" class="form-step-content animate-fadeInUp">
+          <h5 class="step-title"><i class="bi bi-person-fill"></i> Etapa 1: Dados Pessoais</h5>
 
           <div class="row">
             <div class="col-md-3 text-center mb-3">
@@ -72,8 +92,8 @@
           </div>
         </div>
 
-        <div [hidden]="currentStep !== 2" formGroupName="dadosAcademicos">
-          <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-mortarboard-fill"></i> Etapa 2: Dados Académicos</h5>
+        <div *ngIf="currentStep === 2" formGroupName="dadosAcademicos" class="form-step-content animate-fadeInUp">
+          <h5 class="step-title"><i class="bi bi-mortarboard-fill"></i> Etapa 2: Dados Académicos</h5>
           <div class="row">
              <div class="col-md-6 mb-3">
                 <label for="matricula" class="form-label">Matrícula</label>
@@ -132,11 +152,11 @@
           </div>
         </div>
 
-        <div [hidden]="currentStep !== 3" formGroupName="dadosNaapi">
-          <h5 class="mb-3 border-bottom pb-2"><i class="bi bi-shield-shaded"></i> Etapa 3: Informações do NAAPI</h5>
+        <div *ngIf="currentStep === 3" formGroupName="dadosNaapi" class="form-step-content animate-fadeInUp">
+          <h5 class="step-title"><i class="bi bi-shield-shaded"></i> Etapa 3: Informações do NAAPI</h5>
           <div class="mb-3">
             <label class="form-label">Diagnósticos</label>
-            <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+            <div class="diagnosticos-container border rounded p-3">
               <div *ngIf="(diagnosticos$ | async) as diagnosticos">
                 <div *ngFor="let diag of diagnosticos" class="form-check">
                   <input class="form-check-input" type="checkbox"
@@ -170,24 +190,24 @@
             <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
               <i class="bi bi-x-lg"></i> Cancelar
             </button>
-            <button type="button" class="btn btn-secondary ms-2" [hidden]="currentStep === 1" (click)="prevStep()">
+            <button type="button" class="btn btn-secondary ms-2" *ngIf="currentStep > 1" (click)="prevStep()">
               <i class="bi bi-chevron-left"></i> Voltar
             </button>
           </div>
           <div>
             <button type="button" class="btn btn-primary"
-                    [hidden]="currentStep !== 1" (click)="nextStep()"
+                    *ngIf="currentStep === 1" (click)="nextStep()"
                     [disabled]="dadosPessoais.invalid">
               Próximo <i class="bi bi-chevron-right"></i>
             </button>
             <button type="button" class="btn btn-primary"
-                    [hidden]="currentStep !== 2" (click)="nextStep()"
+                    *ngIf="currentStep === 2" (click)="nextStep()"
                     [disabled]="dadosAcademicos.invalid">
               Próximo <i class="bi bi-chevron-right"></i>
             </button>
             <button type="submit" class="btn btn-success"
                     [disabled]="dadosNaapi.invalid || isLoading"
-                    [hidden]="currentStep !== 3">
+                    *ngIf="currentStep === 3">
               <i class="bi bi-check-lg"></i>
               {{ isEditMode ? 'Salvar Alterações' : 'Concluir Cadastro' }}
             </button>

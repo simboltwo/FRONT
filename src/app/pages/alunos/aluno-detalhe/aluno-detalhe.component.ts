@@ -25,7 +25,8 @@ import { PeiList } from '../../peis/pei-list/pei-list.component';
     LaudoList, // <-- Adicione
     PeiList  // <-- Adicione
   ],
-  templateUrl: './aluno-detalhe.component.html'
+  templateUrl: './aluno-detalhe.component.html',
+  styleUrls: ['./aluno-detalhe.component.scss']
 })
 export class AlunoDetalheComponent implements OnInit {
   protected aluno$!: Observable<Aluno>;
