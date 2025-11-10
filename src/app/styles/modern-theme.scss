@@ -1,54 +1,65 @@
 /* ==============================================
- * MODERN-THEME.SCSS
- * CORREÇÃO: Restaurando a cor do .btn-success
+ * HERING-THEME.SCSS (Substitui o modern-theme.scss)
+ * Tema minimalista inspirado na Hering (Preto, Branco, Cinza).
  * ============================================== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* 1. Paleta de Cores (Estilo Neutro/Preto) */
-  --cor-primaria: #212529;
-  --cor-primaria-hover: #000000;
-  --cor-primaria-suave: #f4f4f4;
-  --cor-secundaria: #555555;
-  --cor-link: #333333;
-  --cor-sucesso: #28a745;
-  --cor-perigo: #dc3545;
+  /* 1. Paleta de Cores (Estilo Hering/Minimalista) */
+  --cor-primaria: #1a1a1a;         /* Preto/Chumbo forte */
+  --cor-primaria-hover: #000000;  /* Preto puro */
+  --cor-primaria-suave: #f5f5f5;  /* Cinza de fundo muito claro */
+  --cor-secundaria: #767676;     /* Cinza para texto secundário */
+  --cor-link: var(--cor-primaria);
+  --cor-sucesso: #28a745;         /* Verde (mantido para feedback) */
+  --cor-perigo: #dc3545;          /* Vermelho (mantido para feedback) */
   --cor-aviso: #ffc107;
-  --cor-fundo: #f9f9f9;
+
+  /* Fundos e Texto */
+  --cor-fundo: #ffffff;
   --cor-fundo-card: #ffffff;
   --cor-fundo-header: #ffffff;
-  --cor-texto: #212529;
-  --cor-texto-suave: #6c757d;
-  --cor-borda: #eeeeee;
-  --sombra-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --sombra-md: 0 3px 6px rgba(0, 0, 0, 0.05);
-  --sombra-lg: 0 8px 16px rgba(0, 0, 0, 0.05);
-  --raio-borda: 8px;
+  --cor-texto: #1a1a1a;
+  --cor-texto-suave: #767676;
+  --cor-borda: #eaeaea;
+
+  /* Sombras (Mais subtis ou removidas) */
+  --sombra-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --sombra-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --sombra-lg: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  --raio-borda: 4px; /* Bordas menos arredondadas */
 }
 
 /* ===================================================================
  * Overrides Globais
  * =================================================================== */
 body {
-  font-family: 'Poppins', sans-serif;
+  /* Fonte principal mais limpa */
+  font-family: 'Inter', sans-serif;
   background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  letter-spacing: 0.2px; /* Espaçamento de letra leve */
 }
 
-/* 1. Botões */
+/* 1. Botões (Estilo "Flat") */
 .btn {
   border-radius: var(--raio-borda) !important;
   border-width: 1px !important;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
-  box-shadow: var(--sombra-sm) !important;
+  box-shadow: none !important; /* Remove sombra dos botões */
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
 }
 .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--sombra-md) !important;
-  opacity: 0.9;
+  transform: none; /* Remove efeito de subir */
+  opacity: 0.85;
 }
+
+/* Botão Primário (Preto) */
 .btn-primary {
   background-color: var(--cor-primaria) !important;
   border-color: var(--cor-primaria) !important;
@@ -59,26 +70,35 @@ body {
   border-color: var(--cor-primaria-hover) !important;
   opacity: 1;
 }
+
+/* Botão Secundário (Outline) */
 .btn-outline-primary {
   color: var(--cor-primaria) !important;
   border-color: var(--cor-primaria) !important;
+  background-color: transparent !important;
 }
 .btn-outline-primary:hover {
   background-color: var(--cor-primaria) !important;
   color: #fff !important;
 }
+.btn-outline-secondary {
+  color: var(--cor-secundaria) !important;
+  border-color: var(--cor-borda) !important;
+}
+.btn-outline-secondary:hover {
+  background-color: var(--cor-primaria-suave) !important;
+  color: var(--cor-primaria) !important;
+  border-color: var(--cor-borda) !important;
+}
 
-/* CORREÇÃO: .btn-success agora usa a var(--cor-sucesso) */
 .btn-success {
-   background-color: var(--cor-sucesso) !important;
+  background-color: var(--cor-sucesso) !important;
   border-color: var(--cor-sucesso) !important;
 }
-.btn-success:hover {
-  opacity: 1;
-  background-color: #218838 !important; /* Um verde um pouco mais escuro */
-  border-color: #1e7e34 !important;
+.btn-danger {
+  background-color: var(--cor-perigo) !important;
+  border-color: var(--cor-perigo) !important;
 }
-
 
 /* 2. Links */
 a, .text-link, .text-primary {
@@ -87,68 +107,75 @@ a, .text-link, .text-primary {
   transition: color 0.2s ease;
 }
 a:hover, .text-link:hover, .text-primary:hover {
-  color: var(--cor-primaria-hover) !important;
+  color: var(--cor-secundaria) !important;
   text-decoration: none;
-}
-.text-link:hover {
-  text-decoration: underline;
 }
 
 /* 3. Cards */
 .card {
   border-radius: var(--raio-borda) !important;
-  box-shadow: var(--sombra-md) !important;
-  border: 1px solid var(--cor-borda) !important;
+  box-shadow: none !important; /* Remove sombra */
+  border: 1px solid var(--cor-borda) !important; /* Adiciona borda subtil */
   transition: all 0.3s ease;
 }
 .card:hover {
-  box-shadow: var(--sombra-lg) !important;
+  box-shadow: var(--sombra-md) !important;
 }
 .card-header {
   background-color: var(--cor-fundo-header) !important;
   border-bottom: 1px solid var(--cor-borda) !important;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.9rem;
   padding: 1rem 1.25rem;
 }
 
-/* 4. Formulários */
+/* 4. Formulários (Estilo "borda inferior") */
 .form-control, .form-select {
-  border-radius: var(--raio-borda) !important;
-  border-color: var(--cor-borda) !important;
-  padding: 0.75rem 1rem;
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid var(--cor-borda) !important;
+  padding: 0.75rem 0.25rem; /* Menos padding lateral */
   transition: all 0.2s ease;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', sans-serif;
+  background-color: transparent;
+  box-shadow: none !important;
 }
 .form-control:focus, .form-select:focus {
   border-color: var(--cor-primaria) !important;
-  box-shadow: 0 0 0 3px var(--cor-primaria-suave) !important;
-  background-color: #fff;
+  background-color: transparent;
 }
 .form-label {
   font-weight: 500;
   color: var(--cor-texto-suave);
   margin-bottom: 0.25rem;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* 5. Checkbox (Estilo "Hering" mantido) */
+/* 5. Checkbox (Estilo Hering) */
 .form-check-input {
   appearance: none; -webkit-appearance: none; -moz-appearance: none;
   width: 20px; height: 20px;
-  border: 2px solid #adb5bd;
+  border: 1px solid var(--cor-primaria);
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 0; /* Quadrado */
   margin-top: 0.15em;
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
-.form-check-input:hover { border-color: var(--cor-primaria-hover); }
+.form-check-input:hover {
+  background-color: var(--cor-primaria-suave);
+}
 .form-check-input:checked {
   background-color: var(--cor-primaria);
   border-color: var(--cor-primaria);
 }
+/* O "check" (V) */
 .form-check-input[type="checkbox"]:checked::after {
   content: '';
   position: absolute;
@@ -158,6 +185,7 @@ a:hover, .text-link:hover, .text-primary:hover {
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+/* Radio button */
 .form-check-input[type="radio"] { border-radius: 50%; }
 .form-check-input[type="radio"]:checked { background-color: var(--cor-primaria); }
 .form-check-input[type="radio"]:checked::after {
@@ -172,6 +200,7 @@ a:hover, .text-link:hover, .text-primary:hover {
 .form-check-label {
   padding-left: 0.5em;
   cursor: pointer;
+  color: var(--cor-texto);
 }
 
 
@@ -180,13 +209,13 @@ a:hover, .text-link:hover, .text-primary:hover {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background-color: var(--cor-primaria);
   color: white;
   border: none;
-  font-size: 2rem;
+  font-size: 1.5rem; /* Ícone menor */
   box-shadow: var(--sombra-lg);
   z-index: 1050;
   display: flex;
@@ -196,6 +225,6 @@ a:hover, .text-link:hover, .text-primary:hover {
 }
 .fab-add-button:hover {
   background-color: var(--cor-primaria-hover);
-  transform: scale(1.05) translateY(-2px);
+  transform: scale(1.05);
   color: white;
 }

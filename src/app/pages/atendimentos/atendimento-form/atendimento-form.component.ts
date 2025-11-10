@@ -1,3 +1,4 @@
+// atendimento-form.component.ts
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,74 +13,11 @@ import { Usuario } from '../../../core/models/usuario.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
 
-  // MUDANÇA: Adicionado styleUrls
-  styleUrls: ['./atendimento-form.component.scss'],
-
-  // MUDANÇA: Template atualizado para o design "Flat" do mockup
-  template: `
-    <div class="form-wrapper-flat">
-      <form [formGroup]="atendimentoForm" (ngSubmit)="onSubmit()">
-        <h5 class="form-title">Registrar Novo Atendimento</h5>
-        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-
-        <div class="row">
-          <div class="col-md-6 mb-4">
-            <label for="dataHora" class="form-label">
-              <i class="bi bi-calendar-event me-1"></i> Data e Hora
-            </label>
-            <input type="datetime-local" class="form-control" id="dataHora" formControlName="dataHora"
-                  placeholder="dd/mm/aaaa ----:----"
-                  [class.is-invalid]="form.get('dataHora')!.invalid && form.get('dataHora')!.touched">
-          </div>
-
-          <div class="col-md-6 mb-4">
-            <label for="tipoAtendimentoId" class="form-label">
-              <i class="bi bi-tags me-1"></i> Tipo de Atendimento
-            </label>
-            <select id="tipoAtendimentoId" class="form-select" formControlName="tipoAtendimentoId"
-                    [class.is-invalid]="form.get('tipoAtendimentoId')!.invalid && form.get('tipoAtendimentoId')!.touched">
-              <option [ngValue]="null" disabled>Selecione...</option>
-              <option *ngFor="let tipo of (tiposAtendimento$ | async)" [ngValue]="tipo.id">
-                {{ tipo.nome }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-4">
-            <label for="status" class="form-label">
-              <i class="bi bi-check-circle me-1"></i> Status
-            </label>
-            <select id="status" class="form-select" formControlName="status">
-              <option value="AGENDADO">Agendado</option>
-              <option value="REALIZADO">Realizado</option>
-              <option value="CANCELADO">Cancelado</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="descricao" class="form-label">
-            <i class="bi bi-pencil-square me-1"></i> Descrição / Observações
-          </label>
-          <textarea class="form-control" id="descricao" rows="4" formControlName="descricao"
-                    placeholder="Digite as observações do atendimento..."
-                    [class.is-invalid]="form.get('descricao')!.invalid && form.get('descricao')!.touched"></textarea>
-        </div>
-
-        <div class="text-end">
-          <button type="submit" class="btn btn-success" [disabled]="atendimentoForm.invalid || isLoading">
-            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            {{ isLoading ? 'Salvando...' : 'Salvar Atendimento' }}
-          </button>
-        </div>
-      </form>
-    </div>
-  `
+  // MUDANÇA: Aponta para o HTML externo
+  templateUrl: './atendimento-form.component.html',
+  styleUrls: ['./atendimento-form.component.scss']
 })
 export class AtendimentoForm implements OnInit {
-  // ... (O resto do seu código TypeScript continua aqui, sem alterações) ...
   @Input() alunoId!: number;
   @Output() atendimentoSalvo = new EventEmitter<void>();
 
@@ -106,12 +44,11 @@ export class AtendimentoForm implements OnInit {
 
     this.tiposAtendimento$ = this.tipoAtendimentoService.findAll();
 
-    // Adiciona o valor padrão 'null' ao tipoAtendimentoId para o placeholder "Selecione..."
     this.atendimentoForm = this.fb.group({
       dataHora: ['', [Validators.required]],
-      descricao: ['', [Validators.required, Validators.minLength(5)]], // Adicionei um minLength
+      descricao: ['', [Validators.required, Validators.minLength(5)]],
       status: ['AGENDADO', [Validators.required]],
-      tipoAtendimentoId: [null, [Validators.required]] // Começa como nulo
+      tipoAtendimentoId: [null, [Validators.required]]
     });
   }
 
@@ -120,7 +57,6 @@ export class AtendimentoForm implements OnInit {
   onSubmit(): void {
     if (this.atendimentoForm.invalid || !this.usuarioLogado) {
       this.errorMessage = "Formulário inválido. Verifique todos os campos.";
-      // Marca todos os campos como "tocados" para exibir erros
       this.atendimentoForm.markAllAsTouched();
       return;
     }
@@ -137,7 +73,6 @@ export class AtendimentoForm implements OnInit {
     this.atendimentoService.create(payload).subscribe({
       next: () => {
         this.isLoading = false;
-        // Reseta o formulário para os valores padrão
         this.atendimentoForm.reset({
           status: 'AGENDADO',
           tipoAtendimentoId: null

@@ -1,78 +1,57 @@
-/* ==============================================
- * ATENDIMENTO-FORM.COMPONENT.SCSS
- * NOVO Estilo "Flat" (baseado no mockup image_0aabf9.png)
- * ============================================== */
-@import '../../../styles/animations.scss';
+/* atendimento-form.component.scss */
+@import '../../../styles/modern-theme.scss';
 
-/* Animação de entrada */
-.form-wrapper-flat {
-  animation: fadeInUp 0.4s ease-out;
+/* Remove o estilo padrão do modal-dialog */
+:host {
+  display: block;
+  width: 100%;
 }
 
-/* Título (como no mockup) */
-.form-title {
-  font-weight: 600;
-  color: var(--cor-texto);
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
+.modal-content {
+  border: none;
+  border-radius: var(--raio-borda);
+  box-shadow: var(--sombra-lg);
 }
 
-/* Labels (como no mockup) */
-.form-label {
-  font-weight: 500;
-  color: var(--cor-texto-suave);
-  font-size: 0.85rem; /* Fonte pequena */
-  text-transform: uppercase; /* Em maiúsculas */
-  letter-spacing: 0.5px;
+.modal-header {
+  background-color: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+  padding: 1rem 1.5rem;
 
-  i {
-    color: var(--cor-texto-suave);
-    font-size: 0.8rem;
+  .modal-title {
+    font-weight: 600;
+    font-size: 1.1rem;
   }
 }
 
-/* * Campos "Flat" (Apenas borda inferior)
- */
-.form-control,
-.form-select {
-  /* Remove o estilo padrão */
-  background-color: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-
-  /* Adiciona a borda inferior */
-  border-bottom: 2px solid var(--cor-borda) !important;
-  padding-left: 0.25rem; /* Menos padding lateral */
-  padding-right: 0.25rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-weight: 500;
-
-  transition: border-color 0.2s ease;
+.modal-body {
+  padding: 1.5rem;
 }
 
-/* Placeholder (para Data e Tipo) */
-.form-control::placeholder,
-.form-select:invalid { /* Target para o "Selecione..." */
-  color: var(--cor-texto-suave);
-  font-weight: 400;
+.modal-footer {
+  border-top: 1px solid var(--cor-borda);
+  padding: 1rem 1.5rem;
+  background-color: var(--cor-primaria-suave);
 }
 
-/* Efeito de Foco */
-.form-control:focus,
-.form-select:focus {
-  border-bottom-color: var(--cor-primaria) !important;
-}
+/* Estilo dos campos do formulário no Modal (borda normal) */
+.form-wrapper-flat {
+  .form-control,
+  .form-select {
+    border: 1px solid var(--cor-borda) !important; /* Bordas normais */
+    border-radius: var(--raio-borda) !important;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+  }
 
-/* Efeito de Erro (Borda vermelha) */
-.form-control.is-invalid,
-.form-select.is-invalid {
-  border-bottom-color: var(--cor-perigo) !important;
-  background-image: none !important; /* Remove o ícone de erro do Bootstrap */
-}
+  /* Textarea usa borda normal */
+  textarea.form-control {
+    min-height: 120px;
+  }
 
-/* Botão de Salvar */
-.btn-success {
-  font-weight: 600;
+  .form-control:focus,
+  .form-select:focus {
+    border-color: var(--cor-primaria) !important;
+    box-shadow: none !important;
+  }
 }

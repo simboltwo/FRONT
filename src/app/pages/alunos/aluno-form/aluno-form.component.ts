@@ -189,13 +189,11 @@ export class AlunoFormComponent implements OnInit {
       formData.append('file', fotoFile);
     }
 
-    // 3. Chama o serviço de upload (backend deve estar pronto)
-    // Erro 2 é resolvido aqui
+    // 3. Chama o serviço de upload
     const saveAction = this.isEditMode
       ? this.alunoService.updateWithFile(this.alunoId!, formData)
       : this.alunoService.createWithFile(formData);
 
-    // Erro 3 é resolvido aqui (adicionando o tipo :Aluno)
     saveAction.subscribe({
       next: (alunoSalvo: Aluno) => {
         this.isLoading = false;

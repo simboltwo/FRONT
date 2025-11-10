@@ -1,29 +1,29 @@
 /* ===================================================================
- * STYLES.SCSS (Global)
+ * STYLES.SCSS (Global) - CORRIGIDO
  * =================================================================== */
 
-/* 1. Importa a NOVA fonte (Poppins) */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* 1. Importa as fontes (Inter, como no novo tema) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* 2. Importa o nosso tema */
+/* 2. Importa o NOSSO NOVO tema (que está a substituir o modern-theme) */
+/* (O nome do ficheiro continua 'modern-theme' mas o conteúdo é o da Hering) */
 @import 'app/styles/modern-theme';
 
 /* 3. Importa as animações */
 @import 'app/styles/animations';
 
-/* 4. Importa os estilos da Navbar (mantido) */
-@import 'app/layout/layout.component.scss';
+/* 4. NÃO importar 'app/layout/layout.component.scss' ou 'naapi-theme.scss' aqui! */
 
-/* 5. Define a NOVA fonte e o fundo para toda a aplicação */
-body {
-  /* MUDANÇA: Usando Poppins como fonte principal */
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+/* 5. Define a fonte e o fundo para toda a aplicação */
+body.naapi-body-bg {
+  font-family: 'Inter', sans-serif; /* Fonte do novo tema */
   background-color: var(--cor-fundo);
   color: var(--cor-texto);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Placeholder global */
 ::placeholder {
   color: #aaa !important;
   opacity: 1;

@@ -1,37 +1,35 @@
 <div class="login-container">
+  <div class="login-wrapper">
 
-  <div class="login-form-wrapper">
-
-    <div class="form-header">
+    <div class="form-header text-center mb-4">
       <a class="logo-link" routerLink="/">
-        <img src="/assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo NAAPI" class="login-logo">
-        <img src="/assets/img/NAAPI_completa-negativo.png" alt="Logo NAAPI" class="naapi-logo">
+        <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo NAAPI" class="naapi-logo">
+        <img src="assets/img/NAAPI_completa-negativo.png" alt="Logo NAAPI" class="naapi-logo">
       </a>
-
-      <h3 class="card-title">Olá! Bem-vindo(a) de volta.</h3>
-      <p class="sub-title">Faça login para acessar o painel de gestão.</p>
+      <h3 class="card-title mt-3">Acesso ao Painel</h3>
+      <p class="sub-title">Use as suas credenciais para entrar.</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-      <div class="mb-3 input-group-icon">
-        <i class="bi bi-envelope"></i>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
         <input type="email" id="email" class="form-control"
                formControlName="email" placeholder="O seu email">
       </div>
 
-      <div class="mb-3 input-group-icon">
-        <i class="bi bi-lock"></i>
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha</label>
         <input type="password" id="senha" class="form-control"
                formControlName="senha" placeholder="A sua senha">
       </div>
 
-      <div *ngIf="errorMessage" class="alert alert-danger p-2 mt-3 text-center">
+      <div *ngIf="errorMessage" class="alert alert-danger p-2 mt-3 text-center small">
         {{ errorMessage }}
       </div>
 
       <div class="d-grid mt-4">
-        <button type="submit" class="btn btn-primary btn-lg" [disabled]="loginForm.invalid || isLoading">
+        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || isLoading">
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
           {{ isLoading ? 'Entrando...' : 'Entrar' }}
         </button>
@@ -39,8 +37,4 @@
     </form>
 
   </div>
-
-  <div class="login-visual-splash">
-    </div>
-
 </div>
