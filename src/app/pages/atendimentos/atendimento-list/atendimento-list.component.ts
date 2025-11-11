@@ -61,6 +61,11 @@ export class AtendimentoList implements OnChanges {
     }
   }
 
+  public refresh(): void {
+    // Re-emite o ID atual para forçar o switchMap a recarregar
+    this.alunoId$.next(this.alunoId);
+  }
+
   protected getStatusClass(status: string): string {
     switch (status) {
       case 'REALIZADO': return 'bg-success text-white';

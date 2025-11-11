@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -32,6 +32,7 @@ import * as bootstrap from 'bootstrap';
   styleUrls: ['./aluno-detalhe.component.scss']
 })
 export class AlunoDetalheComponent implements OnInit {
+  @ViewChild(AtendimentoList) private atendimentoListComponent!: AtendimentoList;
   protected aluno$!: Observable<Aluno>;
   protected alunoId!: number;
 
@@ -59,9 +60,10 @@ export class AlunoDetalheComponent implements OnInit {
         modal.hide();
       }
     }
-    // Idealmente, a lista de atendimentos (child) deve ser notificada para recarregar
-    // No nosso caso, o AtendimentoList já recarrega quando o ID muda,
-    // mas se quisermos recarregar após salvar, precisaríamos de um BehaviorSubject
-    // Por agora, o modal a fechar é o principal.
+
+    // MUDANÇA: Chamar o método refresh() do componente filho
+    if (this.atendimentoListComponent) {
+      this.atendimentoListComponent.refresh();
+    }
   }
 }

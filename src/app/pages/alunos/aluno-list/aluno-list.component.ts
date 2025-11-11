@@ -184,6 +184,10 @@ export class AlunoListComponent implements OnInit {
     });
   }
 
+  protected trackByAlunoId(index: number, aluno: Aluno): number {
+    return aluno.id;
+  }
+
   protected get cursoFilterCount(): number {
     const control = this.filterForm.get('cursoIds');
     return control?.value?.length || 0;

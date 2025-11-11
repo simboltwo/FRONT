@@ -126,8 +126,6 @@
 
 /* Campos de Texto (Textarea) - Borda normal */
 textarea.form-control {
-  border: 1px solid var(--cor-borda) !important;
-  border-radius: var(--raio-borda) !important;
   padding: 0.75rem 1rem;
   min-height: 100px;
 }
