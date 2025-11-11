@@ -1,13 +1,19 @@
-<div class="aluno-list-page">
+<div class="aluno-list-page animate-fadeIn">
 
-  <div class="page-header">
-    <h2 class="page-title">Alunos</h2>
-    <div class="header-actions">
+  <div class="page-header-container bg-color-2">
+    <h2 class="page-header-title">ALUNOS</h2>
+  </div>
+
+  <div class="page-toolbar">
+    <div class="toolbar-count">
+      {{ (alunosCount$ | async) || 0 }} alunos encontrados.
+    </div>
+    <div class="toolbar-actions">
       <div class="dropdown" [formGroup]="filterForm">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-arrow-down-up me-1"></i> {{ getSortSelecionadoNome() }}
         </button>
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul class="dropdown-menu">
           <li *ngFor="let opt of sortOptions">
             <a class="dropdown-item" (click)="filterForm.get('sort')?.setValue(opt.value)">
               {{ opt.label }}
@@ -15,73 +21,80 @@
           </li>
         </ul>
       </div>
-
       <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">
         <i class="bi bi-funnel me-1"></i> Filtros
       </button>
     </div>
   </div>
 
-  <div class="aluno-count">
-    {{ (alunosCount$ | async) || 0 }} alunos encontrados
-  </div>
 
-  <div class="row g-3 g-lg-4">
-    <div class="col-6 col-md-4 col-lg-3"
-         *ngFor="let aluno of (alunos$ | async); let i = index"
-         [style.animation-delay]="(i % 12) * 0.05 + 's'">
+  <div class="carousel-container">
 
-      <div class="card aluno-card h-100" (click)="viewAluno(aluno)">
-        <div class="aluno-card-img-container">
-          <img [src]="aluno.foto || 'https://via.placeholder.com/400x400.png?text=Aluno'"
-               class="card-img-top aluno-card-img" alt="Foto do Aluno">
+    <button (click)="scrollCarousel(-1)" class="carousel-arrow prev" title="Anterior">
+      <i class="bi bi-chevron-left"></i>
+    </button>
 
-          <span *ngIf="aluno.prioridade !== 'Baixa'"
-                class="badge aluno-card-badge"
-                [ngClass]="{
-                  'text-bg-danger': aluno.prioridade === 'Alta',
-                  'text-bg-warning': aluno.prioridade === 'Média'
-                }">
-            Prioridade {{ aluno.prioridade }}
-          </span>
-        </div>
+    <div class="aluno-carousel-track" #carouselTrack>
 
-        <div class="card-body">
-          <h5 class="card-title mb-1" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
-          <p class="card-text-matricula mb-1">
-            {{ aluno.matricula }}
-          </p>
-          <p class="card-text-curso">
-            {{ aluno.curso?.nome || 'N/A' }}
-          </p>
+      <div class="carousel-item-wrapper"
+           *ngFor="let aluno of (alunos$ | async); let i = index"
+           [style.animation-delay]="(i % 12) * 0.05 + 's'">
 
-          <div class="aluno-card-diagnosticos mt-2">
-            <span *ngFor="let diag of aluno.diagnosticos.slice(0, 2)"
-                  class="badge aluno-diag-badge me-1 mb-1"
-                  title="{{diag.nome}}">
-              {{ diag.sigla || diag.nome }}
+        <div class="card aluno-card">
+          <div class="aluno-card-img-container">
+            <img [src]="aluno.foto || 'https://via.placeholder.com/400x400.png?text=Aluno'"
+                 class="card-img-top aluno-card-img" alt="Foto do Aluno" (click)="viewAluno(aluno)">
+
+            <span class="badge aluno-card-badge" (click)="viewAluno(aluno)"
+                  [ngClass]="{
+                    'text-bg-danger': aluno.prioridade === 'Alta',
+                    'text-bg-warning': aluno.prioridade === 'Média',
+                    'text-bg-success': aluno.prioridade === 'Baixa'
+                  }">
+              Prioridade {{ aluno.prioridade }}
             </span>
-            <span *ngIf="aluno.diagnosticos.length > 2"
-                  class="badge aluno-diag-badge me-1 mb-1">
-              +{{ aluno.diagnosticos.length - 2 }}
-            </span>
+
+            <div class="card-action-menu dropdown">
+              <button class="btn btn-icon-light" type="button" data-bs-toggle="dropdown" aria-expanded="false" (click)="$event.stopPropagation()">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" (click)="editAluno($event, aluno)">
+                    <i class="bi bi-pencil-fill"></i> Editar
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item text-danger" (click)="deleteAluno($event, aluno)">
+                    <i class="bi bi-trash-fill"></i> Excluir
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card-body" (click)="viewAluno(aluno)">
+            <h5 class="card-title mb-1" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
+            <p class="card-text-matricula mb-1">{{ aluno.matricula }}</p>
+            <p class="card-text-curso">{{ aluno.curso?.nome || 'N/A' }}</p>
+            <div class="aluno-card-diagnosticos mt-2">
+              <span *ngFor="let diag of aluno.diagnosticos.slice(0, 2)"
+                    class="badge aluno-diag-badge me-1 mb-1"
+                    [ngClass]="getDiagClass(diag.sigla)"
+                    title="{{diag.nome}}">
+                {{ diag.sigla || diag.nome }}
+              </span>
+              <span *ngIf="aluno.diagnosticos.length > 2"
+                    class="badge aluno-diag-badge diag-default me-1 mb-1">
+                +{{ aluno.diagnosticos.length - 2 }}
+              </span>
+            </div>
           </div>
         </div>
 
-        <div class="aluno-card-actions">
-          <button (click)="editAluno($event, aluno)"
-                  class="btn btn-sm btn-outline-primary w-100 mb-2"
-                  title="Editar">
-            Editar
-          </button>
-          <button (click)="deleteAluno($event, aluno)"
-                  class="btn btn-sm btn-outline-danger w-100"
-                  title="Excluir">
-            Excluir
-          </button>
-        </div>
-      </div>
-    </div>
+      </div> </div> <button (click)="scrollCarousel(1)" class="carousel-arrow next" title="Próximo">
+      <i class="bi bi-chevron-right"></i>
+    </button>
   </div>
 
 </div>
@@ -97,45 +110,62 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body" [formGroup]="filterForm">
-
     <div class="mb-4">
       <label for="filtroNome" class="form-label">Buscar por nome</label>
       <input type="text" id="filtroNome" class="form-control"
              formControlName="nome" placeholder="Digite o nome...">
     </div>
-
-    <div class="mb-4">
-      <label class="form-label">Curso</label>
-      <div class="filter-options-list">
-        <div *ngFor="let curso of (cursos$ | async)" class="form-check">
-          <input class="form-check-input" type="checkbox"
-                 [value]="curso.id" [id]="'curso-' + curso.id"
-                 [checked]="isCursoChecked(curso.id)"
-                 (change)="onCursoChange($event)">
-          <label class="form-check-label" [for]="'curso-' + curso.id">
-            {{ curso.nome }}
-          </label>
+    <hr class="filter-divider">
+    <div class="mb-4 filter-group">
+      <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurso" aria-expanded="true" aria-controls="collapseCurso">
+        <span class="form-label">
+          Curso
+          <small class="filter-count-badge" *ngIf="cursoFilterCount > 0">
+            {{ cursoFilterCount }}
+          </small>
+        </span>
+        <i class="bi bi-chevron-up"></i>
+      </button>
+      <div class="collapse show" id="collapseCurso">
+        <div class="filter-options-list mt-3">
+          <div *ngFor="let curso of (cursos$ | async)" class="form-check">
+            <input class="form-check-input" type="checkbox"
+                   [value]="curso.id" [id]="'curso-' + curso.id"
+                   [checked]="isCursoChecked(curso.id)"
+                   (change)="onCursoChange($event)">
+            <label class="form-check-label" [for]="'curso-' + curso.id">
+              {{ curso.nome }}
+            </label>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="mb-4">
-      <label class="form-label">Diagnóstico</label>
-      <div class="filter-options-list">
-        <div *ngFor="let diag of (diagnosticos$ | async)" class="form-check">
-          <input class="form-check-input" type="checkbox"
-                 [value]="diag.id" [id]="'diag-' + diag.id"
-                 [checked]="isDiagnosticoChecked(diag.id)"
-                 (change)="onDiagnosticoChange($event)">
-          <label class="form-check-label" [for]="'diag-' + diag.id">
-            {{ diag.sigla || diag.nome }}
-          </label>
+    <hr class="filter-divider">
+    <div class="mb-4 filter-group">
+      <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiag" aria-expanded="true" aria-controls="collapseDiag">
+        <span class="form-label">
+          Diagnóstico
+          <small class="filter-count-badge" *ngIf="diagnosticoFilterCount > 0">
+            {{ diagnosticoFilterCount }}
+          </small>
+        </span>
+        <i class="bi bi-chevron-up"></i>
+      </button>
+      <div class="collapse show" id="collapseDiag">
+        <div class="filter-options-list mt-3">
+          <div *ngFor="let diag of (diagnosticos$ | async)" class="form-check">
+            <input class="form-check-input" type="checkbox"
+                   [value]="diag.id" [id]="'diag-' + diag.id"
+                   [checked]="isDiagnosticoChecked(diag.id)"
+                   (change)="onDiagnosticoChange($event)">
+            <label class="form-check-label" [for]="'diag-' + diag.id">
+              {{ diag.sigla || diag.nome }}
+            </label>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
-
   <div class="offcanvas-footer">
     <button type="button" class="btn btn-outline-secondary w-100" (click)="clearFilters()">
       Limpar Filtros

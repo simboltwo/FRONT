@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core'; // REMOVIDO: AfterViewInit
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Observable, BehaviorSubject, switchMap, startWith, combineLatest, map, tap } from 'rxjs';
@@ -14,6 +14,7 @@ import { CursoService, DiagnosticoService } from '../../../core/services/api.ser
   templateUrl: './aluno-list.component.html',
   styleUrls: ['./aluno-list.component.scss']
 })
+// REMOVIDO: AfterViewInit
 export class AlunoListComponent implements OnInit {
   // Serviços
   private alunoService = inject(AlunoService);
@@ -22,11 +23,19 @@ export class AlunoListComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
 
+  // MUDANÇA: Usando um setter para o ViewChild (mais robusto)
+  private carouselTrackEl!: HTMLDivElement;
+  @ViewChild('carouselTrack') set carouselTrackRef(el: ElementRef<HTMLDivElement> | undefined) {
+    if (el) {
+      // Assim que o Angular encontra o #carouselTrack, ele define a variável
+      this.carouselTrackEl = el.nativeElement;
+    }
+  }
+
   // Observables para os dados
   protected alunos$!: Observable<Aluno[]>;
   protected cursos$!: Observable<Curso[]>;
   protected diagnosticos$!: Observable<Diagnostico[]>;
-
   protected alunosCount$!: Observable<number>;
 
   protected sortOptions = [
@@ -40,10 +49,11 @@ export class AlunoListComponent implements OnInit {
 
   protected filterForm = this.fb.group({
     nome: [''],
-    cursoIds: this.fb.control<number[]>([]), // Array de números
-    diagnosticoIds: this.fb.control<number[]>([]), // Array de números
+    cursoIds: this.fb.control<number[]>([]),
+    diagnosticoIds: this.fb.control<number[]>([]),
     sort: this.fb.control('nome-asc', [Validators.required])
   });
+
 
   ngOnInit(): void {
     this.cursos$ = this.cursoService.findAll();
@@ -61,6 +71,7 @@ export class AlunoListComponent implements OnInit {
         return this.alunoService.findAll(filterParams);
       }),
       map(alunos => {
+        // (Lógica de filtro e sort)
         const { cursoIds, diagnosticoIds } = this.filterForm.value;
         let alunosFiltrados = [...alunos];
 
@@ -85,8 +96,18 @@ export class AlunoListComponent implements OnInit {
     this.alunosCount$ = this.alunos$.pipe(map(alunos => alunos.length));
   }
 
+  // REMOVIDO: ngAfterViewInit()
+
+  // Esta função agora funcionará
+  protected scrollCarousel(direction: number): void {
+    if (this.carouselTrackEl) {
+      const scrollAmount = this.carouselTrackEl.clientWidth * 0.8;
+      this.carouselTrackEl.scrollLeft += scrollAmount * direction;
+    }
+  }
+
   private updateAlunoCount(count: number): void {
-    // (Esta função pode ser usada se o 'alunosCount$' falhar, mas o .pipe(map) deve ser suficiente)
+    // ...
   }
 
   private sortAlunos(alunos: Aluno[], sortValue: string): Aluno[] {
@@ -101,7 +122,6 @@ export class AlunoListComponent implements OnInit {
   }
 
   // --- Funções para Checkbox ---
-
   onCursoChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     const id = Number(target.value);
@@ -164,8 +184,30 @@ export class AlunoListComponent implements OnInit {
     });
   }
 
-  // --- Navegação e Ações ---
+  protected get cursoFilterCount(): number {
+    const control = this.filterForm.get('cursoIds');
+    return control?.value?.length || 0;
+  }
 
+  protected get diagnosticoFilterCount(): number {
+    const control = this.filterForm.get('diagnosticoIds');
+    return control?.value?.length || 0;
+  }
+
+  protected getDiagClass(sigla?: string): string {
+    if (!sigla) return 'diag-default';
+
+    switch (sigla.toUpperCase()) {
+      case 'TEA': return 'diag-tea';
+      case 'TDM': return 'diag-tdm';
+      case 'TAG': return 'diag-tag';
+      case 'TDAH': return 'diag-tdah';
+      // Adicione outros casos aqui
+      default: return 'diag-default';
+    }
+  }
+
+  // --- Navegação e Ações ---
   deleteAluno(event: MouseEvent, aluno: Aluno): void {
     event.stopPropagation();
     if (confirm(`Tem a certeza de que deseja excluir o(a) aluno(a) ${aluno.nome}? Esta ação não pode ser desfeita.`)) {

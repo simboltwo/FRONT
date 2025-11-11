@@ -3,10 +3,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Curso, Diagnostico, Turma, TipoAtendimento } from '../models/aluno.model';
 import { Usuario } from '../models/usuario.model';
+import { Aluno } from '../models/aluno.model';
 
 // URL base da API (usando o proxy)
 const API_URL = '/api';
-
+export interface RelatorioAlunosPorCursoDTO {
+  cursoNome: string;
+  totalAlunos: number;
+}
+export interface RelatorioAlunosPorDiagnosticoDTO {
+  diagnosticoNome: string;
+  totalAlunos: number;
+}
 @Injectable({ providedIn: 'root' })
 export class CursoService {
   constructor(private http: HttpClient) {}
@@ -45,5 +53,18 @@ export class UsuarioService {
   // Busca o usuário logado
   getMe(): Observable<Usuario> {
     return this.http.get<Usuario>(`${API_URL}/usuarios/me`);
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class RelatorioService {
+  constructor(private http: HttpClient) {}
+
+  getAlunosPorCurso(): Observable<RelatorioAlunosPorCursoDTO[]> {
+    return this.http.get<RelatorioAlunosPorCursoDTO[]>(`${API_URL}/relatorios/alunos-por-curso`);
+  }
+
+  getAlunosPorDiagnostico(): Observable<RelatorioAlunosPorDiagnosticoDTO[]> {
+    return this.http.get<RelatorioAlunosPorDiagnosticoDTO[]>(`${API_URL}/relatorios/alunos-por-diagnostico`);
   }
 }

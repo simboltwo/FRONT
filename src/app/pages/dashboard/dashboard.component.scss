@@ -1,0 +1,204 @@
+@import '../../styles/modern-theme.scss';
+
+/* * As cores dos gráficos (--cor-grafico-X)
+ * vêm automaticamente do modern-theme.scss
+ */
+
+/* Cards de Estatística (KPY) */
+.stat-card {
+  border: 1px solid var(--cor-borda);
+}
+.stat-card .card-body {
+  display: flex;
+  align-items: center;
+}
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+
+  &.icon-alunos {
+    background-color: var(--cor-primaria-suave); /* Azul claro */
+    color: var(--cor-primaria);
+  }
+  &.icon-atendimentos {
+    background-color: #fff8e1; // Amarelo suave (da sua paleta)
+    color: var(--cor-aviso);
+  }
+   &.icon-relatorios {
+    background-color: #eaf7e8; // Verde suave (da sua paleta)
+    color: var(--cor-sucesso);
+  }
+}
+
+.stat-title {
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.card-footer-link {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--cor-fundo-card);
+  border-top: 1px solid var(--cor-borda);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cor-link) !important; // Usa a cor de link (#00376b)
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--cor-primaria-suave); // Fundo azul claro
+  }
+  &.disabled {
+    color: var(--cor-texto-suave) !important;
+    pointer-events: none;
+  }
+}
+
+
+/* Gráfico de Barras (CSS Puro) */
+.chart-container-bar {
+  padding: 1rem;
+}
+.chart-bar-item {
+  margin-bottom: 0.75rem;
+}
+.bar-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cor-texto);
+  display: block;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar-track {
+  width: 100%;
+  background-color: var(--cor-primaria-suave); /* CORRIGIDO: Fundo azul claro */
+  border-radius: var(--raio-borda);
+  height: 24px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background-color: var(--cor-primaria); // Cor primária (azul-escuro)
+  border-radius: var(--raio-borda);
+  transition: width 0.5s ease-out;
+  display: flex;
+  align-items: center;
+  min-width: 30px;
+  max-width: 100%;
+}
+.bar-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  padding-left: 0.5rem;
+}
+
+/* Gráfico de Rosca (Donut Chart) */
+.chart-container-donut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  gap: 1.5rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.pie-chart-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pie-chart {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  transition: all 0.5s ease-out;
+  /* O 'background: conic-gradient(...)' é aplicado via style binding */
+}
+
+/* O "buraco" no meio do donut */
+.pie-chart-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  background: var(--cor-fundo-card); /* Fundo Branco */
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  .total-label {
+    font-size: 0.8rem;
+    color: var(--cor-texto-suave);
+    font-weight: 500;
+  }
+  .total-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--cor-texto);
+    line-height: 1.2;
+  }
+}
+
+/* Legenda */
+.pie-chart-legend {
+  flex-grow: 1;
+  width: 100%;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+
+    .legend-color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+      /* A cor é aplicada via style binding */
+    }
+
+    .legend-label {
+      color: var(--cor-texto);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 0.5rem;
+      flex-grow: 1;
+    }
+
+    .legend-value {
+      color: var(--cor-texto-suave);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+  }
+}

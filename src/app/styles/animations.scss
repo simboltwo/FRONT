@@ -8,12 +8,16 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
 
 /* 2. Fade In com slide (Para cards e listas) */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px); /* Um pouco mais subtil */
   }
   to {
     opacity: 1;
@@ -40,10 +44,9 @@
   animation: slideInRight 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
-/* 4. Animação de "Pulso" (Para badges de prioridade) */
-@keyframes pulseGlow {
+@keyframes pulse-alta {
   0% {
-    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); /* --cor-perigo */
   }
   70% {
     box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
@@ -53,6 +56,14 @@
   }
 }
 
-.pulse-glow-danger {
-  animation: pulseGlow 2s infinite;
+@keyframes pulse-media {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.5); /* --cor-aviso */
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
 }

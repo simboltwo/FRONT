@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { LayoutComponent } from './layout/layout.component'; // <-- Importe o layout
+import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
   {
@@ -10,20 +10,25 @@ export const routes: Routes = [
   {
     // Rota "pai" que usa o LayoutComponent
     path: '',
-    component: LayoutComponent, // <-- Carrega o Layout (Navbar, etc.)
-    canActivate: [authGuard], // Protege todas as rotas filhas
+    component: LayoutComponent,
+    canActivate: [authGuard],
     children: [
+      {
+        path: 'dashboard',
+        title: 'Dashboard',
+        loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
       {
         path: 'alunos',
         // As rotas de alunos agora são "filhas" do layout
         loadChildren: () => import('./pages/alunos.routes').then(m => m.ALUNOS_ROUTES)
       },
+      // (Adicionar rotas futuras para /cursos, /diagnosticos, /relatorios aqui)
       {
         path: '',
-        redirectTo: 'alunos', // Redireciona para /alunos
+        redirectTo: 'dashboard', // MUDANÇA: O padrão agora é o dashboard
         pathMatch: 'full'
       }
-      // Adicione outras rotas protegidas aqui (ex: /cursos, /diagnosticos)
     ]
   },
   {
