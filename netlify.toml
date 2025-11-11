@@ -2,3 +2,8 @@
   from = "/api/*"
   to = "https://naapi-api.onrender.com/:splat"
   status = 200
+
+[[redirects]]
+  from = "/uploads/*"
+  to = "https://naapi-api.onrender.com/uploads/:splat"
+  status = 200
