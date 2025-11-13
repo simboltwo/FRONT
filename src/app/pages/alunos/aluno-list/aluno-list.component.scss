@@ -1,18 +1,39 @@
 /* src/app/pages/alunos/aluno-list/aluno-list.component.scss */
 @import '../../../../styles.scss';
 
-// Toolbar (Contagem e Ações)
+// --- Animações ---
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-blink-fast {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-blink-slow {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+// --- Layout da Página (Modo Full) ---
 .page-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem 1rem 1rem;
-  margin: 0 auto;
+  font-family: var(--font-secundaria);
   max-width: 1320px;
   margin: 0 auto;
   padding: 1.5rem 1rem 1rem 1rem;
-  font-family: var(--font-secundaria);
-  padding-top: 1.5rem; // Espaço do topo
 
   .toolbar-count {
     color: var(--cor-texto-claro);
@@ -27,14 +48,23 @@
   }
 }
 
-// Container do Carrossel
+// Container do Grid (Modo Full)
+.aluno-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem 1rem;
+}
+
+// --- Layout da Vitrine (Modo Vitrine) ---
 .carousel-container {
   position: relative;
   max-width: 1320px;
   margin: 0 auto;
 }
 
-// Botões de Seta
 .carousel-arrow {
   position: absolute;
   top: 50%;
@@ -48,85 +78,63 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   font-size: 1.5rem;
   color: var(--cor-secundaria);
-  transition: all 0.3s ease; // MUDANÇA: Adicionar transição
+  transition: all 0.3s ease;
 
   &.prev { left: -20px; }
   &.next { right: -20px; }
 }
 
-// Pista do Carrossel
 .aluno-carousel-track {
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 0.5rem 0.5rem 1.5rem 0.5rem;
-  scrollbar-width: none; // Firefox
-  &::-webkit-scrollbar { display: none; } // Chrome/Safari
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 
-  // MUDANÇA: Largura fixa SÓ se aplica dentro do carrossel
+  // Largura fixa SÓ se aplica dentro do carrossel
   .carousel-item-wrapper {
     flex: 0 0 auto;
-    width: 280px; // Largura do cartão no carrossel
+    width: 280px;
   }
 }
 
-.aluno-grid-container {
-  display: grid;
-  // Colunas responsivas: auto-preenchimento, min de 260px, max de 1fr
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.5rem; // Espaçamento entre os cards
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 1rem 2rem 1rem; // Padding (especialmente em baixo)
-}
+// --- Estilos Comuns (Wrapper e Cards) ---
 
-// Wrapper do Item (para espaçamento)
 .carousel-item-wrapper {
-  padding: 0 0.5rem;
-  flex: 0 0 auto;
-  width: 280px; // Largura do cartão
   animation: fadeInUp 0.5s ease-out forwards;
   opacity: 0;
-  // MUDANÇA: REMOVER A ALTURA
-  // height: 100%; // <-- Linha removida
+  height: 100%; // Garante que itens do grid tenham mesma altura
 }
 
 .aluno-card {
   border: none;
-  border-radius: 0; // MUDANÇA: Remove cantos arredondados
-  box-shadow: none; // MUDANÇA: Remove a sombra
+  border-radius: 0;
+  box-shadow: none;
   transition: all 0.3s ease;
   cursor: pointer;
   background-color: var(--cor-branco);
   display: flex;
   flex-direction: column;
-  overflow: hidden; // MUDANÇA: Essencial para o efeito de zoom
+  overflow: hidden;
+  height: 100%; // Garante que o card preencha o wrapper
 
+  // --- O GATILHO DE HOVER (no card-pai) ---
   &:hover {
-    box-shadow: none; // MUDANÇA: Sem sombra no hover
-    transform: none; // MUDANÇA: Sem movimento no hover
+    box-shadow: none;
+    transform: none;
 
-    // MUDANÇA: Ativa a animação da imagem
+    // 1. Anima o zoom da imagem
     .aluno-card-img {
-      transform: scale(1.05);
-    }
-    .aluno-card:hover .aluno-quick-actions {
-      opacity: 1;
-      // Sobe para 1rem ACIMA da base da imagem
-      transform: translateX(-50%) translateY(-1rem);
+      transform: scale(1.35);
     }
   }
 
-  .aluno-card .card-body {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-  }
+  // --- ESTILOS DO CARD ---
 
   .aluno-card-img-container {
     position: relative;
-    height: 380px; // Altura padrão (página /alunos)
+    height: 400px; // Altura padrão (Modo Full / Grid)
     overflow: hidden;
     flex-shrink: 0;
     border-radius: 0;
@@ -137,82 +145,40 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0; // MUDANÇA: Remove radius
-    transform: scale(1); // MUDANÇA: Estado inicial do zoom
-    transition: transform 0.4s ease-out; // MUDANÇA: Animação do zoom
+    border-radius: 0;
+    transform: scale(1);
+    transition: transform 0.4s ease-out;
   }
 
+  // Ícone de Prioridade
   .aluno-priority-icon {
     position: absolute;
     top: 10px;
     left: 10px;
     font-size: 1.25rem;
-    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); // Sombra para o ícone
 
-    // Prioridade Baixa (Verde)
     &.priority-baixa {
-      color: var(--cor-sucesso); // Cor verde de sucesso
+      color: var(--cor-sucesso);
     }
-
-    // Prioridade Média (Amarelo, pisca lento)
     &.priority-media {
-      color: var(--cor-aviso); // Cor amarela de aviso
+      color: var(--cor-aviso);
       animation: pulse-blink-slow 2.5s infinite ease-in-out;
     }
-
-    // Prioridade Alta (Vermelho, pisca rápido)
     &.priority-alta {
-      color: var(--cor-perigo); // Cor vermelha de perigo
+      color: var(--cor-perigo);
       animation: pulse-blink-fast 1s infinite ease-in-out;
     }
   }
 
-  .card-text-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: var(--font-secundaria);
-    color: var(--cor-texto-claro);
-    font-size: 0.8rem;
-    padding-right: 0.25rem; // Pequeno espaço à direita
-  }
-
-  .aluno-card-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-family: var(--font-secundaria);
-    font-weight: 700;
-    border-width: 1px; // Adiciona borda
-    border-style: solid;
-    background-color: var(--cor-branco) !important; // Fundo branco
-    font-size: 0.75rem;
-    padding: 0.3em 0.6em;
-    border-radius: 4px;
-
-    // Classes de prioridade (estilo "Soft")
-    &.text-bg-danger {
-      color: var(--bs-danger) !important;
-      border-color: var(--bs-danger) !important;
-    }
-    &.text-bg-warning {
-      color: #997404 !important; // Cor de texto mais escura para aviso
-      border-color: var(--bs-warning) !important;
-    }
-    &.text-bg-success {
-      color: var(--bs-success) !important;
-      border-color: var(--bs-success) !important;
-    }
-  }
-
+  // --- Menu Flutuante (Hover) ---
+  // A definição do menu (estado ESCONDIDO)
   .aluno-quick-actions {
     position: absolute;
-    bottom: 0.75rem;
+    bottom: 0rem;
     left: 50%;
-    width: auto;
+    width: 100%;
     background: var(--cor-branco);
-    border-radius: 50px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: none;
     padding: 0.4rem;
     display: flex;
     justify-content: center;
@@ -226,18 +192,18 @@
 
     .btn-action, .btn-action-main, .btn-action-danger {
       font-family: var(--font-secundaria);
-      font-weight: 700;
-      font-size: 0.8rem;
+      font-weight: 400;
+      font-size: 0.7rem;
       border: none;
-      padding: 0.4rem 0.8rem;
+      padding: 0.8rem 0.8rem;
       line-height: 1;
       transition: all 0.2s ease;
-      background-color: #f0f0f0;
+      background: var(--cor-branco);
       color: #333;
     }
 
     .btn-action-main {
-      border-radius: 50px;
+      border-radius: none;
       flex-grow: 1;
       max-width: 160px;
 
@@ -248,7 +214,7 @@
     }
 
     .btn-action, .btn-action-danger {
-      border-radius: 50%;
+      border-radius: none;
       width: 38px;
       height: 38px;
       display: flex;
@@ -272,12 +238,16 @@
     }
   }
 
-  .card-action-menu {
-    display: none;
+  // CORREÇÃO: Esta é a regra para MOSTRAR o menu.
+  // Fica fora do .aluno-card:hover, mas ainda dentro de .aluno-card
+  &:hover .aluno-quick-actions {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0rem); // Posição visível
   }
 
+  // --- Corpo do Card ---
   .card-body {
-    padding: 1rem 0;
+    padding: 1rem 0; // Padding do Modo Full (alinhado à esquerda)
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -285,35 +255,59 @@
 
   .card-title {
     font-family: var(--font-secundaria);
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .card-text-matricula {
+  .card-text-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-family: var(--font-secundaria);
     color: var(--cor-texto-claro);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    padding-right: 0.25rem;
+  }
+
+  .card-text-matricula {
+    font-weight: 400;
+  }
+
+  .card-text-nascimento {
+    font-size: 0.7rem;
   }
 
   .card-text-curso {
-    font-family: var(--font-secundaria);
+    font-family: var(--font-principal);
     font-size: 0.7rem;
-    color: var(--cor-texto-claro);
+    font-weight: 700;
+    color: var(--cor-primaria);
   }
 
   .aluno-card-diagnosticos {
-    margin-top: auto; // Empurra as badges para o final do card-body
-    padding-top: 0rem; // Adiciona espaço
+    margin-top: auto;
+    padding-top: 0.5rem;
   }
 }
 
-// --- MUDANÇA: Card de Capa (Sem min-height) ---
+// Emblemas de Diagnóstico (Outline Azul)
+.aluno-diag-badge {
+  font-family: var(--font-secundaria);
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding: 0.3em 0.5em;
+  border-radius: 4px;
+  border: 1px solid var(--cor-primaria);
+  background-color: #f0f6fc !important;
+  color: var(--cor-primaria);
+}
+
+// Card de Capa (Modo Full)
 .aluno-cover-card {
   background-color: var(--cor-secundaria);
-  // MUDANÇA: 'min-height' removido. 'height: 100%' adicionado.
   display: flex;
   align-items: center;
   justify-content: center;
@@ -323,8 +317,14 @@
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  // MUDANÇA: Adicionado um 'min-height' razoável para o card de capa
   min-height: 400px;
+  height: 100%; // Garante altura do grid
+
+  font-family: var(--font-titulos);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    transition: color 0.3s ease;
 
   &::before {
     content: '';
@@ -334,15 +334,14 @@
     background-size: 80%;
     background-position: center center;
     background-repeat: no-repeat;
-    opacity: 0.1;
+    opacity: 0.05;
     transition: opacity 0.3s ease;
   }
 
   &:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-5px);
     &::before {
-      opacity: 0.2;
+      opacity: 0.4;
     }
   }
 
@@ -361,31 +360,17 @@
 
   .cover-card-link {
     font-family: var(--font-secundaria);
-    font-weight: 700;
+    font-weight: 400;
     font-size: 1rem;
     color: var(--cor-branco);
     text-decoration: none;
     display: block;
     margin-top: 0.5rem;
+    letter-spacing: 1.5px;
   }
 }
 
-
-// Badges de Diagnóstico
-  .aluno-diag-badge {
-    font-family: var(--font-secundaria);
-    font-weight: 700;
-    font-size: 0.7rem;
-    padding: 0.3em 0.5em;
-    border-radius: 0px;
-    border: 1px solid var(--cor-primaria); // Borda azul
-    background-color: #f0f6fc !important; // Fundo azul bem claro
-    color: var(--cor-primaria); // Texto azul
-
-    // MUDANÇA: Removemos as classes de cores individuais
-  }
-
-// Botão Flutuante (FAB)
+// --- Botão Flutuante (Modo Full) ---
 .fab-add-button {
   position: fixed;
   bottom: 2rem;
@@ -404,7 +389,7 @@
   z-index: 100;
 }
 
-// Offcanvas de Filtros
+// --- Offcanvas de Filtros (Modo Full) ---
 .filter-divider {
   border-top: 1px solid var(--cor-borda);
 }
@@ -443,67 +428,41 @@
   border-top: 1px solid var(--cor-borda);
 }
 
+// --- Estilos Específicos do Modo Vitrine ---
 .is-vitrine {
 
-  // Remove o padding superior que era para o toolbar
-  .page-toolbar {
-    display: none; // Já está no HTML, mas garante
-  }
-
   .carousel-container {
-    max-width: none; // Permite ocupar o container-fluid
+    max-width: none;
     margin: 0;
   }
 
-  // Ajusta as setas para ficarem menores e DENTRO do container
+  // Setas menores e dentro
   .carousel-arrow {
     width: 38px;
     height: 38px;
     font-size: 1.25rem;
     background: rgba(255, 255, 255, 0.85);
 
-    &.prev { left: 10px; } // Move para dentro
-    &.next { right: 10px; } // Move para dentro
+    &.prev { left: 10px; }
+    &.next { right: 10px; }
   }
 
-  // Remove o padding lateral extra da "pista"
   .aluno-carousel-track {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
 
+  // Altura da imagem na vitrine
+  .aluno-card .aluno-card-img-container {
+    height: 320px;
+  }
+
+  // Padding do corpo do card na vitrine
   .aluno-card .card-body {
-    padding: 0.75rem; // Padding igual em todos os lados
+    padding: 0.75rem;
   }
 
   .aluno-card .card-text-meta {
     padding-right: 0;
   }
-}
-
-@keyframes pulse-blink {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes pulse-blink-fast {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.1); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes pulse-blink-slow {
-  0% { opacity: 1; }
-  50% { opacity: 0.7; }
-  100% { opacity: 1; }
 }

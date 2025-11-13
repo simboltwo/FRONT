@@ -34,7 +34,7 @@ export class AlunoFormComponent implements OnInit {
   protected errorMessage: string | null = null;
 
   // Para o Upload
-  protected previewUrl: string | ArrayBuffer | null = "https://via.placeholder.com/150.png?text=Preview";
+  protected previewUrl: string | ArrayBuffer | null = null;
   protected currentFotoUrl: string | null = null;
 
   // Dados
