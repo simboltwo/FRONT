@@ -1,0 +1,225 @@
+/* src/app/layout/layout.component.scss */
+@import '../../styles.scss'; // Importa nossas variáveis
+
+.main-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1030;
+
+  background-color: hsl(0, 0%, 100%);
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+
+  // Classe para quando o scroll acontece
+  &.navbar-scrolled {
+    background-color: hsl(0, 0%, 100%); // Fundo com leve transparência
+    backdrop-filter: blur(5px);
+  }
+
+  .navbar-logo {
+    height: 35px;
+    margin-right: 0.1rem;
+  }
+
+  .naapi-logo-text {
+    color: hsl(209, 100%, 21%);
+    font-family: var(--font-titulos); // Fonte Montserrat
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+  }
+
+  // Links da Navbar (Ex: Dashboard, Alunos)
+  .nav-link {
+      font-family: var(--font-secundaria); // Fonte Roboto
+      color: hsl(209, 100%, 21%);
+      font-weight: 400;
+      font-size: 0.9rem;
+      padding: 0.5rem 0.8rem;
+      line-height: 18.4px;
+      padding-bottom: 1rem;
+      position: relative;
+      background: none;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        font-weight: 600; // Usa Roboto Bold no hover
+        transform: translateY(-2%);
+        transition: transform 0s ease-out;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 2px; // Posição da linha (2px de baixo para cima)
+        left: 1rem;  // Alinha com o padding do link
+        right: 1rem; // Alinha com o padding do link
+        height: 1px;
+        background-color: hsl(209, 100%, 21%);
+
+        transform: scaleX(0); // Começa invisível (encolhido)
+        transition: transform 0s ease-out;
+        transform-origin: center;
+        border-radius: 10px;
+      }
+      &:hover::after{
+        transform: scaleX(1.5); // Expande a linha
+      }
+  }
+
+  // Perfil do Usuário
+  .navbar-profile {
+    .nav-link {
+      font-family: var(--font-principal);
+
+      /* Garante que a linha de hover não apareça aqui */
+      &::after {
+        display: none;
+        
+      }
+
+      small {
+        font-family: var(--font-secundaria);
+        display: block;
+        font-size: 0.75rem;
+        line-height: 1;
+      }
+    }
+
+    /* Adiciona a transição suave ao dropdown do perfil (versão DESKTOP) */
+    .dropdown-menu {
+      display: block;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px); // Começa 10px abaixo
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+      margin-top: 0.5rem; // Pequeno espaço
+      border-radius: 0.375rem;
+    }
+
+    .dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0); // Sobe para a posição 0
+      pointer-events: auto;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
+    }
+  }
+
+  // --- MUDANÇA 2: Estilos do Mega Menu ---
+  .dropdown-mega {
+    position: static; // Chave para o mega menu
+
+    .dropdown-menu-mega {
+      // Ocupa 100% da largura e alinha com a navbar
+      display: block;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(0px); // Começa 10px abaixo
+      pointer-events: none;
+
+      transition: opacity 0s ease, transform 0s ease, visibility 0s 0s;
+
+      width: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 0; // Remove o espaço
+      border: none;
+      border-radius: 0; // Remove cantos arredondados
+      padding: 1.5rem 2rem;
+
+      .container-fluid {
+        // Define uma largura máxima para o conteúdo.
+        // Isto fará com que as colunas .col-lg-3 fiquem mais próximas.
+        max-width: 560px;
+
+        // Remove paddings laterais do container para alinhar
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 2.4rem; // Remove a margem automática da esquerda
+        margin-right: auto;
+      }
+    }
+
+    @media (min-width: 992px) {
+      &:hover > .dropdown-menu-mega {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0); // Volta à posição 0
+        pointer-events: auto; // Agora captura o rato
+        // 'visibility' muda instantaneamente (0s)
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
+      }
+    }
+
+    .dropdown-header {
+      font-family: var(--font-principal); // Fonte Montserrat
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--cor-primaria);
+      padding-left: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .dropdown-item {
+      font-family: var(--font-secundaria); // Fonte Roboto
+      font-weight: 400;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+
+      &.active, &:hover {
+        font-weight: 700;
+        text-decoration: underline;
+      }
+    }
+
+    // Itens secundários (como "Gerenciar Cursos")
+    .item-secondary-style {
+      color: var(--cor-texto-claro);
+      font-weight: 400;
+      font-size: 0.8rem;
+      &:hover {
+        font-weight: 700;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  // --- Estilos para o Menu Offcanvas (Mobile) ---
+  .offcanvas-header {
+    border-bottom: 1px solid var(--cor-borda);
+  }
+  .offcanvas-nav-links {
+    .nav-link {
+      font-family: var(--font-titulos); // Títulos no mobile
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cor-secundaria);
+      display: flex;
+      justify-content: space-between;
+
+      &.active, &:hover {
+        color: var(--cor-primaria);
+        background: none;
+      }
+    }
+  }
+  .offcanvas-footer {
+    border-top: 1px solid var(--cor-borda);
+    background-color: var(--cor-fundo);
+  }
+}
+
+// --- MUDANÇA 3: Ajusta o conteúdo principal ---
+.main-content-area {
+  // Adiciona um padding no topo igual à altura da navbar
+  // para que o conteúdo não comece "atrás" dela.
+  padding-top: 80px;
+}

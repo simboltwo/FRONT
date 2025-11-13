@@ -1,0 +1,325 @@
+/* src/app/pages/dashboard/dashboard.component.scss */
+@import '../../../styles.scss';
+
+// Cores base dos gráficos
+:host {
+  --cor-grafico-1: #004a91;
+  --cor-grafico-2: #007bff;
+  --cor-grafico-3: #17a2b8;
+  --cor-grafico-4: #ffc107;
+  --cor-grafico-5: #fd7e14;
+  --cor-grafico-6: #6f42c1;
+
+  --cor-sucesso: #28a745;
+  --cor-aviso: #ffc107;
+  --cor-perigo: #dc3545;
+
+  --cor-pastel-1: #566965;
+  --cor-pastel-2: #948a71;
+  --cor-pastel-3: #cc9476;
+  --cor-pastel-4: #f2a176;
+  --cor-pastel-5: #ff7373;
+  --cor-pastel-6: #f5a2a2;
+  --cor-pastel-7: #dcf7f3;
+  --cor-pastel-8: #fffcdd;
+
+  --cor-texto-claro-adapt: #555555;
+  --cor-texto-escuro-adapt: #003366;
+  --cor-fundo-barra-adapt: rgba(0, 0, 0, 0.05);
+  --cor-borda-adapt: rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page {
+  padding-bottom: 2rem;
+}
+
+// Carousel de Gráficos
+#graphCarousel {
+  min-height: 420px;
+  border-bottom: none;
+  position: relative; // Necessário para o posicionamento absoluto do botão
+
+  .carousel-item {
+    height: 420px;
+    padding: 2rem;
+
+    &.slide-bg-1 { background-color: var(--cor-pastel-1); }
+    &.slide-bg-2 { background-color: var(--cor-pastel-2); }
+    &.slide-bg-3 { background-color: var(--cor-pastel-3); }
+    &.slide-bg-4 { background-color: var(--cor-pastel-4); }
+    &.slide-bg-5 { background-color: var(--cor-pastel-5); }
+    &.slide-bg-6 { background-color: var(--cor-pastel-6); }
+    &.slide-bg-7 { background-color: var(--cor-pastel-7); }
+    &.slide-bg-8 { background-color: var(--cor-pastel-8); }
+
+    &.slide-bg-1,
+    &.slide-bg-2,
+    &.slide-bg-3,
+    &.slide-bg-4,
+    &.slide-bg-5,
+    &.slide-bg-6 {
+      .carousel-content-wrapper {
+        --cor-texto-claro-adapt: rgba(255, 255, 255, 0.7);
+        --cor-texto-escuro-adapt: #ffffff;
+        --cor-fundo-barra-adapt: rgba(255, 255, 255, 0.2);
+        --cor-borda-adapt: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  .carousel-content-wrapper {
+    padding: 0;
+    height: 100%;
+
+    .card {
+      border: none;
+      background-color: transparent !important;
+      box-shadow: none !important;
+      border-radius: 0;
+    }
+
+    /* MUDANÇA: Centraliza o título do gráfico */
+    .card-header {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      color: var(--cor-texto-escuro-adapt);
+      font-family: var(--font-titulos);
+      font-weight: 400;
+      background-color: transparent;
+      text-align: center; // Centralizado!
+    }
+  }
+
+  /* --- MUDANÇA: Estilo dos novos indicadores (Barras) --- */
+  .carousel-indicators {
+    bottom: 20px; // Posição na vertical
+    z-index: 10;
+
+    [data-bs-target] {
+      // Transforma a bolinha numa barra
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 4px;
+      background-color: #cccccc; // Cor inativa
+      opacity: 1;
+
+      // Cor ativa
+      &.active {
+        background-color: var(--cor-primaria);
+      }
+    }
+  }
+
+  /* --- MUDANÇA: Estilo do novo botão fixo --- */
+  .dashboard-report-button {
+    position: absolute;
+    bottom: 60px; // Posição (acima dos indicadores)
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15; // Acima dos slides e indicadores
+    font-family: var(--font-principal);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-weight: 400;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+
+      &.active, &:hover {
+        font-weight: 700;
+        text-decoration: underline;
+      }
+  }
+}
+
+// Card de KPI (Slides 1, 2, 3)
+.stat-card {
+  height: 100%;
+
+  .card-body {
+    display: flex;
+    align-items: center;
+  }
+  .stat-icon {
+    font-size: 3rem;
+    padding: 1.5rem;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin-right: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: var(--cor-primaria);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.icon-atendimentos { color: var(--cor-sucesso); }
+    &.icon-agendados { color: var(--cor-aviso); }
+  }
+
+  .stat-title {
+    font-family: var(--font-secundaria);
+    color: var(--cor-texto-claro-adapt);
+    font-size: 1.2rem;
+  }
+  .stat-value {
+    font-family: var(--font-titulos);
+    font-weight: 800;
+    font-size: 4rem;
+    color: var(--cor-texto-escuro-adapt);
+    line-height: 1;
+  }
+  /* MUDANÇA: Removido - não precisamos mais dele nos slides */
+  // .card-footer-link { ... }
+}
+
+// Gráfico de Rosca (Diagnósticos / Prioridade)
+.chart-container-donut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 50px);
+  gap: 2rem;
+  padding: 0.5rem 0;
+  border-radius: 0;
+
+  .pie-chart-container {
+    flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+  }
+  .pie-chart {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  .pie-chart-legend {
+    flex-grow: 1;
+    max-width: 300px;
+    overflow-y: auto;
+    max-height: 250px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-secundaria);
+  }
+  .legend-color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .legend-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--cor-texto-claro-adapt);
+  }
+  .legend-value {
+    margin-left: auto;
+    font-weight: 700;
+    padding-left: 1rem;
+    color: var(--cor-texto-escuro-adapt);
+  }
+}
+
+// Gráfico de Barras (Cursos / Responsável)
+.chart-container-bar {
+  overflow-y: auto;
+  max-height: calc(100% - 50px);
+  padding: 0.5rem 1rem 0.5rem 0;
+  border-radius: 0;
+
+  .chart-bar-item {
+    margin-bottom: 1rem;
+  }
+  .bar-label {
+    font-family: var(--font-secundaria);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--cor-texto-escuro-adapt);
+  }
+  .bar-track {
+    background: var(--cor-fundo-barra-adapt);
+    border-radius: 4px;
+    height: 25px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    background: var(--cor-grafico-1);
+    height: 100%;
+    text-align: right;
+    padding-right: 8px;
+    color: var(--cor-branco);
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 30px;
+    transition: width 0.5s ease;
+  }
+}
+
+// Gráfico de Linha (Atendimentos por Mês)
+.chart-container-line {
+  display: flex;
+  height: calc(100% - 50px);
+  align-items: flex-end;
+  padding: 1rem 0.5rem 0 0.5rem;
+  gap: 0.5%;
+  border-radius: 0;
+  border-bottom: 2px solid var(--cor-borda-adapt);
+
+  .line-bar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: center;
+  }
+
+  .line-bar-fill {
+    background: var(--cor-grafico-2);
+    width: 70%;
+    border-radius: 4px 4px 0 0;
+    transition: height 0.5s ease-out;
+
+    .line-bar-value {
+      padding-top: 5px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--cor-branco);
+    }
+  }
+
+  .line-bar-label {
+    font-family: var(--font-secundaria);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    color: var(--cor-texto-claro-adapt);
+  }
+}
+
+
+// Cabeçalho da Vitrine (Fora do Carrossel)
+.vitrine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    font-family: var(--font-titulos);
+    font-size: 1.5rem;
+  }
+  a {
+    font-family: var(--font-secundaria);
+    font-weight: 700;
+    text-decoration: none;
+  }
+}

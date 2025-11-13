@@ -1,0 +1,70 @@
+/* src/styles.scss */
+
+// 1. Variáveis Globais de Fontes (baseado no teu pedido)
+:root {
+  --font-principal: 'Roboto', sans-serif;
+  --font-titulos: 'Montserrat', sans-serif;
+  --font-secundaria: 'Roboto Condensed', sans-serif;
+
+  // Paleta de Cores Base (Exemplo)
+  --cor-primaria: #004a91; // Azul CEFET
+  --cor-secundaria: #003366;
+  --cor-texto: #333;
+  --cor-texto-claro: #666;
+  --cor-fundo: #f4f7f6;
+  --cor-branco: #ffffff;
+  --cor-borda: #dee2e6;
+}
+
+// 2. Estilos Globais
+body {
+  font-family: var(--font-principal);
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-titulos);
+  font-weight: 800; // Como em 'Montserrat:wght@800'
+  color: var(--cor-secundaria);
+}
+
+// 3. Animações e Utilitários
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// 4. Estilos reutilizáveis (ex: Page Header)
+.page-header-container {
+  background-color: var(--cor-branco);
+  padding: 2rem;
+  border-bottom: 1px solid var(--cor-borda);
+  margin-bottom: 1.5rem;
+
+  &.bg-color-2 { // Para o Aluno List
+    background-color: var(--cor-secundaria);
+     h2.page-header-title {
+       color: var(--cor-branco);
+     }
+  }
+
+  .page-header-title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 800;
+  }
+}
+
+// Layout Básico da Página
+.page-container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem 1rem;
+}

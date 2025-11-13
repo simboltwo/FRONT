@@ -1,0 +1,21 @@
+/* src/app/pages/atendimentos/atendimento-form.component.scss */
+@import '../../../../styles.scss';
+
+// Remove o padding extra do modal-body
+.modal-body {
+  padding: 0;
+}
+
+.form-wrapper-flat {
+  padding: 2rem;
+}
+
+.form-label {
+  font-family: var(--font-secundaria);
+  font-weight: 700;
+}
+
+// Footer customizado
+.modal-footer {
+  background-color: var(--cor-fundo);
+}
