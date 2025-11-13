@@ -1,4 +1,6 @@
-<nav class="navbar navbar-expand-lg main-navbar" [class.navbar-scrolled]="isNavbarScrolled">
+<nav class="navbar navbar-expand-lg main-navbar"
+     [class.navbar-scrolled]="isNavbarScrolled"
+     [class.is-dashboard-page]="isDashboard">
   <div class="container-fluid">
 
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#naapiOffcanvasMenu" aria-controls="naapiOffcanvasMenu">
@@ -8,6 +10,8 @@
     <div class="navbar-brand-container">
       <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
         <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="navbar-logo">
+
+        <img src="assets/img/CEFET-MG_simplificada-negativo-menor.png" alt="Logo CEFET Branca" class="navbar-logo logo-branco">
 
         <span class="naapi-logo-text">NAAPI</span>
       </a>
@@ -147,10 +151,9 @@
         </ul>
       </li>
     </ul>
-
-  </div>
+    </div>
 </nav>
 
-<main class="main-content-area">
+<main class="main-content-area" [class.is-dashboard-page]="isDashboard">
   <router-outlet></router-outlet>
 </main>

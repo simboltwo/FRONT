@@ -10,6 +10,7 @@
   margin: 0 auto;
   max-width: 1320px;
   font-family: var(--font-secundaria);
+  padding-top: 1.5rem; // Espaço do topo
 
   .toolbar-count {
     color: var(--cor-texto-claro);
@@ -67,14 +68,20 @@
   width: 280px; // Largura do cartão
   animation: fadeInUp 0.5s ease-out forwards;
   opacity: 0;
+  height: 100%; // Garante que o wrapper tenha altura
 }
 
-// Cartão do Aluno
+// --- MUDANÇA: Card de Aluno (Sem min-height) ---
 .aluno-card {
   border: 1px solid var(--cor-borda);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   cursor: pointer;
+
+  // MUDANÇA: 'min-height' removido. 'height: 100%' adicionado.
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -85,6 +92,7 @@
     position: relative;
     height: 250px;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   .aluno-card-img {
@@ -109,6 +117,9 @@
 
   .card-body {
     padding: 1rem;
+    flex-grow: 1; // Ocupa o espaço restante
+    display: flex;
+    flex-direction: column;
   }
 
   .card-title {
@@ -132,7 +143,74 @@
     font-weight: 700;
     color: var(--cor-primaria);
   }
+
+  .aluno-card-diagnosticos {
+    margin-top: auto; // Empurra as badges para o final do card-body
+    padding-top: 0.5rem; // Adiciona espaço
+  }
 }
+
+// --- MUDANÇA: Card de Capa (Sem min-height) ---
+.aluno-cover-card {
+  background-color: var(--cor-secundaria);
+  // MUDANÇA: 'min-height' removido. 'height: 100%' adicionado.
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--cor-branco);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  // MUDANÇA: Adicionado um 'min-height' razoável para o card de capa
+  min-height: 400px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('../../../../../public/assets/img/CEFET-MG_simplificada-negativo-menor.png');
+    background-size: 80%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.1;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    &::before {
+      opacity: 0.2;
+    }
+  }
+
+  .cover-card-content {
+    z-index: 2;
+    position: relative;
+  }
+
+  .cover-card-title {
+    font-family: var(--font-titulos);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--cor-branco);
+    margin: 0;
+  }
+
+  .cover-card-link {
+    font-family: var(--font-secundaria);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--cor-branco);
+    text-decoration: none;
+    display: block;
+    margin-top: 0.5rem;
+  }
+}
+
 
 // Badges de Diagnóstico
 .aluno-diag-badge {

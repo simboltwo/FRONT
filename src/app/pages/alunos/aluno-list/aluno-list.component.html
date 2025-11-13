@@ -1,17 +1,5 @@
 <div class="aluno-list-page animate-fadeIn">
 
-  <div class="page-container">
-
-  <div class="aluno-list-page animate-fadeIn">
-
-    <div class="page-header-container bg-color-2">
-      <h2 class="page-header-title">ALUNOS</h2>
-    </div>
-
-    </div>
-
-</div>
-
   <div class="page-toolbar">
     <div class="toolbar-count">
       {{ (alunosCount$ | async) || 0 }} alunos encontrados.
@@ -44,6 +32,16 @@
 
     <div class="aluno-carousel-track" #carouselTrack>
 
+      <div class="carousel-item-wrapper">
+        <div class="card aluno-cover-card" (click)="goToNewAlunoPage()" title="Adicionar Novo Aluno">
+          <div class="cover-card-content">
+            <h3 class="cover-card-title">ALUNOS</h3>
+            <span class="cover-card-link">
+              CONFIRA <i class="bi bi-chevron-right"></i>
+            </span>
+          </div>
+        </div>
+      </div>
       <div class="carousel-item-wrapper"
            *ngFor="let aluno of (alunos$ | async); let i = index"
            [style.animation-delay]="(i % 12) * 0.05 + 's'">
@@ -100,7 +98,10 @@
           </div>
         </div>
 
-      </div> </div> <button (click)="scrollCarousel(1)" class="carousel-arrow next" title="Próximo">
+      </div>
+    </div>
+
+    <button (click)="scrollCarousel(1)" class="carousel-arrow next" title="Próximo">
       <i class="bi bi-chevron-right"></i>
     </button>
   </div>

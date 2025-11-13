@@ -1,5 +1,5 @@
 /* src/app/layout/layout.component.scss */
-@import '../../styles.scss'; // Importa nossas variáveis
+@import '../../styles.scss';
 
 .main-navbar {
   position: fixed;
@@ -8,79 +8,134 @@
   width: 100%;
   z-index: 1030;
 
+  // --- ESTADO PADRÃO (BRANCO SÓLIDO) ---
   background-color: hsl(0, 0%, 100%);
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
-
-  // Classe para quando o scroll acontece
-  &.navbar-scrolled {
-    background-color: hsl(0, 0%, 100%); // Fundo com leve transparência
-    backdrop-filter: blur(5px);
-  }
+  box-shadow: none; // Começa sem sombra
 
   .navbar-logo {
     height: 35px;
     margin-right: 0.1rem;
+    display: inline-block; // Padrão
+  }
+
+  // Logo branca (começa escondida)
+  .logo-branco {
+    display: none;
   }
 
   .naapi-logo-text {
-    color: hsl(209, 100%, 21%);
-    font-family: var(--font-titulos); // Fonte Montserrat
+    color: hsl(209, 100%, 21%); // Cor padrão (azul)
+    font-family: var(--font-titulos);
     font-weight: 800;
     font-size: 1.5rem;
     letter-spacing: 4px;
+    transition: color 0.3s ease;
   }
 
-  // Links da Navbar (Ex: Dashboard, Alunos)
+  // Links da Navbar
   .nav-link {
-      font-family: var(--font-secundaria); // Fonte Roboto
-      color: hsl(209, 100%, 21%);
-      font-weight: 400;
-      font-size: 0.9rem;
-      padding: 0.5rem 0.8rem;
-      line-height: 18.4px;
-      padding-bottom: 1rem;
-      position: relative;
-      background: none;
-      border-radius: 4px;
-      transition: all 0.2s ease;
+    font-family: var(--font-secundaria);
+    color: hsl(209, 100%, 21%); // Cor padrão (azul)
+    font-weight: 400;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    line-height: 18.4px;
+    padding-bottom: 1rem;
+    position: relative;
+    background: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
 
-      &:hover {
-        font-weight: 600; // Usa Roboto Bold no hover
-        transform: translateY(-2%);
-        transition: transform 0s ease-out;
-      }
+    &:hover {
+      font-weight: 600;
+      transform: translateY(-2%);
+      transition: transform 0s ease-out;
+    }
 
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 2px; // Posição da linha (2px de baixo para cima)
-        left: 1rem;  // Alinha com o padding do link
-        right: 1rem; // Alinha com o padding do link
-        height: 1px;
-        background-color: hsl(209, 100%, 21%);
-
-        transform: scaleX(0); // Começa invisível (encolhido)
-        transition: transform 0s ease-out;
-        transform-origin: center;
-        border-radius: 10px;
-      }
-      &:hover::after{
-        transform: scaleX(1.5); // Expande a linha
-      }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 1rem;
+      right: 1rem;
+      height: 1px;
+      background-color: hsl(209, 100%, 21%); // Cor padrão (azul)
+      transform: scaleX(0);
+      transition: transform 0s ease-out;
+      transform-origin: center;
+      border-radius: 10px;
+    }
+    &:hover::after {
+      transform: scaleX(1.5);
+    }
   }
+
+  // --- ESTADO DE SCROLL (FUNDO BRANCO + SOMBRA) ---
+  &.navbar-scrolled {
+    background-color: hsl(0, 0%, 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); // Adiciona sombra
+  }
+
+  // --- MUDANÇA: ESTADO ESPECIAL DO DASHBOARD (SOBREPOSIÇÃO) ---
+  &.is-dashboard-page {
+    // 1. Fica transparente no topo
+    background-color: transparent;
+    box-shadow: none;
+
+    // 2. Mostra a logo branca e esconde a azul
+    .navbar-logo {
+      display: none;
+    }
+    .logo-branco {
+      display: inline-block;
+    }
+
+    // 3. Muda cor do texto e da linha
+    .naapi-logo-text,
+    .nav-link,
+    .navbar-profile .nav-link {
+      color: var(--cor-branco); // Texto branco
+    }
+
+    .nav-link::after {
+      background-color: var(--cor-branco); // Linha branca
+    }
+
+    // 4. QUANDO ROLAR A PÁGINA DO DASHBOARD
+    &.navbar-scrolled {
+      background-color: hsl(0, 0%, 100%); // Volta ao branco
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+      // 5. Mostra a logo azul e esconde a branca
+      .navbar-logo {
+        display: inline-block;
+      }
+      .logo-branco {
+        display: none;
+      }
+
+      // 6. Volta as cores dos textos para azul
+      .naapi-logo-text,
+      .nav-link,
+      .navbar-profile .nav-link {
+        color: hsl(209, 100%, 21%);
+      }
+
+      .nav-link::after {
+        background-color: hsl(209, 100%, 21%); // Linha azul
+      }
+    }
+  }
+  // --- FIM DAS MUDANÇAS DA NAVBAR ---
+
 
   // Perfil do Usuário
   .navbar-profile {
     .nav-link {
       font-family: var(--font-principal);
-
-      /* Garante que a linha de hover não apareça aqui */
-      &::after {
-        display: none;
-        
-      }
-
+      &::after { display: none; }
       small {
         font-family: var(--font-secundaria);
         display: block;
@@ -88,126 +143,83 @@
         line-height: 1;
       }
     }
-
-    /* Adiciona a transição suave ao dropdown do perfil (versão DESKTOP) */
     .dropdown-menu {
-      display: block;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px); // Começa 10px abaixo
+      display: block; opacity: 0; visibility: hidden;
+      transform: translateY(10px);
       pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
-      margin-top: 0.5rem; // Pequeno espaço
+      margin-top: 0.5rem;
       border-radius: 0.375rem;
     }
-
     .dropdown-menu.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0); // Sobe para a posição 0
+      opacity: 1; visibility: visible;
+      transform: translateY(0);
       pointer-events: auto;
       transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
     }
   }
 
-  // --- MUDANÇA 2: Estilos do Mega Menu ---
+  // Estilos do Mega Menu
   .dropdown-mega {
-    position: static; // Chave para o mega menu
-
+    position: static;
     .dropdown-menu-mega {
-      // Ocupa 100% da largura e alinha com a navbar
-      display: block;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(0px); // Começa 10px abaixo
+      display: block; opacity: 0; visibility: hidden;
+      transform: translateY(0px);
       pointer-events: none;
-
       transition: opacity 0s ease, transform 0s ease, visibility 0s 0s;
-
       width: 100%;
-      left: 0;
-      right: 0;
-      margin-top: 0; // Remove o espaço
-      border: none;
-      border-radius: 0; // Remove cantos arredondados
+      left: 0; right: 0; margin-top: 0;
+      border: none; border-radius: 0;
       padding: 1.5rem 2rem;
 
       .container-fluid {
-        // Define uma largura máxima para o conteúdo.
-        // Isto fará com que as colunas .col-lg-3 fiquem mais próximas.
         max-width: 560px;
-
-        // Remove paddings laterais do container para alinhar
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: 2.4rem; // Remove a margem automática da esquerda
-        margin-right: auto;
+        padding-left: 0; padding-right: 0;
+        margin-left: 2.4rem; margin-right: auto;
       }
     }
-
     @media (min-width: 992px) {
       &:hover > .dropdown-menu-mega {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0); // Volta à posição 0
-        pointer-events: auto; // Agora captura o rato
-        // 'visibility' muda instantaneamente (0s)
+        opacity: 1; visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
         transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
       }
     }
-
     .dropdown-header {
-      font-family: var(--font-principal); // Fonte Montserrat
-      font-weight: 800;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-family: var(--font-principal);
+      font-weight: 800; font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.5px;
       color: var(--cor-primaria);
-      padding-left: 0.5rem;
-      margin-bottom: 0.5rem;
+      padding-left: 0.5rem; margin-bottom: 0.5rem;
     }
-
     .dropdown-item {
-      font-family: var(--font-secundaria); // Fonte Roboto
-      font-weight: 400;
-      font-size: 0.7rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-
+      font-family: var(--font-secundaria);
+      font-weight: 400; font-size: 0.7rem;
+      padding: 0.15rem 0.5rem; border-radius: 4px;
       &.active, &:hover {
-        font-weight: 700;
-        text-decoration: underline;
+        font-weight: 700; text-decoration: underline;
       }
     }
-
-    // Itens secundários (como "Gerenciar Cursos")
     .item-secondary-style {
       color: var(--cor-texto-claro);
-      font-weight: 400;
-      font-size: 0.8rem;
+      font-weight: 400; font-size: 0.8rem;
       &:hover {
-        font-weight: 700;
-        text-decoration: underline;
+        font-weight: 700; text-decoration: underline;
       }
     }
   }
 
-  // --- Estilos para o Menu Offcanvas (Mobile) ---
-  .offcanvas-header {
-    border-bottom: 1px solid var(--cor-borda);
-  }
+  // Estilos para o Menu Offcanvas (Mobile)
+  .offcanvas-header { border-bottom: 1px solid var(--cor-borda); }
   .offcanvas-nav-links {
     .nav-link {
-      font-family: var(--font-titulos); // Títulos no mobile
-      font-size: 1.2rem;
-      font-weight: 700;
+      font-family: var(--font-titulos);
+      font-size: 1.2rem; font-weight: 700;
       color: var(--cor-secundaria);
-      display: flex;
-      justify-content: space-between;
-
+      display: flex; justify-content: space-between;
       &.active, &:hover {
-        color: var(--cor-primaria);
-        background: none;
+        color: var(--cor-primaria); background: none;
       }
     }
   }
@@ -217,9 +229,14 @@
   }
 }
 
-// --- MUDANÇA 3: Ajusta o conteúdo principal ---
+// --- MUDANÇA: Ajuste do conteúdo principal ---
 .main-content-area {
-  // Adiciona um padding no topo igual à altura da navbar
-  // para que o conteúdo não comece "atrás" dela.
+  // O padding padrão que empurra o conteúdo para baixo da navbar
   padding-top: 80px;
+  transition: padding-top 0.3s ease; // Transição suave
+
+  // SE ESTIVER no dashboard, remove o padding
+  &.is-dashboard-page {
+    padding-top: 0;
+  }
 }

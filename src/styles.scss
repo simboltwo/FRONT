@@ -14,10 +14,12 @@
   --cor-fundo: #f4f7f6;
   --cor-branco: #ffffff;
   --cor-borda: #dee2e6;
+
 }
 
 // 2. Estilos Globais
 body {
+
   font-family: var(--font-principal);
   background-color: var(--cor-fundo);
   color: var(--cor-texto);
