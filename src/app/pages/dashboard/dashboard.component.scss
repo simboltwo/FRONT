@@ -175,17 +175,20 @@
 // Gráfico de Rosca (Diagnósticos / Prioridade)
 .chart-container-donut {
   display: flex;
-  flex-direction: column;
+  // MUDANÇA: De 'column' para 'row' para ficar lado a lado
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   height: calc(100% - 70px);
-  gap: 1.5rem;
-  padding: 0;
+  // MUDANÇA: Aumenta o espaço entre o gráfico e a legenda
+  gap: 3rem;
+  padding: 0 1rem; // Adiciona padding lateral
 
   .pie-chart-container {
     flex-shrink: 0;
-    width: 150px;
-    height: 150px;
+    // MUDANÇA: Gráfico significativamente maior
+    width: 220px;
+    height: 220px;
   }
   .pie-chart {
     width: 100%;
@@ -194,23 +197,27 @@
   }
   .pie-chart-legend {
     flex-grow: 0;
+    // MUDANÇA: Define uma largura para a coluna da legenda
     width: 100%;
     max-width: 350px;
-    overflow-y: auto;
-    max-height: 120px;
+    overflow-y: auto; // Scroll vertical se a lista for longa
+    // MUDANÇA: Altura máxima alinhada ao gráfico
+    max-height: 220px;
     padding: 0 1rem;
   }
   .legend-item {
     display: flex;
     align-items: center;
-    margin-bottom: 0.5rem;
+    // MUDANÇA: Aumenta o espaçamento entre os itens
+    margin-bottom: 0.75rem;
     font-family: var(--font-secundaria);
   }
   .legend-color-dot {
-    width: 12px;
-    height: 12px;
+    // MUDANÇA: Ponto de cor ligeiramente maior
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    margin-right: 0.5rem;
+    margin-right: 0.75rem; // MUDANÇA: Mais espaço
     flex-shrink: 0;
   }
   .legend-label {
@@ -218,14 +225,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--cor-texto-claro-adapt);
-    font-size: 0.9rem;
+    // MUDANÇA: Fonte ligeiramente maior para legibilidade
+    font-size: 0.95rem;
   }
   .legend-value {
     margin-left: auto;
     font-weight: 700;
     padding-left: 1rem;
     color: var(--cor-texto-escuro-adapt);
-    font-size: 0.9rem;
+    // MUDANÇA: Fonte ligeiramente maior para legibilidade
+    font-size: 0.95rem;
   }
 }
 
@@ -287,7 +296,6 @@
   }
 
   .line-bar-fill {
-    background: var(--cor-grafico-2);
     width: 70%;
     border-radius: 4px 4px 0 0;
     transition: height 0.5s ease-out;

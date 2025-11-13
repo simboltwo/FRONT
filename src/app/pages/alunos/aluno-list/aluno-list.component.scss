@@ -9,6 +9,8 @@
   padding: 0 1rem 1rem 1rem;
   margin: 0 auto;
   max-width: 1320px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 1rem 1rem;
   font-family: var(--font-secundaria);
   padding-top: 1.5rem; // Espaço do topo
 
@@ -46,6 +48,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   font-size: 1.5rem;
   color: var(--cor-secundaria);
+  transition: all 0.3s ease; // MUDANÇA: Adicionar transição
 
   &.prev { left: -20px; }
   &.next { right: -20px; }
@@ -59,6 +62,22 @@
   padding: 0.5rem 0.5rem 1.5rem 0.5rem;
   scrollbar-width: none; // Firefox
   &::-webkit-scrollbar { display: none; } // Chrome/Safari
+
+  // MUDANÇA: Largura fixa SÓ se aplica dentro do carrossel
+  .carousel-item-wrapper {
+    flex: 0 0 auto;
+    width: 280px; // Largura do cartão no carrossel
+  }
+}
+
+.aluno-grid-container {
+  display: grid;
+  // Colunas responsivas: auto-preenchimento, min de 260px, max de 1fr
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem; // Espaçamento entre os cards
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem 1rem; // Padding (especialmente em baixo)
 }
 
 // Wrapper do Item (para espaçamento)
@@ -68,37 +87,94 @@
   width: 280px; // Largura do cartão
   animation: fadeInUp 0.5s ease-out forwards;
   opacity: 0;
-  height: 100%; // Garante que o wrapper tenha altura
+  // MUDANÇA: REMOVER A ALTURA
+  // height: 100%; // <-- Linha removida
 }
 
-// --- MUDANÇA: Card de Aluno (Sem min-height) ---
 .aluno-card {
-  border: 1px solid var(--cor-borda);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 0; // MUDANÇA: Remove cantos arredondados
+  box-shadow: none; // MUDANÇA: Remove a sombra
   transition: all 0.3s ease;
   cursor: pointer;
-
-  // MUDANÇA: 'min-height' removido. 'height: 100%' adicionado.
-  height: 100%;
+  background-color: var(--cor-branco);
   display: flex;
   flex-direction: column;
+  overflow: hidden; // MUDANÇA: Essencial para o efeito de zoom
 
   &:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-5px);
+    box-shadow: none; // MUDANÇA: Sem sombra no hover
+    transform: none; // MUDANÇA: Sem movimento no hover
+
+    // MUDANÇA: Ativa a animação da imagem
+    .aluno-card-img {
+      transform: scale(1.05);
+    }
+    .aluno-card:hover .aluno-quick-actions {
+      opacity: 1;
+      // Sobe para 1rem ACIMA da base da imagem
+      transform: translateX(-50%) translateY(-1rem);
+    }
+  }
+
+  .aluno-card .card-body {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 
   .aluno-card-img-container {
     position: relative;
-    height: 250px;
+    height: 380px; // Altura padrão (página /alunos)
     overflow: hidden;
     flex-shrink: 0;
+    border-radius: 0;
+    transition: height 0.3s ease;
   }
 
   .aluno-card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 0; // MUDANÇA: Remove radius
+    transform: scale(1); // MUDANÇA: Estado inicial do zoom
+    transition: transform 0.4s ease-out; // MUDANÇA: Animação do zoom
+  }
+
+  .aluno-priority-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.25rem;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); // Sombra para o ícone
+
+    // Prioridade Baixa (Verde)
+    &.priority-baixa {
+      color: var(--cor-sucesso); // Cor verde de sucesso
+    }
+
+    // Prioridade Média (Amarelo, pisca lento)
+    &.priority-media {
+      color: var(--cor-aviso); // Cor amarela de aviso
+      animation: pulse-blink-slow 2.5s infinite ease-in-out;
+    }
+
+    // Prioridade Alta (Vermelho, pisca rápido)
+    &.priority-alta {
+      color: var(--cor-perigo); // Cor vermelha de perigo
+      animation: pulse-blink-fast 1s infinite ease-in-out;
+    }
+  }
+
+  .card-text-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-secundaria);
+    color: var(--cor-texto-claro);
+    font-size: 0.8rem;
+    padding-right: 0.25rem; // Pequeno espaço à direita
   }
 
   .aluno-card-badge {
@@ -107,25 +183,110 @@
     left: 10px;
     font-family: var(--font-secundaria);
     font-weight: 700;
+    border-width: 1px; // Adiciona borda
+    border-style: solid;
+    background-color: var(--cor-branco) !important; // Fundo branco
+    font-size: 0.75rem;
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+
+    // Classes de prioridade (estilo "Soft")
+    &.text-bg-danger {
+      color: var(--bs-danger) !important;
+      border-color: var(--bs-danger) !important;
+    }
+    &.text-bg-warning {
+      color: #997404 !important; // Cor de texto mais escura para aviso
+      border-color: var(--bs-warning) !important;
+    }
+    &.text-bg-success {
+      color: var(--bs-success) !important;
+      border-color: var(--bs-success) !important;
+    }
+  }
+
+  .aluno-quick-actions {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    width: auto;
+    background: var(--cor-branco);
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 0.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+
+    // Estado inicial (escondido)
+    opacity: 0;
+    transform: translateX(-50%) translateY(100%); // Posição escondida
+    transition: all 0.3s ease-out;
+
+    .btn-action, .btn-action-main, .btn-action-danger {
+      font-family: var(--font-secundaria);
+      font-weight: 700;
+      font-size: 0.8rem;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      line-height: 1;
+      transition: all 0.2s ease;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-action-main {
+      border-radius: 50px;
+      flex-grow: 1;
+      max-width: 160px;
+
+      &:hover {
+        background-color: var(--cor-primaria);
+        color: var(--cor-branco);
+      }
+    }
+
+    .btn-action, .btn-action-danger {
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+
+      &:hover {
+        background-color: var(--cor-primaria);
+        color: var(--cor-branco);
+      }
+    }
+
+    .btn-action-danger {
+      color: var(--bs-danger);
+
+      &:hover {
+        background-color: var(--bs-danger);
+        color: var(--cor-branco);
+      }
+    }
   }
 
   .card-action-menu {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+    display: none;
   }
 
   .card-body {
-    padding: 1rem;
-    flex-grow: 1; // Ocupa o espaço restante
+    padding: 1rem 0;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
   }
 
   .card-title {
-    font-family: var(--font-titulos);
-    font-size: 1.1rem;
-    font-weight: 800;
+    font-family: var(--font-secundaria);
+    font-size: 1rem;
+    font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -134,19 +295,18 @@
   .card-text-matricula {
     font-family: var(--font-secundaria);
     color: var(--cor-texto-claro);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .card-text-curso {
-    font-family: var(--font-principal);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--cor-primaria);
+    font-family: var(--font-secundaria);
+    font-size: 0.7rem;
+    color: var(--cor-texto-claro);
   }
 
   .aluno-card-diagnosticos {
     margin-top: auto; // Empurra as badges para o final do card-body
-    padding-top: 0.5rem; // Adiciona espaço
+    padding-top: 0rem; // Adiciona espaço
   }
 }
 
@@ -154,7 +314,6 @@
 .aluno-cover-card {
   background-color: var(--cor-secundaria);
   // MUDANÇA: 'min-height' removido. 'height: 100%' adicionado.
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,18 +372,18 @@
 
 
 // Badges de Diagnóstico
-.aluno-diag-badge {
-  font-family: var(--font-secundaria);
-  font-weight: 700;
-  font-size: 0.7rem;
-  padding: 0.3em 0.5em;
-  color: var(--cor-branco);
-  &.diag-tea { background-color: #007bff; }
-  &.diag-tdah { background-color: #fd7e14; }
-  &.diag-tag { background-color: #17a2b8; }
-  &.diag-tdm { background-color: #6f42c1; }
-  &.diag-default { background-color: #6c757d; }
-}
+  .aluno-diag-badge {
+    font-family: var(--font-secundaria);
+    font-weight: 700;
+    font-size: 0.7rem;
+    padding: 0.3em 0.5em;
+    border-radius: 0px;
+    border: 1px solid var(--cor-primaria); // Borda azul
+    background-color: #f0f6fc !important; // Fundo azul bem claro
+    color: var(--cor-primaria); // Texto azul
+
+    // MUDANÇA: Removemos as classes de cores individuais
+  }
 
 // Botão Flutuante (FAB)
 .fab-add-button {
@@ -282,4 +441,69 @@
   padding: 1rem;
   background: var(--cor-fundo);
   border-top: 1px solid var(--cor-borda);
+}
+
+.is-vitrine {
+
+  // Remove o padding superior que era para o toolbar
+  .page-toolbar {
+    display: none; // Já está no HTML, mas garante
+  }
+
+  .carousel-container {
+    max-width: none; // Permite ocupar o container-fluid
+    margin: 0;
+  }
+
+  // Ajusta as setas para ficarem menores e DENTRO do container
+  .carousel-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 1.25rem;
+    background: rgba(255, 255, 255, 0.85);
+
+    &.prev { left: 10px; } // Move para dentro
+    &.next { right: 10px; } // Move para dentro
+  }
+
+  // Remove o padding lateral extra da "pista"
+  .aluno-carousel-track {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .aluno-card .card-body {
+    padding: 0.75rem; // Padding igual em todos os lados
+  }
+
+  .aluno-card .card-text-meta {
+    padding-right: 0;
+  }
+}
+
+@keyframes pulse-blink {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-blink-fast {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-blink-slow {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
 }

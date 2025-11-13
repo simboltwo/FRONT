@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core'; // REMOVIDO: AfterViewInit
+import { Component, OnInit, inject, ViewChild, ElementRef, Input } from '@angular/core'; // REMOVIDO: AfterViewInit
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Observable, BehaviorSubject, switchMap, startWith, combineLatest, map, tap } from 'rxjs';
@@ -16,6 +16,8 @@ import { CursoService, DiagnosticoService } from '../../../core/services/api.ser
 })
 // REMOVIDO: AfterViewInit
 export class AlunoListComponent implements OnInit {
+
+  @Input() mode: 'full' | 'vitrine' = 'full';
   // Serviços
   private alunoService = inject(AlunoService);
   private cursoService = inject(CursoService);
