@@ -1,8 +1,90 @@
 <div class="aluno-list-page animate-fadeIn" [class.is-vitrine]="mode === 'vitrine'">
 
-  <div class="page-toolbar" *ngIf="mode === 'full'">
+  <div class="filter-bar-container" *ngIf="mode === 'full'" [formGroup]="filterForm">
+
+    <div class="filter-controls-left">
+      <div class="filter-search">
+        <i class="bi bi-search"></i>
+        <input type="text" class="form-control" placeholder="Buscar por nome do aluno..." formControlName="nome">
+      </div>
+
+      <div class="filter-dropdowns">
+
+        <div class="dropdown" formGroupName="cursoIds">
+          <button class="filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ getCursoSelecionadoTexto() }}
+            <span *ngIf="cursoFilterCount > 0" class="badge-filter-count ms-1">{{ cursoFilterCount }}</span>
+            <i class="bi bi-chevron-down ms-1"></i>
+          </button>
+          <div class="dropdown-menu filter-dropdown-menu">
+            <ul class="filter-options-list">
+              <li *ngFor="let curso of (cursos$ | async)">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="curso.id"
+                         [id]="'curso-' + curso.id"
+                         [checked]="isCursoChecked(curso.id)"
+                         (change)="onCursoChange($event)">
+                  <label class="form-check-label" [for]="'curso-' + curso.id">
+                    {{ curso.nome }}
+                  </label>
+                </div>
+              </li>
+            </ul>
+            <div class="filter-dropdown-footer">
+              <button class="btn btn-link btn-sm" (click)="clearFilters()">Limpar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown" formGroupName="diagnosticoIds">
+          <button class="filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ getDiagnosticoSelecionadoTexto() }}
+            <span *ngIf="diagnosticoFilterCount > 0" class="badge-filter-count ms-1">{{ diagnosticoFilterCount }}</span>
+            <i class="bi bi-chevron-down ms-1"></i>
+          </button>
+          <div class="dropdown-menu filter-dropdown-menu">
+            <ul class="filter-options-list">
+              <li *ngFor="let diag of (diagnosticos$ | async)">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox"
+                         [value]="diag.id"
+                         [id]="'diag-' + diag.id"
+                         [checked]="isDiagnosticoChecked(diag.id)"
+                         (change)="onDiagnosticoChange($event)">
+                  <label class="form-check-label" [for]="'diag-' + diag.id">
+                    {{ diag.sigla || diag.nome }}
+                  </label>
+                </div>
+              </li>
+            </ul>
+             <div class="filter-dropdown-footer">
+              <button class="btn btn-link btn-sm" (click)="clearFilters()">Limpar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
+    <div class="sort-control dropdown">
+      <span class="sort-label">ORDENAR POR:</span>
+      <button class="filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ getSortSelecionadoNome() }}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li *ngFor="let opt of sortOptions">
+          <a class="dropdown-item" href="#" (click)="$event.preventDefault(); filterForm.get('sort')?.setValue(opt.value)">
+            {{ opt.label }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="toolbar-count" *ngIf="mode === 'full'">
+    <span *ngIf="alunosCount$ | async as count">{{ count }} aluno(s) encontrado(s)</span>
+  </div>
   <div class="carousel-container" *ngIf="mode === 'vitrine'">
     <button (click)="scrollCarousel(-1)" class="carousel-arrow prev" title="Anterior">
       <i class="bi bi-chevron-left"></i>
@@ -148,6 +230,3 @@
 <button class="fab-add-button" title="Adicionar Novo Aluno" (click)="goToNewAlunoPage()" *ngIf="mode === 'full'">
   <i class="bi bi-plus-lg"></i>
 </button>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel" *ngIf="mode === 'full'">
-  </div>

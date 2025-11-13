@@ -70,7 +70,7 @@
               ALUNOS POR DIAGNÓSTICO
             </div>
             <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingTpl">
-              <div *ngIf="diagnosticos.length > 0; else noDataTpl">
+              <div *ngIf="diagnosticos.length > 0; else noDataTpl" class="chart-donut-content-wrapper">
                 <div class="pie-chart-container">
                   <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
                 </div>
@@ -94,7 +94,7 @@
               Alunos por Prioridade
             </div>
             <div class="card-body chart-container-donut" *ngIf="(relatorioPrioridade$ | async) as prioridades; else loadingTpl">
-              <div *ngIf="prioridades.length > 0; else noDataTpl">
+              <div *ngIf="prioridades.length > 0; else noDataTpl" class="chart-donut-content-wrapper">
                 <div class="pie-chart-container">
                   <div class="pie-chart" [style.background]="prioridadeChartStyle"></div>
                 </div>
@@ -118,7 +118,7 @@
               Alunos por Curso
             </div>
             <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loadingTpl">
-              <div *ngIf="cursos.length > 0; else noDataTpl">
+              <div *ngIf="cursos.length > 0; else noDataTpl" class="chart-bar-content-wrapper">
                 <div *ngFor="let item of cursos; trackBy: trackByNome" class="chart-bar-item">
                   <span class="bar-label">{{ item.cursoNome }}</span>
                   <div class="bar-track">
@@ -140,7 +140,7 @@
               Atendimentos Realizados por Responsável
             </div>
             <div class="card-body chart-container-bar" *ngIf="(relatorioAtendimentosResp$ | async) as atendimentos; else loadingTpl">
-              <div *ngIf="atendimentos.length > 0; else noDataTpl">
+              <div *ngIf="atendimentos.length > 0; else noDataTpl" class="chart-bar-content-wrapper">
                 <div *ngFor="let item of atendimentos; trackBy: trackByNome" class="chart-bar-item">
                   <span class="bar-label">{{ item.nome }}</span>
                   <div class="bar-track">
@@ -162,7 +162,7 @@
               Tendência de Atendimentos Realizados
             </div>
             <div class="card-body chart-container-line" *ngIf="(relatorioAtendimentosMes$ | async) as atendimentos; else loadingTpl">
-              <div *ngIf="atendimentos.length > 0; else noDataTpl">
+              <div *ngIf="atendimentos.length > 0; else noDataTpl" class="chart-line-content-wrapper">
 
                 <div *ngFor="let item of atendimentos; trackBy: trackByNome" class="line-bar-item">
                    <div class="line-bar-fill" [style.height]="getBarPercentage(item.total, maxAtendimentoMesCount)">
@@ -177,26 +177,33 @@
         </div>
       </div>
 
-    </div> <a routerLink="/relatorios" class="btn btn-primary dashboard-report-button">
+    </div>
+
+    <a routerLink="/relatorios" class="btn btn-primary dashboard-report-button">
       Ver Relatórios Completos
     </a>
 
+  </div>
+
   </div> <div class="container-fluid mt-4 mb-5">
     <div class="vitrine-header">
-      <h2>Alunos Recentes</h2>
+      <h2>Alunos com Prioridade Alta</h2>
       <a routerLink="/alunos">Ver todos</a>
     </div>
-    <app-aluno-list [mode]="'vitrine'"></app-aluno-list>
+
+    <app-aluno-list [mode]="'vitrine'" [prioridade]="'Alta'"></app-aluno-list>
+
   </div>
-</div>
 
 <ng-template #loadingTpl>
-  <div class="card-body text-center p-5">
+  <div class="d-flex align-items-center justify-content-center h-100">
     <span class="spinner-border spinner-border-sm"></span>
-    <p class="text-muted small mt-2">A carregar dados...</p>
+    <p class="text-muted small mt-2 ms-2">A carregar dados...</p>
   </div>
 </ng-template>
 
 <ng-template #noDataTpl>
-  <p class="text-muted text-center m-5">Sem dados disponíveis.</p>
+  <div class="d-flex align-items-center justify-content-center h-100">
+    <p class="text-muted m-5">Sem dados disponíveis.</p>
+  </div>
 </ng-template>

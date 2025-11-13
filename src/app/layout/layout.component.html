@@ -10,9 +10,7 @@
     <div class="navbar-brand-container">
       <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
         <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="navbar-logo">
-
         <img src="assets/img/CEFET-MG_simplificada-negativo-menor.png" alt="Logo CEFET Branca" class="navbar-logo logo-branco">
-
         <span class="naapi-logo-text">NAAPI</span>
       </a>
     </div>
@@ -43,7 +41,20 @@
               Relatórios <i class="bi bi-chevron-right"></i>
             </a>
           </li>
+        </ul>
+
+        <div class="offcanvas-nav-section d-lg-none">
+          <h6 class="nav-section-title">Cadastros</h6>
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" routerLink="/alunos/novo" routerLinkActive="active" (click)="closeOffcanvas()">Novo Aluno <i class="bi bi-chevron-right small"></i></a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/cursos" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Cursos <i class="bi bi-chevron-right small"></i></a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/turmas" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Turmas <i class="bi bi-chevron-right small"></i></a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/diagnosticos" routerLinkActive="active" (click)="closeOffcanvas()">Diagnósticos <i class="bi bi-chevron-right small"></i></a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/tipos-atendimento" routerLinkActive="active" (click)="closeOffcanvas()">Tipos de Atendimento <i class="bi bi-chevron-right small"></i></a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="/usuarios" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Usuários <i class="bi bi-chevron-right small"></i></a></li>
           </ul>
+        </div>
+
 
         <ul class="navbar-nav ms-lg-4 d-none d-lg-flex">
           <li class="nav-item">
@@ -108,7 +119,7 @@
               <i class="bi bi-person fs-5 me-2"></i>
               <span><small>{{ user.nome }}</small></span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="navbarUserDropdown">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
               <li>
                 <a class="dropdown-item" routerLink="/perfil" (click)="closeOffcanvas()">
                   <i class="bi bi-person-lines-fill me-2"></i> Ver perfil
@@ -129,14 +140,14 @@
 
     <ul class="navbar-nav navbar-profile d-none d-lg-flex" *ngIf="currentUser$ | async as user">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarUserDropdownDesktop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarUserDropdownDesktop" role="button" aria-expanded="false">
           <i class="bi bi-person fs-4 me-2"></i>
           <span>
             <small>Bem-vindo,</small>
             {{ user.nome }}
           </span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="navbarUserDropdownDesktop">
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdownDesktop">
           <li>
             <a class="dropdown-item" routerLink="/perfil">
               <i class="bi bi-person-lines-fill me-2"></i> Ver perfil

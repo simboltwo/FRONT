@@ -1,113 +1,236 @@
 /* src/app/pages/alunos/aluno-detalhe/aluno-detalhe.component.scss */
 @import '../../../../styles.scss';
 
-.aluno-detalhe-page {
+// Container principal da página (adiciona espaçamento)
+.detalhe-page-container {
   max-width: 1400px;
-  margin: 1.5rem auto;
-  background: var(--cor-branco);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-  overflow: hidden;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 4rem 1.5rem;
+  background-color: var(--cor-branco); // Fundo branco
 }
 
-// Coluna da Foto
-.aluno-foto-container {
-  height: 100%;
-  min-height: 80vh;
-  .aluno-foto-principal {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+// 1. Estilo do Breadcrumb
+.detalhe-breadcrumb {
+  font-family: var(--font-secundaria);
+  font-size: 0.8rem;
+  color: var(--cor-texto-claro);
+  padding: 1rem 0;
+
+  a {
+    color: var(--cor-texto-claro);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  i {
+    font-size: 0.6rem;
+    margin: 0 0.5rem;
+  }
+
+  span {
+    color: var(--cor-texto);
+    font-weight: 700;
   }
 }
 
-// Coluna de Informações
-.aluno-info-container {
-  padding: 2.5rem 3rem;
+// 2. Layout principal em Grid
+.detalhe-main-content {
+  display: grid;
+  grid-template-columns: 1fr; // Mobile: 1 coluna
+  gap: 2rem;
+
+  // MUDANÇA: Desktop: 50/50
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
+// 3. Coluna da Esquerda (Galeria)
+.detalhe-gallery {
+  width: 100%;
+
+  .gallery-image-main {
+    width: 100%;
+    overflow: hidden;
+    // MUDANÇA: Removida a borda para um look mais limpo
+  }
+
+  .aluno-foto-principal {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+  }
+}
+
+// 4. Coluna da Direita (Painel de Informações)
+.detalhe-info-panel {
+  width: 100%;
+
+  @media (min-width: 992px) {
+    position: sticky;
+    top: 100px; // (altura da navbar + padding)
+    align-self: start;
+    max-height: calc(100vh - 120px); // Evita que o painel seja maior que a tela
+    overflow-y: auto; // Adiciona scroll se o conteúdo for muito grande
+    padding-right: 1rem; // Espaço para a barra de scroll
+  }
+}
+
+// Secções de Informação
 .info-section {
   margin-bottom: 1.5rem;
 }
 
 .aluno-nome {
   font-family: var(--font-titulos);
-  font-size: 2.5rem;
+  font-size: 2.25rem; // Título principal
   font-weight: 800;
   margin-bottom: 0.25rem;
+  line-height: 1.2;
 }
 .aluno-nome-social {
   font-family: var(--font-secundaria);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: var(--cor-texto-claro);
-  margin-top: -0.5rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
 }
 .aluno-matricula {
   font-family: var(--font-secundaria);
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--cor-primaria);
   font-weight: 700;
 }
 
-// Infos empilhadas
-.stacked-info-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+// MUDANÇA: Badges de Prioridade (estilo pílula)
+.info-badge-group {
+  display: flex;
+  gap: 1.5rem;
+  border-top: 1px solid var(--cor-borda);
+  padding: 1.25rem 0;
 }
 .info-item {
   .info-label {
     display: block;
     font-family: var(--font-secundaria);
     color: var(--cor-texto-claro);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin-bottom: 0.25rem;
+    text-transform: uppercase;
   }
-  .info-value, .badge {
-    font-family: var(--font-principal);
+
+  // Estilo "Tamanhos" da Hering
+  .info-value-pill {
+    font-family: var(--font-secundaria);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 2px;
+    border: 1px solid var(--cor-borda);
+    display: inline-block;
+
+    &.pill-danger { border-color: var(--cor-perigo); color: var(--cor-perigo); }
+    &.pill-warning { border-color: var(--cor-aviso); color: var(--cor-aviso); }
+    &.pill-success { border-color: var(--cor-sucesso); color: var(--cor-sucesso); }
+    &.pill-info { border-color: #0dcaf0; color: #0dcaf0; }
+    &.pill-secondary { border-color: var(--cor-texto-claro); color: var(--cor-texto-claro); }
+  }
+}
+
+// MUDANÇA: Botões de Ação (Estilo Hering)
+.info-actions {
+  display: grid;
+  gap: 0.75rem;
+
+  .btn-primary {
+    background-color: var(--cor-secundaria); // Cor escura
+    border-color: var(--cor-secundaria);
+    font-family: var(--font-titulos);
     font-weight: 700;
     font-size: 1rem;
+    padding: 0.85rem; // Um pouco mais alto
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      background-color: #000; // Preto no hover
+      border-color: #000;
+    }
   }
 }
 
-.section-divider {
-  margin: 1.5rem 0;
-  border-top: 1px solid var(--cor-borda);
+// MUDANÇA: Link de Edição (estilo Hering)
+.info-edit-link {
+  font-family: var(--font-secundaria);
+  font-size: 0.9rem;
+  color: var(--cor-texto-claro);
+
+  a {
+    color: var(--cor-secundaria);
+    font-weight: 700;
+    text-decoration: underline;
+    margin-left: 0.5rem;
+    &:hover {
+      color: var(--cor-primaria);
+    }
+  }
 }
 
-// Acordeão
-.hering-accordion { // Estilo personalizado
+
+// Acordeão Estilo Hering
+.hering-accordion {
+  .accordion-item {
+    border-bottom: 1px solid var(--cor-borda); // Linha divisória
+
+    // MUDANÇA: Removida a borda superior
+    &:first-of-type {
+      border-top: none;
+    }
+  }
+
   .accordion-button {
-    font-family: var(--font-titulos);
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--cor-secundaria);
+    font-family: var(--font-principal);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cor-texto);
+    padding: 1.25rem 0;
+    background: none;
+    box-shadow: none;
+
+    .accordion-chevron {
+      transition: transform 0.2s ease-in-out;
+      margin-left: auto;
+      font-size: 1rem;
+    }
+
+    &::after {
+      display: none;
+    }
 
     &:not(.collapsed) {
-      background-color: var(--cor-fundo);
-      box-shadow: none;
+      .accordion-chevron {
+        transform: rotate(180deg);
+      }
     }
+
     &:focus { box-shadow: none; }
   }
 
-  .info-content {
-    font-family: var(--font-principal);
-    white-space: pre-wrap; // Respeita quebras de linha
-    line-height: 1.6;
-  }
-}
-
-// Cabeçalho da Lista (Atendimentos)
-.list-section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-
-  .list-title-sub {
+  .accordion-body {
+    padding: 0 0 1.5rem 0; // Padding inferior
     font-family: var(--font-secundaria);
-    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--cor-texto-claro);
+  }
+
+  .info-content {
+    white-space: pre-wrap;
     color: var(--cor-texto);
-    margin: 0;
   }
 }

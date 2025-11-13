@@ -28,17 +28,16 @@ export class LayoutComponent implements OnInit { // MUDANÇA: Implementado OnIni
   protected router = inject(Router);
   protected currentUser$: Observable<Usuario | null>;
 
-  // Variável para controlar o estado da navbar
   protected isNavbarScrolled = false;
 
-  // MUDANÇA: Nova variável para controlar a rota do dashboard
+  // MUDANÇA: Variável 'isDashboard' restaurada
   protected isDashboard = false;
 
   constructor() {
     this.currentUser$ = this.authService.currentUser$;
   }
 
-  // MUDANÇA: Novo método ngOnInit para detetar a rota
+  // MUDANÇA: Método ngOnInit restaurado
   ngOnInit(): void {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -48,13 +47,11 @@ export class LayoutComponent implements OnInit { // MUDANÇA: Implementado OnIni
     });
   }
 
-  // Listener que observa o scroll da janela
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const scrollOffset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-    // MUDANÇA: A lógica de scroll agora é um pouco diferente
-    // Se estiver no dashboard, o scroll_ativado é 50. Senão, 10.
+    // MUDANÇA: Lógica de scroll original restaurada
     const scrollTrigger = this.isDashboard ? 50 : 10;
     this.isNavbarScrolled = scrollOffset > scrollTrigger;
   }

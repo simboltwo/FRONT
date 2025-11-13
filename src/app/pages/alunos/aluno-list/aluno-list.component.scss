@@ -25,28 +25,209 @@
   100% { opacity: 1; }
 }
 
-// --- Layout da Página (Modo Full) ---
-.page-toolbar {
+// --- MUDANÇA: Nova Barra de Filtros (Estilo Hering 2.0) ---
+.filter-bar-container {
   display: flex;
+  flex-wrap: wrap; // Quebra a linha em ecrãs pequenos
   justify-content: space-between;
   align-items: center;
-  font-family: var(--font-secundaria);
+  gap: 1rem;
   max-width: 1320px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 1rem 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--cor-borda);
+}
 
-  .toolbar-count {
+.filter-controls-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem; // Espaço menor entre busca e filtros
+  flex: 1 1 50%; // Ocupa a maior parte do espaço
+}
+
+// Estilo da Barra de Busca "Quadrada e Menor"
+.filter-search {
+  display: flex;
+  align-items: center;
+  background: var(--cor-branco); // Fundo branco
+  border: 1px solid #ced4da; // Borda cinza
+  border-radius: 2px; // "Quadrado"
+  padding: 0 0.75rem; // Padding para o ícone
+  flex: 1 1 300px; // Cresce para preencher o espaço
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus-within { // Quando o input dentro dele focar
+     border-color: var(--cor-primaria);
+     box-shadow: 0 0 0 0.25rem rgba(0, 74, 145, 0.15);
+  }
+
+  .bi-search {
     color: var(--cor-texto-claro);
+    font-size: 0.9rem;
+    margin-right: 0.5rem; // Espaço entre ícone e texto
   }
-  .toolbar-actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-  .btn {
+
+  .form-control {
+    border: none;
+    background: none;
+    box-shadow: none;
+    padding: 0.45rem 0.5rem; // "Menor" (padding vertical)
+    font-size: 0.9rem;
     font-family: var(--font-secundaria);
-    font-weight: 700;
+
+    &:focus {
+      box-shadow: none;
+    }
+    &::placeholder {
+      color: var(--cor-texto-claro);
+    }
   }
 }
+
+// Estilo dos Dropdowns de Filtro (Curso, Diag)
+.filter-dropdowns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+// Estilo dos Botões "Quadrado e Menor"
+.filter-btn {
+  font-family: var(--font-secundaria);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--cor-secundaria); // Texto escuro
+  background-color: var(--cor-branco);
+  border: 1px solid #ced4da; // Borda cinza
+  border-radius: 2px; // "Quadrado"
+  padding: 0.45rem 0.75rem; // "Menor"
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  white-space: nowrap; // Evita quebra de linha
+
+  &:hover {
+    border-color: var(--cor-primaria);
+    color: var(--cor-primaria);
+  }
+
+  // Seta personalizada (para filtros)
+  .bi-chevron-down {
+    font-size: 0.7rem;
+    margin-left: 0.5rem; // Espaço da seta
+  }
+
+  // Seta padrão (para "Ordenar Por")
+  &.dropdown-toggle::after {
+    font-size: 0.7rem;
+    vertical-align: 0.1em;
+    margin-left: 0.5rem;
+  }
+
+  // Oculta a seta personalizada quando a seta padrão estiver presente
+  &.dropdown-toggle .bi-chevron-down {
+    display: none;
+  }
+
+  // Contador de filtro
+  .badge-filter-count {
+    background-color: var(--cor-primaria);
+    color: var(--cor-branco);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2em 0.5em;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+  }
+}
+
+// Menu que abre do dropdown (para Curso e Diag)
+.filter-dropdown-menu {
+  padding: 0; // Removido padding
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: 2px; // "Quadrado"
+  border: 1px solid var(--cor-borda);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+  font-size: 0.9rem; // Aplicado ao menu todo
+
+  .filter-options-list {
+    list-style: none;
+    padding: 0.5rem 0; // Espaço interno
+    margin: 0;
+
+    .form-check {
+      padding: 0.5rem 1.25rem;
+      font-family: var(--font-secundaria);
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f0f6fc; // Azul claro no hover
+      }
+      .form-check-label {
+        cursor: pointer;
+        user-select: none; // Impede seleção de texto
+      }
+    }
+  }
+
+  .filter-dropdown-footer {
+    border-top: 1px solid var(--cor-borda);
+    padding: 0.25rem 0.75rem;
+    text-align: end;
+    background-color: var(--cor-fundo);
+
+    .btn-link {
+      font-family: var(--font-secundaria);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+
+// Controlo de Ordenação (Direita)
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; // Espaço entre label e botão
+  flex: 0 0 auto; // Não cresce
+
+  .sort-label {
+    font-family: var(--font-secundaria);
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--cor-texto-claro);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  // O botão de sort agora usa o estilo .filter-btn
+  // (Removemos o override que o deixava diferente)
+
+  .dropdown-menu .dropdown-item {
+    font-family: var(--font-secundaria);
+    font-size: 0.9rem;
+  }
+}
+
+// Contagem de Alunos (abaixo da barra)
+.toolbar-count {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0.5rem 1.25rem 0 1.25rem;
+  font-size: 0.85rem;
+  font-family: var(--font-secundaria);
+  color: var(--cor-texto-claro);
+}
+
+// --- FIM DOS ESTILOS DA BARRA ---
+
 
 // Container do Grid (Modo Full)
 .aluno-grid-container {
@@ -55,7 +236,7 @@
   gap: 1.5rem;
   max-width: 1320px;
   margin: 0 auto;
-  padding: 0 1rem 2rem 1rem;
+  padding: 1.5rem 1rem 2rem 1rem; // Padding-top
 }
 
 // --- Layout da Vitrine (Modo Vitrine) ---
@@ -88,8 +269,10 @@
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+  padding: 0.5rem 1rem 1.5rem 1rem;
   scrollbar-width: none;
+  gap: 1.5rem; // Espaçamento entre cards
+
   &::-webkit-scrollbar { display: none; }
 
   // Largura fixa SÓ se aplica dentro do carrossel
@@ -104,7 +287,7 @@
 .carousel-item-wrapper {
   animation: fadeInUp 0.5s ease-out forwards;
   opacity: 0;
-  height: 100%; // Garante que itens do grid tenham mesma altura
+  height: 100%;
 }
 
 .aluno-card {
@@ -117,20 +300,20 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 100%; // Garante que o card preencha o wrapper
+  height: 100%;
 
-  // --- O GATILHO DE HOVER (no card-pai) ---
+  // --- Animação de Hover (Levitar) ---
   &:hover {
-    box-shadow: none;
-    transform: none;
+    transform: translateY(-5px); // Levanta o card
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); // Adiciona sombra suave
 
     // 1. Anima o zoom da imagem
     .aluno-card-img {
-      transform: scale(1.35);
+      transform: scale(1.1); // Zoom mais suave
+      filter: brightness(1.05); // Efeito de "luz"
     }
   }
-
-  // --- ESTILOS DO CARD ---
+  // --- FIM DO HOVER ---
 
   .aluno-card-img-container {
     position: relative;
@@ -147,7 +330,7 @@
     object-fit: cover;
     border-radius: 0;
     transform: scale(1);
-    transition: transform 0.4s ease-out;
+    transition: transform 0.4s ease-out, filter 0.4s ease-out; // Transição do hover
   }
 
   // Ícone de Prioridade
@@ -171,7 +354,6 @@
   }
 
   // --- Menu Flutuante (Hover) ---
-  // A definição do menu (estado ESCONDIDO)
   .aluno-quick-actions {
     position: absolute;
     bottom: 0rem;
@@ -238,8 +420,7 @@
     }
   }
 
-  // CORREÇÃO: Esta é a regra para MOSTRAR o menu.
-  // Fica fora do .aluno-card:hover, mas ainda dentro de .aluno-card
+  // Regra para MOSTRAR o menu
   &:hover .aluno-quick-actions {
     opacity: 1;
     transform: translateX(-50%) translateY(0rem); // Posição visível
@@ -389,45 +570,6 @@
   z-index: 100;
 }
 
-// --- Offcanvas de Filtros (Modo Full) ---
-.filter-divider {
-  border-top: 1px solid var(--cor-borda);
-}
-.filter-group-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 0;
-
-  .form-label {
-    font-family: var(--font-titulos);
-    font-size: 1.1rem;
-    font-weight: 800;
-    margin-bottom: 0;
-  }
-
-  .filter-count-badge {
-    font-size: 0.75rem;
-    padding: 0.2em 0.5em;
-    border-radius: 4px;
-    background: var(--cor-primaria);
-    color: var(--cor-branco);
-    margin-left: 0.5rem;
-  }
-}
-.filter-options-list {
-  max-height: 250px;
-  overflow-y: auto;
-}
-.offcanvas-footer {
-  padding: 1rem;
-  background: var(--cor-fundo);
-  border-top: 1px solid var(--cor-borda);
-}
-
 // --- Estilos Específicos do Modo Vitrine ---
 .is-vitrine {
 
@@ -445,11 +587,6 @@
 
     &.prev { left: 10px; }
     &.next { right: 10px; }
-  }
-
-  .aluno-carousel-track {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
   }
 
   // Altura da imagem na vitrine

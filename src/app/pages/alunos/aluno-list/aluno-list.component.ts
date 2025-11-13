@@ -18,6 +18,8 @@ import { CursoService, DiagnosticoService } from '../../../core/services/api.ser
 export class AlunoListComponent implements OnInit {
 
   @Input() mode: 'full' | 'vitrine' = 'full';
+
+  @Input() prioridade: string | null = null;
   // Serviços
   private alunoService = inject(AlunoService);
   private cursoService = inject(CursoService);
@@ -90,7 +92,17 @@ export class AlunoListComponent implements OnInit {
         }
 
         const sortValue = this.filterForm.value.sort;
-        return this.sortAlunos(alunosFiltrados, sortValue || 'nome-asc');
+        let sortedAlunos = this.sortAlunos(alunosFiltrados, sortValue || 'nome-asc');
+
+        // --- MUDANÇA: Filtro de Prioridade para modo Vitrine ---
+        if (this.mode === 'vitrine' && this.prioridade) {
+          sortedAlunos = sortedAlunos.filter(aluno =>
+            aluno.prioridade.toLowerCase() === this.prioridade!.toLowerCase()
+          );
+        }
+        // --- FIM DA MUDANÇA ---
+
+        return sortedAlunos;
       }),
       tap(alunos => this.updateAlunoCount(alunos.length))
     );
