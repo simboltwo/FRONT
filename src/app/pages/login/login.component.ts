@@ -37,7 +37,7 @@ export class LoginComponent {
       next: (success) => {
         if (success) {
           // Sucesso! Navega para a página principal
-          this.router.navigate(['/alunos']);
+          this.router.navigate(['/dashboard']);
         } else {
           // Falha (controlada pelo service)
           this.errorMessage = "Email ou senha inválidos.";
