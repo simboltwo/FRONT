@@ -1,118 +1,100 @@
 <div class="dashboard-page animate-fadeIn">
 
-  <div class="page-header-container bg-color-11"> <h2 class="page-header-title">DASHBOARD</h2>
-  </div>
-
-  <div class="row g-3 g-lg-4 mb-4">
-    <div class="col-md-4">
-      <div class="card stat-card h-100">
-        <div class="card-body">
-          <div class="stat-icon icon-alunos">
-            <i class="bi bi-people-fill"></i>
-          </div>
-          <div class="stat-content">
-            <h6 class="stat-title">Total de Alunos</h6>
-            <span class="stat-value">{{ (totalAlunos$ | async) || 0 }}</span>
-          </div>
-        </div>
-        <a routerLink="/alunos" class="card-footer-link">
-          Ver Alunos <i class="bi bi-arrow-right-short"></i>
-        </a>
-      </div>
+  <div id="graphCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
-     <div class="col-md-4">
-      <div class="card stat-card h-100">
-        <div class="card-body">
-          <div class="stat-icon icon-atendimentos">
-            <i class="bi bi-calendar-check"></i>
-          </div>
-          <div class="stat-content">
-            <h6 class="stat-title">Atendimentos (Futuro)</h6>
-            <span class="stat-value">...</span>
-          </div>
-        </div>
-         <a href="#" class="card-footer-link disabled">
-          Ver Atendimentos <i class="bi bi-arrow-right-short"></i>
-        </a>
-      </div>
-    </div>
-     <div class="col-md-4">
-      <div class="card stat-card h-100">
-        <div class="card-body">
-          <div class="stat-icon icon-relatorios">
-            <i class="bi bi-file-earmark-text"></i>
-          </div>
-          <div class="stat-content">
-            <h6 class="stat-title">Relatórios</h6>
-            <span class="stat-value">...</span>
-          </div>
-        </div>
-         <a href="#" class="card-footer-link disabled">
-          Gerar Relatórios <i class="bi bi-arrow-right-short"></i>
-        </a>
-      </div>
-    </div>
-  </div>
 
-  <div class="row g-3 g-lg-4">
+    <div class="carousel-inner">
 
-    <div class="col-lg-6">
-      <div class="card h-100">
-        <div class="card-header">
-          Alunos por Curso
+      <div class="carousel-item active">
+        <div class="carousel-content-wrapper slide-kpi">
+          <div class="card stat-card">
+            <div class="card-body">
+              <div class="stat-icon icon-alunos">
+                <i class="bi bi-people-fill"></i>
+              </div>
+              <div class="stat-content">
+                <h6 class="stat-title">Total de Alunos</h6>
+                <span class="stat-value">{{ (totalAlunos$ | async) || 0 }}</span>
+              </div>
+            </div>
+            <a routerLink="/alunos" class="card-footer-link">
+              Ver Alunos <i class="bi bi-arrow-right-short"></i>
+            </a>
+          </div>
         </div>
-        <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loading">
-          <div *ngIf="cursos.length > 0; else noData">
-            <div *ngFor="let item of cursos" class="chart-bar-item">
-              <span class="bar-label">{{ item.cursoNome }}</span>
-              <div class="bar-track">
-                <div class="bar-fill" [style.width]="getBarPercentage(item.totalAlunos, maxCursoCount)">
-                  <span class="bar-value">{{ item.totalAlunos }}</span>
+      </div>
+      <div class="carousel-item">
+        <div class="carousel-content-wrapper">
+          <div class="card h-100">
+            <div class="card-header">
+              Alunos por Diagnóstico
+            </div>
+            <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingDiag">
+              <div *ngIf="diagnosticos.length > 0; else noDataDiag">
+                <div class="pie-chart-container">
+                  <div class="pie-chart" [style.background]="diagnosticoChartStyle">
+                    <div class="pie-chart-center">
+                      </div>
+                  </div>
+                </div>
+                <div class="pie-chart-legend">
+                  <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
+                    <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
+                    <span class="legend-label" [title]="item.diagnosticoNome">{{ item.diagnosticoNome }}</span>
+                    <span class="legend-value">{{ item.totalAlunos }}</span>
+                  </div>
                 </div>
               </div>
+              <ng-template #noDataDiag><p class="text-muted text-center m-5">Sem dados de diagnósticos.</p></ng-template>
             </div>
+            <ng-template #loadingDiag>
+              <div class="card-body text-center p-5"><span class="spinner-border spinner-border-sm"></span></div>
+            </ng-template>
           </div>
-          <ng-template #noData><p class="text-muted text-center m-0">Sem dados de cursos.</p></ng-template>
         </div>
-        <ng-template #loading>
-          <div class="card-body text-center p-3"><span class="spinner-border spinner-border-sm"></span></div>
-        </ng-template>
       </div>
-    </div>
 
-    <div class="col-lg-6">
-      <div class="card h-100">
-        <div class="card-header">
-          Alunos por Diagnóstico
-        </div>
-        <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingDiag">
-           <div *ngIf="diagnosticos.length > 0; else noDataDiag">
-
-            <div class="pie-chart-container">
-              <div class="pie-chart" [style.background]="diagnosticoChartStyle">
-                <div class="pie-chart-center">
-                  <span class="total-value">{{ totalDiagnosticosAlunos }}</span>
-                  <span class="total-label">Alunos</span>
+      <div class="carousel-item">
+        <div class="carousel-content-wrapper">
+          <div class="card h-100">
+            <div class="card-header">
+              Alunos por Curso
+            </div>
+            <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loading">
+              <div *ngIf="cursos.length > 0; else noData">
+                <div *ngFor="let item of cursos" class="chart-bar-item">
+                  <span class="bar-label">{{ item.cursoNome }}</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" [style.width]="getBarPercentage(item.totalAlunos, maxCursoCount)">
+                      <span class="bar-value">{{ item.totalAlunos }}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <ng-template #noData><p class="text-muted text-center m-0">Sem dados de cursos.</p></ng-template>
             </div>
-
-            <div class="pie-chart-legend">
-              <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
-                <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
-                <span class="legend-label" [title]="item.diagnosticoNome">{{ item.diagnosticoNome }}</span>
-                <span class="legend-value">{{ item.totalAlunos }}</span>
-              </div>
-            </div>
-
+            <ng-template #loading>
+              <div class="card-body text-center p-3"><span class="spinner-border spinner-border-sm"></span></div>
+            </ng-template>
           </div>
-          <ng-template #noDataDiag><p class="text-muted text-center m-5">Sem dados de diagnósticos.</p></ng-template>
         </div>
-         <ng-template #loadingDiag>
-          <div class="card-body text-center p-5"><span class="spinner-border spinner-border-sm"></span></div>
-        </ng-template>
       </div>
+
+    </div>
+  </div>
+
+
+  <div class="container-fluid mt-4 mb-5">
+    <div class="vitrine-header">
+      <h2>Alunos Atendidos</h2>
+      <a routerLink="/alunos">Ver todos</a>
     </div>
 
+    <app-aluno-list></app-aluno-list>
   </div>
+
 </div>

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg main-navbar">
+<nav class="navbar navbar-expand-lg main-navbar" [class.navbar-scrolled]="isNavbarScrolled">
   <div class="container-fluid">
 
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#naapiOffcanvasMenu" aria-controls="naapiOffcanvasMenu">
@@ -8,7 +8,8 @@
     <div class="navbar-brand-container">
       <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
         <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="navbar-logo">
-        <img src="assets/img/NAAPI_completa-negativo.png" alt="Logo NAAPI" class="naapi-logo">
+
+        <span class="naapi-logo-text">NAAPI</span>
       </a>
     </div>
 
@@ -16,7 +17,7 @@
       <div class="offcanvas-header">
         <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard" (click)="closeOffcanvas()">
           <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="navbar-logo">
-           <img src="assets/img/NAAPI_completa-negativo.png" alt="Logo NAAPI" class="naapi-logo">
+           <span class="naapi-logo-text">NAAPI</span>
         </a>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -40,7 +41,7 @@
           </li>
           </ul>
 
-        <ul class="navbar-nav mx-auto d-none d-lg-flex">
+        <ul class="navbar-nav ms-lg-4 d-none d-lg-flex">
           <li class="nav-item">
             <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
               Dashboard
@@ -51,17 +52,44 @@
               Alunos
             </a>
           </li>
-          <li class="nav-item dropdown">
+
+          <li class="nav-item dropdown dropdown-mega">
             <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Cadastros
+              Cadastros <i class="bi bi-chevron-down small"></i>
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" routerLink="/diagnosticos">Diagnósticos</a></li>
-              <li><a class="dropdown-item" routerLink="/cursos">Cursos</a></li>
-              <li><a class="dropdown-item" routerLink="/turmas">Turmas</a></li>
-              <li><a class="dropdown-item" routerLink="/tipos-atendimento">Tipos de Atendimento</a></li>
-            </ul>
+
+            <div class="dropdown-menu dropdown-menu-mega">
+              <div class="container-fluid">
+                <div class="row">
+
+                  <div class="col-lg-3">
+                    <h6 class="dropdown-header">Alunos</h6>
+                    <a class="dropdown-item" routerLink="/alunos" routerLinkActive="active">Listar Alunos</a>
+                    <a class="dropdown-item" routerLink="/alunos/novo" routerLinkActive="active">Novo Aluno</a>
+                  </div>
+
+                  <div class="col-lg-3">
+                    <h6 class="dropdown-header">Acadêmico</h6>
+                    <a class="dropdown-item item-secondary-style" routerLink="/cursos" routerLinkActive="active">Gerenciar Cursos</a>
+                    <a class="dropdown-item item-secondary-style" routerLink="/turmas" routerLinkActive="active">Gerenciar Turmas</a>
+                  </div>
+
+                  <div class="col-lg-3">
+                    <h6 class="dropdown-header">NAAPI</h6>
+                     <a class="dropdown-item" routerLink="/diagnosticos" routerLinkActive="active">Diagnósticos</a>
+                    <a class="dropdown-item item-secondary-style" routerLink="/tipos-atendimento" routerLinkActive="active">Tipos de Atendimento</a>
+                  </div>
+
+                  <div class="col-lg-3 d-none d-lg-block">
+                     <h6 class="dropdown-header">Administração</h6>
+                     <a class="dropdown-item item-secondary-style" routerLink="/usuarios" routerLinkActive="active">Gerenciar Usuários</a>
+                  </div>
+
+                </div>
+              </div>
+            </div>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" routerLink="/relatorios" routerLinkActive="active">
               Relatórios
@@ -105,6 +133,6 @@
   </div>
 </nav>
 
-<main class="container-fluid mt-4 mb-5">
+<main class="main-content-area">
   <router-outlet></router-outlet>
 </main>

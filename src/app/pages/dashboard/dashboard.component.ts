@@ -6,10 +6,14 @@ import { AlunoService } from '../../core/services/aluno.service';
 import { map } from 'rxjs/operators';
 import { RouterLink } from '@angular/router';
 
+// 1. Importar o AlunoListComponent
+import { AlunoListComponent } from '../alunos/aluno-list/aluno-list.component';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  // 2. ADICIONAR o AlunoListComponent aqui
+  imports: [CommonModule, RouterLink, AlunoListComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -20,11 +24,9 @@ export class DashboardComponent implements OnInit {
   protected totalAlunos$!: Observable<number>;
   protected relatorioCursos$!: Observable<RelatorioAlunosPorCursoDTO[]>;
 
-  // MUDANÇA: Estes são para o gráfico de Rosca (Donut Chart)
   protected relatorioDiagnosticos$!: Observable<RelatorioAlunosPorDiagnosticoDTO[]>;
   protected diagnosticoChartStyle: string = '';
   protected totalDiagnosticosAlunos: number = 0;
-  // Define a paleta de cores no componente
   protected chartColors: string[] = [
     'var(--cor-grafico-1)',
     'var(--cor-grafico-2)',
@@ -34,7 +36,6 @@ export class DashboardComponent implements OnInit {
     'var(--cor-grafico-6)'
   ];
 
-  // Para o gráfico de Barras
   protected maxCursoCount = 0;
 
   ngOnInit(): void {
@@ -64,13 +65,14 @@ export class DashboardComponent implements OnInit {
   protected getBarPercentage(value: number, max: number): string {
     if (max === 0) return '0%';
     const percentage = (value / max) * 100;
-    return Math.max(percentage, 10) + '%'; // Mínimo de 10% para visibilidade
+    return Math.max(percentage, 10) + '%';
   }
 
-  // MUDANÇA: Nova função para construir o gráfico de Rosca
+  // Função para construir o gráfico de Rosca
   private buildDonutChart(data: RelatorioAlunosPorDiagnosticoDTO[]): void {
     if (!data || data.length === 0) {
-      this.diagnosticoChartStyle = 'background: var(--cor-borda)';
+      // --- CORREÇÃO AQUI ---
+      this.diagnosticoChartStyle = 'var(--cor-borda)'; // Removemos "background:"
       return;
     }
 
@@ -82,9 +84,8 @@ export class DashboardComponent implements OnInit {
 
     data.forEach((item, index) => {
       const percent = (item.totalAlunos / total) * 100;
-      const color = this.chartColors[index % this.chartColors.length]; // Repete as cores se houver muitos dados
+      const color = this.chartColors[index % this.chartColors.length];
 
-      // Define o início e o fim da fatia
       const startPercent = cumulativePercent;
       const endPercent = cumulativePercent + percent;
 
@@ -93,8 +94,9 @@ export class DashboardComponent implements OnInit {
       cumulativePercent = endPercent;
     });
 
-    // Define o estilo conic-gradient
-    this.diagnosticoChartStyle = `background: conic-gradient(${gradientParts.join(', ')});`;
+    // --- CORREÇÃO AQUI ---
+    // Define o estilo (APENAS O VALOR)
+    this.diagnosticoChartStyle = `conic-gradient(${gradientParts.join(', ')})`;
   }
 
   // Função de performance para o *ngFor da legenda

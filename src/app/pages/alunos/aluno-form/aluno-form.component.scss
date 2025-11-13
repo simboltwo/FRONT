@@ -1,7 +1,10 @@
 /* aluno-form.component.scss */
 @import '../../../styles/modern-theme.scss';
-
+:host {
+  display: block;
+}
 .wizard-container {
+  padding-top: 94px; // Altura da navbar (70px) + espaçamento (24px)
   max-width: 900px;
   margin: 0 auto;
   animation: fadeInUp 0.6s ease-out;

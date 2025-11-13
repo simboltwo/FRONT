@@ -3,6 +3,13 @@
 
 /* Barra de Ferramentas e Filtros (Sem alteração) */
 
+:host {
+  display: block;
+}
+
+.page-header-container {
+  padding-top: calc(70px + 2.5rem); // Navbar (70px) + Padding original (2.5rem)
+}
 .page-toolbar {
   background-color: var(--cor-fundo-card);
   border: 1px solid var(--cor-borda);
