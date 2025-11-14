@@ -8,8 +8,7 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="text-center text-muted p-4">
       <i class="bi bi-file-earmark-medical fs-2"></i>
-      <p>A secção de Laudos será implementada aqui.</p>
-      <p>(Aluno ID: {{ alunoId }})</p>
+      <p>A seção de Laudos ainda não foi implementada.</p>
     </div>
   `
 })

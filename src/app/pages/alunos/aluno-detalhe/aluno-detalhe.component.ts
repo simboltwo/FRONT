@@ -1,3 +1,4 @@
+// src/app/pages/alunos/aluno-detalhe/aluno-detalhe.component.ts
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -32,17 +33,18 @@ import * as bootstrap from 'bootstrap';
   styleUrls: ['./aluno-detalhe.component.scss']
 })
 export class AlunoDetalheComponent implements OnInit {
+  // @ViewChild permite-nos aceder ao componente AtendimentoList no HTML
   @ViewChild(AtendimentoList) private atendimentoListComponent!: AtendimentoList;
+
   protected aluno$!: Observable<Aluno>;
   protected alunoId!: number;
-
-  // MUDANÇA: Esta variável não é mais necessária
-  // protected showAtendimentoForm = false;
 
   private route = inject(ActivatedRoute);
   private alunoService = inject(AlunoService);
 
   ngOnInit(): void {
+    // Usamos o 'route.paramMap' para obter o 'id' da URL
+    // O 'switchMap' cancela a subscrição anterior e busca o novo aluno
     this.aluno$ = this.route.paramMap.pipe(
       switchMap(params => {
         this.alunoId = +params.get('id')!;
@@ -51,8 +53,12 @@ export class AlunoDetalheComponent implements OnInit {
     );
   }
 
-  // MUDANÇA: Esta função agora fecha o modal
+  /**
+   * Esta função é chamada quando o formulário de atendimento (no modal)
+   * emite o evento (atendimentoSalvo).
+   */
   onAtendimentoSalvo(): void {
+    // 1. Fechamos o modal usando a API de JavaScript do Bootstrap
     const modalElement = document.getElementById('modalAtendimento');
     if (modalElement) {
       const modal = bootstrap.Modal.getInstance(modalElement);
@@ -61,7 +67,8 @@ export class AlunoDetalheComponent implements OnInit {
       }
     }
 
-    // MUDANÇA: Chamar o método refresh() do componente filho
+    // 2. Chamamos o método 'refresh()' do componente filho (AtendimentoList)
+    //    para que ele recarregue a lista de atendimentos.
     if (this.atendimentoListComponent) {
       this.atendimentoListComponent.refresh();
     }

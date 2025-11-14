@@ -1,12 +1,19 @@
 /* src/app/pages/alunos/aluno-detalhe/aluno-detalhe.component.scss */
 @import '../../../../styles.scss';
 
-// Container principal da página (adiciona espaçamento)
+// Adiciona as variáveis de cor para este componente
+:host {
+  --cor-sucesso: #28a745;
+  --cor-aviso: #ee9b00;
+  --cor-perigo: #9b2226;
+}
+
+// Container principal da página
 .detalhe-page-container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 1rem 1.5rem 4rem 1.5rem;
-  background-color: var(--cor-branco); // Fundo branco
+  background-color: var(--cor-branco);
 }
 
 // 1. Estilo do Breadcrumb
@@ -23,12 +30,10 @@
       text-decoration: underline;
     }
   }
-
   i {
     font-size: 0.6rem;
     margin: 0 0.5rem;
   }
-
   span {
     color: var(--cor-texto);
     font-weight: 700;
@@ -41,9 +46,9 @@
   grid-template-columns: 1fr; // Mobile: 1 coluna
   gap: 2rem;
 
-  // MUDANÇA: Desktop: 50/50
   @media (min-width: 992px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 55% 1fr;
+    gap: 3rem;
   }
 }
 
@@ -54,12 +59,17 @@
   .gallery-image-main {
     width: 100%;
     overflow: hidden;
-    // MUDANÇA: Removida a borda para um look mais limpo
+    min-height: 85vh;
+    position: relative;
+    background-color: var(--cor-fundo);
   }
 
   .aluno-foto-principal {
     width: 100%;
-    height: auto;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     object-fit: cover;
     display: block;
     border-radius: 2px;
@@ -72,25 +82,44 @@
 
   @media (min-width: 992px) {
     position: sticky;
-    top: 100px; // (altura da navbar + padding)
+    top: 100px;
     align-self: start;
-    max-height: calc(100vh - 120px); // Evita que o painel seja maior que a tela
-    overflow-y: auto; // Adiciona scroll se o conteúdo for muito grande
-    padding-right: 1rem; // Espaço para a barra de scroll
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+
+    // --- MUDANÇAS AQUI ---
+
+    // 1. Restaura o padding para o conteúdo não colar na borda
+    padding-right: 1rem;
+
+    // 2. Esconde a scrollbar (Firefox)
+    scrollbar-width: none;
+    // 3. Esconde a scrollbar (IE/Edge)
+    -ms-overflow-style: none;
+
+    // 4. Esconde a scrollbar (Chrome, Safari, Edge)
+    &::-webkit-scrollbar {
+      width: 0; // Força a largura a zero
+      background: transparent; // Garante que é invisível
+    }
+    // --- FIM DAS MUDANÇAS ---
   }
 }
 
-// Secções de Informação
 .info-section {
   margin-bottom: 1.5rem;
 }
 
+// Fontes
 .aluno-nome {
   font-family: var(--font-titulos);
-  font-size: 2.25rem; // Título principal
+  text-transform: uppercase;
+  font-size: 2.25rem;
   font-weight: 800;
   margin-bottom: 0.25rem;
+  letter-spacing: 4px;
   line-height: 1.2;
+  color: var(--cor-secundaria);
 }
 .aluno-nome-social {
   font-family: var(--font-secundaria);
@@ -100,13 +129,15 @@
   margin-bottom: 0.5rem;
 }
 .aluno-matricula {
-  font-family: var(--font-secundaria);
   font-size: 1rem;
   color: var(--cor-primaria);
-  font-weight: 700;
+  font-weight: 800;
+  font-family: var(--font-principal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-// MUDANÇA: Badges de Prioridade (estilo pílula)
+// Emblemas com COR DE FUNDO
 .info-badge-group {
   display: flex;
   gap: 1.5rem;
@@ -123,48 +154,63 @@
     text-transform: uppercase;
   }
 
-  // Estilo "Tamanhos" da Hering
   .info-value-pill {
     font-family: var(--font-secundaria);
     font-weight: 700;
     font-size: 0.9rem;
     padding: 0.4rem 0.75rem;
     border-radius: 2px;
-    border: 1px solid var(--cor-borda);
+    border: 1px solid transparent;
     display: inline-block;
+    color: var(--cor-branco);
 
-    &.pill-danger { border-color: var(--cor-perigo); color: var(--cor-perigo); }
-    &.pill-warning { border-color: var(--cor-aviso); color: var(--cor-aviso); }
-    &.pill-success { border-color: var(--cor-sucesso); color: var(--cor-sucesso); }
-    &.pill-info { border-color: #0dcaf0; color: #0dcaf0; }
-    &.pill-secondary { border-color: var(--cor-texto-claro); color: var(--cor-texto-claro); }
+    &.pill-danger { background-color: var(--cor-perigo); }
+    &.pill-warning { background-color: var(--cor-aviso); color: var(--cor-secundaria); }
+    &.pill-success { background-color: var(--cor-sucesso); }
+    &.pill-info { background-color: #0dcaf0; }
+    &.pill-secondary {
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto-claro);
+      border-color: var(--cor-borda);
+    }
   }
 }
 
-// MUDANÇA: Botões de Ação (Estilo Hering)
+// Botão de Ação com GRANULADO
 .info-actions {
   display: grid;
   gap: 0.75rem;
 
   .btn-primary {
-    background-color: var(--cor-secundaria); // Cor escura
+    background-color: var(--cor-secundaria);
     border-color: var(--cor-secundaria);
     font-family: var(--font-titulos);
     font-weight: 700;
     font-size: 1rem;
-    padding: 0.85rem; // Um pouco mais alto
+    padding: 0.85rem;
     border-radius: 2px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
 
     &:hover {
-      background-color: #000; // Preto no hover
+      background-color: #000;
       border-color: #000;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='10' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.5;
     }
   }
 }
 
-// MUDANÇA: Link de Edição (estilo Hering)
+// Link de Edição
 .info-edit-link {
   font-family: var(--font-secundaria);
   font-size: 0.9rem;
@@ -181,23 +227,22 @@
   }
 }
 
-
-// Acordeão Estilo Hering
+// Acordeão
 .hering-accordion {
   .accordion-item {
-    border-bottom: 1px solid var(--cor-borda); // Linha divisória
-
-    // MUDANÇA: Removida a borda superior
+    border-bottom: 1px solid var(--cor-borda);
     &:first-of-type {
       border-top: none;
     }
   }
 
   .accordion-button {
-    font-family: var(--font-principal);
-    font-size: 1rem;
+    font-family: var(--font-secundaria);
+    font-size: 0.85rem;
     font-weight: 700;
-    color: var(--cor-texto);
+    color: var(--cor-secundaria);
+    text-transform: uppercase;
+    letter-spacing: 1px;
     padding: 1.25rem 0;
     background: none;
     box-shadow: none;
@@ -207,22 +252,19 @@
       margin-left: auto;
       font-size: 1rem;
     }
-
     &::after {
       display: none;
     }
-
     &:not(.collapsed) {
       .accordion-chevron {
         transform: rotate(180deg);
       }
     }
-
     &:focus { box-shadow: none; }
   }
 
   .accordion-body {
-    padding: 0 0 1.5rem 0; // Padding inferior
+    padding: 0 0 1.5rem 0;
     font-family: var(--font-secundaria);
     font-size: 0.95rem;
     line-height: 1.6;

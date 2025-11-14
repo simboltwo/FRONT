@@ -8,8 +8,7 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="text-center text-muted p-4">
       <i class="bi bi-clipboard2-data fs-2"></i>
-      <p>A secção de PEI (Plano Educacional Individualizado) será implementada aqui.</p>
-      <p>(Aluno ID: {{ alunoId }})</p>
+      <p>A seção de PEI (Plano Educacional Individualizado) ainda não foi implementada.</p>
     </div>
   `
 })
