@@ -1,21 +1,126 @@
 /* src/app/pages/atendimentos/atendimento-form.component.scss */
 @import '../../../../styles.scss';
 
-// Remove o padding extra do modal-body
+// 1. Remove rounded corners e bordas do modal
+.modal-content {
+  border-radius: 2px; // Raio subtil
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); // Sombra suave
+  overflow: hidden; // Garante que os cantos fiquem limpos
+}
+
+// 2. Estiliza o cabeçalho
+.modal-header {
+  border-bottom: 1px solid var(--cor-borda); // Separador leve
+  padding: 1.5rem 2rem;
+
+  .modal-title {
+    font-family: var(--font-titulos); // Fonte de título
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--cor-secundaria);
+  }
+
+  .btn-close {
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+// 3. Estiliza o corpo (onde o formulário vive)
 .modal-body {
-  padding: 0;
+  padding: 0; // Removido
 }
 
 .form-wrapper-flat {
-  padding: 2rem;
+  padding: 2rem; // Adicionado padding aqui
 }
 
+// 4. Estiliza os campos do formulário (consistente com aluno-form)
 .form-label {
   font-family: var(--font-secundaria);
   font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--cor-texto-claro);
+  margin-bottom: 0.25rem;
 }
 
-// Footer customizado
+.form-control, .form-select {
+  font-family: var(--font-secundaria);
+  font-weight: 400;
+  font-size: 1rem; // Um pouco maior para facilitar a leitura no modal
+  padding: 0.75rem 1rem;
+  background-color: var(--cor-fundo); // Fundo cinza claro
+  border: 1px solid var(--cor-borda);
+  border-radius: 2px;
+  box-shadow: none;
+
+  &:focus {
+    background-color: var(--cor-branco);
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(0, 74, 145, 0.15); // Efeito de foco suave
+    z-index: 2;
+  }
+}
+
+textarea.form-control {
+  min-height: 120px;
+}
+
+// 5. Estiliza o rodapé e os botões
 .modal-footer {
-  background-color: var(--cor-fundo);
+  background-color: var(--cor-fundo); // Fundo consistente
+  border-top: 1px solid var(--cor-borda); // Separador leve
+  padding: 1rem 2rem;
+
+  .btn {
+    border-radius: 2px;
+    font-family: var(--font-secundaria);
+    font-weight: 700;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  // Botão "Cancelar"
+  .btn-outline-secondary {
+    color: var(--cor-texto-claro);
+    border-color: var(--cor-borda);
+    background-color: var(--cor-branco); // Fundo branco
+
+    &:hover {
+      background-color: var(--cor-fundo); // Cinza claro no hover
+      color: var(--cor-secundaria);
+      border-color: var(--cor-borda);
+    }
+  }
+
+  // Botão "Salvar Atendimento"
+  .btn-primary {
+    background-color: var(--cor-secundaria);
+    border-color: var(--cor-secundaria);
+
+    // Efeito Granulado (como no botão da pág. de detalhe)
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      background-color: #000; // Hover preto
+      border-color: #000;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='10' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
 }

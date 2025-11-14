@@ -1,12 +1,12 @@
 /* src/styles.scss */
 
-// 1. Variáveis Globais de Fontes (baseado no teu pedido)
+// 1. Variáveis Globais de Fontes
 :root {
   --font-principal: 'Roboto', sans-serif;
   --font-titulos: 'Montserrat', sans-serif;
   --font-secundaria: 'Roboto Condensed', sans-serif;
 
-  // Paleta de Cores Base (Exemplo)
+  // Paleta de Cores Base
   --cor-primaria: #004a91; // Azul CEFET
   --cor-secundaria: #003366;
   --cor-texto: #333;
@@ -14,18 +14,29 @@
   --cor-fundo: #f4f7f6;
   --cor-branco: #ffffff;
   --cor-borda: #dee2e6;
-
 }
 
 // 2. Estilos Globais
 body {
-
   font-family: var(--font-principal);
   background-color: var(--cor-fundo);
   color: var(--cor-texto);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  // --- MUDANÇA: Adicione estas 2 linhas ---
+  // Esconde a scrollbar (Firefox)
+  scrollbar-width: none;
+  // Esconde a scrollbar (IE/Edge)
+  -ms-overflow-style: none;
 }
+
+// --- MUDANÇA: Adicione este bloco novo ---
+// Esconde a scrollbar (Chrome, Safari, Edge)
+body::-webkit-scrollbar {
+  display: none;
+}
+// --- FIM DAS MUDANÇAS ---
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-titulos);
