@@ -1,0 +1,426 @@
+/* src/app/layout/layout.component.scss */
+@import '../../styles.scss';
+
+.main-navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 1030;
+  background-color: transparent;
+  box-shadow: none;
+  transition: all 0.3s ease;
+
+  .container-fluid {
+    display: flex;
+    align-items: center;
+  }
+
+  // --- MUDANÇA: Seções de 3 colunas ---
+  .navbar-section {
+    display: flex;
+    padding: 0 4.25rem;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+  }
+
+  .navbar-section-start {
+    display: flex;
+    padding: 1.25rem 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    // No mobile, só o toggler aparece
+    .navbar-nav {
+      display: none;
+    }
+    .navbar-toggler {
+      display: block;
+      border: none;
+      color: var(--cor-branco);
+      font-size: 1.5rem;
+    }
+  }
+
+  .navbar-section-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .navbar-brand {
+      margin-right: 0; // Remove margem
+    }
+  }
+
+  .navbar-section-end {
+    position: relative;
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    // No mobile, o perfil do desktop some
+    .navbar-profile {
+      display: none;
+    }
+    // Placeholder para centralizar no mobile
+    .navbar-toggler-placeholder {
+      display: block;
+      width: 46px; // Largura exata do toggler
+      height: 38px;
+      visibility: hidden;
+    }
+  }
+
+  // --- MUDANÇA: Media Query para Desktop (lg) ---
+  @media (min-width: 992px) {
+    .navbar-section-start {
+      // Toggler some
+      .navbar-toggler {
+        display: none;
+      }
+      // Links aparecem
+      .navbar-nav {
+        display: flex;
+      }
+    }
+
+    .navbar-section-center {
+      // Ajuste de espaçamento se necessário
+      padding: 0 1rem;
+    }
+
+    .navbar-section-end {
+      // Placeholder some
+      .navbar-toggler-placeholder {
+        display: none;
+      }
+      // Perfil aparece
+      .navbar-profile {
+        display: flex;
+      }
+    }
+  }
+
+  // --- Estilos de Cor (Logos) ---
+  .navbar-logo {
+    height: 35px;
+    margin-right: 0.1rem;
+    display: none;
+  }
+  .logo-branco {
+    display: inline-block;
+  }
+  .naapi-logo-text {
+    color: var(--cor-branco);
+    font-family: var(--font-titulos);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    transition: color 0.3s ease;
+  }
+
+  // --- Estilos de Cor (Links) ---
+  .nav-link {
+    font-family: var(--font-secundaria);
+    color: var(--cor-branco);
+    font-weight: 400;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    line-height: 18.4px;
+    padding-bottom: 1rem;
+    position: relative;
+    background: none;
+    border-radius: 4px;
+
+    &:hover {
+      transform: none;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 1rem;
+      right: 1rem;
+      height: 1px;
+      transform: scaleX(0);
+      transform-origin: center;
+      border-radius: 10px;
+      background-color: var(--cor-branco);
+    }
+    &:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  .navbar-profile .nav-link {
+    color: var(--cor-branco);
+    font-family: var(--font-principal);
+    &::after { display: none; }
+    small {
+      font-family: var(--font-secundaria);
+      display: block;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+  }
+
+  // --- ESTADO DE SCROLL (BRANCO SÓLIDO) ---
+  &.navbar-scrolled {
+    background-color: hsl(0, 0%, 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .navbar-toggler { color: var(--cor-secundaria); }
+    .navbar-logo { display: inline-block; }
+    .logo-branco { display: none; }
+
+    .naapi-logo-text,
+    .nav-link,
+    .navbar-profile .nav-link {
+      color: hsl(209, 100%, 21%);
+    }
+    .nav-link::after {
+      background-color: hsl(209, 100%, 21%);
+    }
+  }
+
+  // --- ESTADO "NÃO-DASHBOARD" (Começa branco) ---
+  &:not(.is-dashboard-page) {
+    background-color: hsl(0, 0%, 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .navbar-toggler { color: var(--cor-secundaria); }
+    .navbar-logo { display: inline-block; }
+    .logo-branco { display: none; }
+
+    .naapi-logo-text,
+    .nav-link,
+    .navbar-profile .nav-link {
+      color: hsl(209, 100%, 21%);
+    }
+    .nav-link::after {
+      background-color: hsl(209, 100%, 21%);
+    }
+  }
+
+  // Se for o dashboard, E estiver com scroll, aplica o estilo branco
+  &.is-dashboard-page.navbar-scrolled {
+     background-color: hsl(0, 0%, 100%);
+     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+    .navbar-toggler { color: var(--cor-secundaria); }
+    .navbar-logo { display: inline-block; }
+    .logo-branco { display: none; }
+
+    .naapi-logo-text,
+    .nav-link,
+    .navbar-profile .nav-link {
+      color: hsl(209, 100%, 21%);
+    }
+    .nav-link::after {
+      background-color: hsl(209, 100%, 21%);
+    }
+  }
+
+  // Perfil do Usuário (Desktop)
+  .navbar-profile {
+    .dropdown-menu {
+      display: block; opacity: 0; visibility: hidden;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+      margin-top: 0;
+      border-radius: 4px;
+      border: 1px solid var(--cor-borda);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    .dropdown-menu.show {
+      opacity: 1; visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
+    }
+    .dropdown {
+       @media (min-width: 992px) {
+         &:hover > .dropdown-menu {
+            opacity: 1; visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
+         }
+       }
+    }
+  }
+
+  // Estilos do Mega Menu (Desktop)
+  .dropdown-mega {
+    position: static;
+    .dropdown-menu-mega {
+      display: block;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      pointer-events: none;
+      width: 100%;
+      left: 0; right: 0; margin-top: 0;
+      border: none; border-radius: 0;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0.25s;
+      transition-delay: 0.1s; // Delay para fechar
+
+      .container-fluid {
+        max-width: 560px;
+        padding-left: 0; padding-right: 0;
+        margin-left: 2.4rem; margin-right: auto;
+      }
+    }
+    @media (min-width: 992px) {
+      &:hover > .dropdown-menu-mega {
+        opacity: 1; visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+        transition-delay: 0s; // Sem delay para abrir
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0s;
+      }
+    }
+    .dropdown-header {
+      font-family: var(--font-principal);
+      font-weight: 800; font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--cor-primaria);
+      padding-left: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .dropdown-item {
+      font-family: var(--font-secundaria);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      color: var(--cor-texto);
+      i {
+        font-size: 0.9rem;
+        min-width: 25px;
+        color: var(--cor-primaria);
+      }
+      &.active, &:hover {
+        font-weight: 700;
+        text-decoration: none;
+        background: var(--cor-fundo);
+        color: var(--cor-primaria);
+      }
+    }
+    .item-secondary-style {
+      color: var(--cor-texto-claro);
+      font-weight: 400;
+      i {
+        color: var(--cor-texto-claro);
+      }
+      &:hover {
+        i { color: var(--cor-primaria); }
+      }
+    }
+  }
+
+  // --- Estilos para o Menu Offcanvas (Mobile) ---
+  .offcanvas-header {
+    border-bottom: 1px solid var(--cor-borda);
+    .navbar-logo { display: inline-block; }
+    .logo-branco { display: none; }
+    .naapi-logo-text { color: var(--cor-secundaria); }
+  }
+
+  .offcanvas-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .offcanvas-nav-links {
+    padding: 1rem 0;
+    flex-grow: 1;
+
+    .nav-item {
+      margin: 0 0.5rem;
+    }
+    .nav-link {
+      font-family: var(--font-titulos);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cor-secundaria);
+      padding: 0.9rem 1rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      i {
+        font-size: 1rem;
+        min-width: 25px;
+        text-align: center;
+        color: var(--cor-texto-claro);
+      }
+      &.active, &:hover {
+        color: var(--cor-primaria);
+        background-color: var(--cor-fundo);
+        i {
+          color: var(--cor-primaria);
+        }
+      }
+      .offcanvas-chevron {
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+        color: var(--cor-texto-claro);
+      }
+      &[data-bs-toggle="collapse"]:not(.collapsed) {
+        .offcanvas-chevron {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
+
+  .offcanvas-submenu {
+    margin: 0.5rem -0.5rem 0 -0.5rem;
+    padding-left: 20px;
+    background: var(--cor-fundo);
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--cor-borda);
+    border-bottom: 1px solid var(--cor-borda);
+
+    .nav-link {
+      font-family: var(--font-secundaria);
+      font-size: 0.95rem;
+      font-weight: 400;
+      padding: 0.7rem 1rem;
+      color: var(--cor-texto-claro);
+      i {
+        font-size: 0.8rem;
+        min-width: 20px;
+      }
+      &.active, &:hover {
+        color: var(--cor-primaria);
+        background: none;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .offcanvas-footer {
+    // ... (seu código de rodapé do offcanvas) ...
+  }
+}
+
+// --- Ajuste do conteúdo principal ---
+.main-content-area {
+  padding-top: 0;
+
+  &:not(.is-dashboard-page) {
+    padding-top: 80px;
+  }
+}
