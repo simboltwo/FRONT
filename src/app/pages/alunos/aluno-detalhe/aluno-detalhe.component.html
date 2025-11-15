@@ -6,155 +6,155 @@
   </div>
 </ng-template>
 
-<div class="detalhe-page-container" *ngIf="aluno$ | async as aluno; else loading">
+<div *ngIf="aluno$ | async as aluno; else loading">
 
-  <nav class="detalhe-breadcrumb">
-    <a routerLink="/alunos">Alunos</a>
-    <i class="bi bi-chevron-right"></i>
-    <span>{{ aluno.nome }}</span>
-  </nav>
-
-  <div class="detalhe-main-content">
-
-    <div class="detalhe-gallery">
-      <div class="gallery-image-main">
-        <img [src]="aluno.foto || 'https://via.placeholder.com/600x800.png?text=FOTO DO ALUNO'"
-             alt="Foto do Aluno"
-             class="aluno-foto-principal">
-      </div>
+  <div class="page-header-container">
+    <div class="header-content">
+      <nav class="detalhe-breadcrumb">
+        <a routerLink="/alunos">Alunos</a>
+        <i class="bi bi-chevron-right"></i>
+        <span>{{ aluno.nome }}</span>
+      </nav>
     </div>
+    <div class="header-actions">
+      <button class="btn btn-primary"
+              data-bs-toggle="modal" data-bs-target="#modalAtendimento">
+        <i class="bi bi-plus-lg me-1"></i> Novo Atendimento
+      </button>
+    </div>
+  </div>
 
-    <div class="detalhe-info-panel">
+  <div class="page-container animate-fadeIn">
+    <div class="detalhe-main-content">
 
-      <section class="info-section">
-        <h1 class="aluno-nome">{{ aluno.nome }}</h1>
-        <p *ngIf="aluno.nomeSocial" class="aluno-nome-social">({{ aluno.nomeSocial }})</p>
-        <p class="aluno-matricula">{{ aluno.matricula }} | {{ aluno.curso.nome }}</p>
-      </section>
-
-      <section class="info-section info-badge-group">
-        <div class="info-item">
-          <span class="info-label">Prioridade</span>
-          <span class="info-value-pill" [ngClass]="{
-            'pill-danger': aluno.prioridade === 'Alta',
-            'pill-warning': aluno.prioridade === 'Média',
-            'pill-success': aluno.prioridade === 'Baixa'
-          }">
-            {{ aluno.prioridade }}
-          </span>
+      <div class="detalhe-gallery">
+        <div class="gallery-image-main">
+          <img [src]="aluno.foto || 'https://via.placeholder.com/600x800.png?text=FOTO DO ALUNO'"
+               alt="Foto do Aluno"
+               class="aluno-foto-principal">
         </div>
-        <div class="info-item">
-          <span class="info-label">Prova Separada</span>
-          <span class="info-value-pill" [ngClass]="aluno.provaOutroEspaco ? 'pill-info' : 'pill-secondary'">
-            {{ aluno.provaOutroEspaco ? 'Sim' : 'Não' }}
-          </span>
-        </div>
-      </section>
+      </div>
 
-      <section class="info-section info-actions">
-        <button class="btn btn-primary btn-lg w-100"
-                data-bs-toggle="modal" data-bs-target="#modalAtendimento">
-          <i class="bi bi-plus-lg"></i> Novo Atendimento
-        </button>
-      </section>
+      <div class="detalhe-info-panel">
 
-      <section class="info-section info-edit-link">
-        <span>Informações de cadastro:</span>
-        <a [routerLink]="['/alunos/editar', aluno.id]">Editar</a>
-      </section>
+        <section class="info-section">
+          <h1 class="aluno-nome">{{ aluno.nome }}</h1>
+          <p *ngIf="aluno.nomeSocial" class="aluno-nome-social">({{ aluno.nomeSocial }})</p>
+          <p class="aluno-matricula">{{ aluno.matricula }} | {{ aluno.curso.nome }}</p>
+        </section>
+
+        <section class="info-section info-badge-group">
+          <div class="info-item">
+            <span class="info-label">Prioridade</span>
+            <span class="info-value-pill" [ngClass]="{
+              'pill-danger': aluno.prioridade === 'Alta',
+              'pill-warning': aluno.prioridade === 'Média',
+              'pill-success': aluno.prioridade === 'Baixa'
+            }">
+              {{ aluno.prioridade }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Prova Separada</span>
+            <span class="info-value-pill" [ngClass]="aluno.provaOutroEspaco ? 'pill-info' : 'pill-secondary'">
+              {{ aluno.provaOutroEspaco ? 'Sim' : 'Não' }}
+            </span>
+          </div>
+        </section>
+
+        <section class="info-section info-edit-link">
+          <span>Informações de cadastro:</span>
+          <a [routerLink]="['/alunos/editar', aluno.id]">Editar</a>
+        </section>
 
 
-      <section class="info-section">
-        <div class="accordion accordion-flush hering-accordion" id="naapiAccordion">
+        <section class="info-section">
+          <div class="accordion accordion-flush" id="naapiAccordion">
 
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingAtendimentos">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAtendimentos" aria-expanded="true" aria-controls="collapseAtendimentos">
-                Histórico de Atendimentos
-                <i class="bi bi-chevron-down accordion-chevron"></i>
-              </button>
-            </h2>
-            <div id="collapseAtendimentos" class="accordion-collapse collapse show" aria-labelledby="headingAtendimentos" data-bs-parent="#naapiAccordion">
-              <div class="accordion-body">
-                <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingAtendimentos">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAtendimentos" aria-expanded="true" aria-controls="collapseAtendimentos">
+                  Histórico de Atendimentos
+                </button>
+              </h2>
+              <div id="collapseAtendimentos" class="accordion-collapse collapse show" aria-labelledby="headingAtendimentos" data-bs-parent="#naapiAccordion">
+                <div class="accordion-body">
+                  <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="accordion-item" *ngIf="aluno.adaptacoesNecessarias">
-            <h2 class="accordion-header" id="headingAdaptacoes">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdaptacoes" aria-expanded="false" aria-controls="collapseAdaptacoes">
-                Adaptações Necessárias
-                <i class="bi bi-chevron-down accordion-chevron"></i>
-              </button>
-            </h2>
-            <div id="collapseAdaptacoes" class="accordion-collapse collapse" aria-labelledby="headingAdaptacoes" data-bs-parent="#naapiAccordion">
-              <div class="accordion-body info-content">
-                 {{ aluno.adaptacoesNecessarias }}
+            <div class="accordion-item" *ngIf="aluno.adaptacoesNecessarias">
+              <h2 class="accordion-header" id="headingAdaptacoes">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdaptacoes" aria-expanded="false" aria-controls="collapseAdaptacoes">
+                  Adaptações Necessárias
+                </button>
+              </h2>
+              <div id="collapseAdaptacoes" class="accordion-collapse collapse" aria-labelledby="headingAdaptacoes" data-bs-parent="#naapiAccordion">
+                <div class="accordion-body info-content">
+                   {{ aluno.adaptacoesNecessarias }}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="accordion-item" *ngIf="aluno.necessidadesRelatoriosMedicos">
-             <h2 class="accordion-header" id="headingNecessidades">
-               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNecessidades" aria-expanded="false" aria-controls="collapseNecessidades">
-                Necessidades (Relatórios Médicos)
-                <i class="bi bi-chevron-down accordion-chevron"></i>
-               </button>
-             </h2>
-             <div id="collapseNecessidades" class="accordion-collapse collapse" aria-labelledby="headingNecessidades" data-bs-parent="#naapiAccordion">
-               <div class="accordion-body info-content">
-                 {{ aluno.necessidadesRelatoriosMedicos }}
+            <div class="accordion-item" *ngIf="aluno.necessidadesRelatoriosMedicos">
+               <h2 class="accordion-header" id="headingNecessidades">
+                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNecessidades" aria-expanded="false" aria-controls="collapseNecessidades">
+                  Necessidades (Relatórios Médicos)
+                 </button>
+               </h2>
+               <div id="collapseNecessidades" class="accordion-collapse collapse" aria-labelledby="headingNecessidades" data-bs-parent="#naapiAccordion">
+                 <div class="accordion-body info-content">
+                   {{ aluno.necessidadesRelatoriosMedicos }}
+                 </div>
                </div>
-             </div>
-          </div>
+            </div>
 
-          <div class="accordion-item" *ngIf="aluno.anotacoesNaapi">
-             <h2 class="accordion-header" id="headingAnotacoes">
-               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnotacoes" aria-expanded="false" aria-controls="collapseAnotacoes">
-                Anotações Gerais (NAAPI)
-                <i class="bi bi-chevron-down accordion-chevron"></i>
-               </button>
-             </h2>
-             <div id="collapseAnotacoes" class="accordion-collapse collapse" aria-labelledby="headingAnotacoes" data-bs-parent="#naapiAccordion">
-               <div class="accordion-body info-content">
-                 {{ aluno.anotacoesNaapi }}
+            <div class="accordion-item" *ngIf="aluno.anotacoesNaapi">
+               <h2 class="accordion-header" id="headingAnotacoes">
+                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnotacoes" aria-expanded="false" aria-controls="collapseAnotacoes">
+                  Anotações Gerais (NAAPI)
+                 </button>
+               </h2>
+               <div id="collapseAnotacoes" class="accordion-collapse collapse" aria-labelledby="headingAnotacoes" data-bs-parent="#naapiAccordion">
+                 <div class="accordion-body info-content">
+                   {{ aluno.anotacoesNaapi }}
+                 </div>
                </div>
-             </div>
-          </div>
+            </div>
 
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingLaudos">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLaudos" aria-expanded="false" aria-controls="collapseLaudos">
-                Laudos e Documentos
-                <i class="bi bi-chevron-down accordion-chevron"></i>
-              </button>
-            </h2>
-            <div id="collapseLaudos" class="accordion-collapse collapse" aria-labelledby="headingLaudos" data-bs-parent="#naapiAccordion">
-              <div class="accordion-body">
-                 <app-laudo-list [alunoId]="aluno.id"></app-laudo-list>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingLaudos">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLaudos" aria-expanded="false" aria-controls="collapseLaudos">
+                  Laudos e Documentos
+                </button>
+              </h2>
+              <div id="collapseLaudos" class="accordion-collapse collapse" aria-labelledby="headingLaudos" data-bs-parent="#naapiAccordion">
+                <div class="accordion-body">
+                   <app-laudo-list [alunoId]="aluno.id"></app-laudo-list>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingPei">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePei" aria-expanded="false" aria-controls="collapsePei">
-                Plano Educacional (PEI)
-                <i class="bi bi-chevron-down accordion-chevron"></i>
-              </button>
-            </h2>
-            <div id="collapsePei" class="accordion-collapse collapse" aria-labelledby="headingPei" data-bs-parent="#naapiAccordion">
-              <div class="accordion-body">
-                <app-pei-list [alunoId]="aluno.id"></app-pei-list>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingPei">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePei" aria-expanded="false" aria-controls="collapsePei">
+                  Plano Educacional (PEI)
+                </button>
+              </h2>
+              <div id="collapsePei" class="accordion-collapse collapse" aria-labelledby="headingPei" data-bs-parent="#naapiAccordion">
+                <div class="accordion-body">
+                  <app-pei-list [alunoId]="aluno.id"></app-pei-list>
+                </div>
               </div>
             </div>
+
           </div>
+        </section>
 
-        </div>
-      </section>
+      </div> </div> </div> </div>
 
-    </div> </div> </div> <div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalAtendimentoLabel" aria-hidden="true">
+<div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalAtendimentoLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <app-atendimento-form
       *ngIf="alunoId"

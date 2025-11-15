@@ -1,7 +1,19 @@
-<div class="aluno-list-page animate-fadeIn" [class.is-vitrine]="mode === 'vitrine'">
+<div class="aluno-list-page">
+
+  <div class="page-header-container">
+    <div class="header-content">
+      <h2 class="page-header-title">Alunos</h2>
+      <p class="page-header-subtitle">Gestão e acompanhamento de alunos.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="goToNewAlunoPage()">
+        <i class="bi bi-plus-lg me-1"></i>
+        Cadastrar Aluno
+      </button>
+    </div>
+  </div>
 
   <div class="filter-bar-container" *ngIf="mode === 'full'" [formGroup]="filterForm">
-
     <div class="filter-controls-left">
       <div class="filter-search">
         <i class="bi bi-search"></i>
@@ -9,7 +21,6 @@
       </div>
 
       <div class="filter-dropdowns">
-
         <div class="dropdown" formGroupName="cursoIds">
           <button class="filter-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{ getCursoSelecionadoTexto() }}
@@ -63,12 +74,11 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
     <div class="sort-control dropdown">
-      <span class="sort-label">ORDENAR POR:</span>
+      <span class="sort-label">Ordenar por:</span>
       <button class="filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         {{ getSortSelecionadoNome() }}
       </button>
@@ -82,14 +92,13 @@
     </div>
   </div>
 
-  <div class="toolbar-count" *ngIf="mode === 'full'">
-    <span *ngIf="alunosCount$ | async as count">{{ count }} aluno(s) encontrado(s)</span>
-  </div>
-  <div class="carousel-container" *ngIf="mode === 'vitrine'">
-    <button (click)="scrollCarousel(-1)" class="carousel-arrow prev" title="Anterior">
-      <i class="bi bi-chevron-left"></i>
-    </button>
-    <div class="aluno-carousel-track" #carouselTrack>
+  <div class="page-container animate-fadeIn">
+
+    <div class="toolbar-count" *ngIf="mode === 'full'">
+      <span *ngIf="alunosCount$ | async as count">{{ count }} aluno(s) encontrado(s)</span>
+    </div>
+
+    <div class="aluno-grid-container" *ngIf="mode === 'full'">
       <div class="carousel-item-wrapper"
            *ngFor="let aluno of (alunos$ | async); let i = index"
            [style.animation-delay]="(i % 12) * 0.05 + 's'">
@@ -98,6 +107,7 @@
           <div class="aluno-card-img-container">
             <img [src]="aluno.foto || 'https://via.placeholder.com/400x400.png?text=Aluno'"
                  class="card-img-top aluno-card-img" alt="Foto do Aluno" (click)="viewAluno(aluno)">
+
             <div class="aluno-priority-icon"
                  [ngClass]="{
                    'priority-alta': aluno.prioridade === 'Alta',
@@ -112,7 +122,20 @@
                 <i *ngSwitchDefault class="bi bi-circle-fill"></i>
               </ng-container>
             </div>
+
+            <div class="aluno-quick-actions" *ngIf="mode === 'full'">
+              <button (click)="viewAluno(aluno)" class="btn btn-sm btn-action-main">
+                <i class="bi bi-headset"></i> Atendimentos
+              </button>
+              <button (click)="editAluno($event, aluno)" class="btn btn-sm btn-action" title="Editar">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button (click)="deleteAluno($event, aluno)" class="btn btn-sm btn-action btn-action-danger" title="Excluir">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
           </div>
+
           <div class="card-body" (click)="viewAluno(aluno)">
             <h5 class="card-title mb-1" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
             <div class="card-text-meta mb-1">
@@ -140,93 +163,65 @@
         </div>
 
       </div>
-    </div>
-    <button (click)="scrollCarousel(1)" class="carousel-arrow next" title="Próximo">
-      <i class="bi bi-chevron-right"></i>
-    </button>
-  </div>
+    </div> <div class="carousel-container" *ngIf="mode === 'vitrine'">
+      <button (click)="scrollCarousel(-1)" class="carousel-arrow prev" title="Anterior">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <div class="aluno-carousel-track" #carouselTrack>
+        <div class="carousel-item-wrapper"
+             *ngFor="let aluno of (alunos$ | async); let i = index"
+             [style.animation-delay]="(i % 12) * 0.05 + 's'">
 
-  <div class="aluno-grid-container" *ngIf="mode === 'full'">
+          <div class="card aluno-card">
+            <div class="aluno-card-img-container">
+              <img [src]="aluno.foto || 'https://via.placeholder.com/400x400.png?text=Aluno'"
+                   class="card-img-top aluno-card-img" alt="Foto do Aluno" (click)="viewAluno(aluno)">
+              <div class="aluno-priority-icon"
+                   [ngClass]="{
+                     'priority-alta': aluno.prioridade === 'Alta',
+                     'priority-media': aluno.prioridade === 'Média',
+                     'priority-baixa': aluno.prioridade === 'Baixa'
+                   }"
+                   [title]="'Prioridade ' + aluno.prioridade">
+                <ng-container [ngSwitch]="aluno.prioridade">
+                  <i *ngSwitchCase="'Alta'" class="bi bi-exclamation-triangle-fill"></i>
+                  <i *ngSwitchCase="'Média'" class="bi bi-exclamation-circle-fill"></i>
+                  <i *ngSwitchCase="'Baixa'" class="bi bi-check-circle-fill"></i>
+                  <i *ngSwitchDefault class="bi bi-circle-fill"></i>
+                </ng-container>
+              </div>
+            </div>
+            <div class="card-body" (click)="viewAluno(aluno)">
+              <h5 class="card-title mb-1" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
+              <div class="card-text-meta mb-1">
+                <span class="card-text-matricula">{{ aluno.matricula }}</span>
+                <span class="card-text-nascimento" *ngIf="aluno.dataNascimento">
+                  {{ (aluno.dataNascimento | date: 'dd/MM/yyyy') }}
+                </span>
+                <span class="card-text-nascimento" *ngIf="!aluno.dataNascimento">
+                  Nasc. N/A
+                </span>
+              </div>
+              <p class="card-text-curso">{{ aluno.curso?.nome || 'N/A' }}</p>
+              <div class="aluno-card-diagnosticos mt-2">
+                <span *ngFor="let diag of aluno.diagnosticos.slice(0, 2)"
+                      class="badge aluno-diag-badge me-1 mb-1"
+                      title="{{diag.nome}}">
+                  {{ diag.sigla || diag.nome }}
+                </span>
+                <span *ngIf="aluno.diagnosticos.length > 2"
+                      class="badge aluno-diag-badge me-1 mb-1">
+                  +{{ aluno.diagnosticos.length - 2 }}
+                </span>
+              </div>
+            </div>
+          </div>
 
-    <div class="carousel-item-wrapper">
-      <div class="card aluno-cover-card" (click)="goToNewAlunoPage()" title="Adicionar Novo Aluno">
-        <div class="cover-card-content">
-          <h3 class="cover-card-title">ALUNOS</h3>
-          <span class="cover-card-link">
-            Cadastrar <i class="bi bi-chevron-right"></i>
-          </span>
         </div>
       </div>
-    </div>
-
-    <div class="carousel-item-wrapper"
-         *ngFor="let aluno of (alunos$ | async); let i = index"
-         [style.animation-delay]="(i % 12) * 0.05 + 's'">
-
-      <div class="card aluno-card">
-        <div class="aluno-card-img-container">
-          <img [src]="aluno.foto || 'https://via.placeholder.com/400x400.png?text=Aluno'"
-               class="card-img-top aluno-card-img" alt="Foto do Aluno" (click)="viewAluno(aluno)">
-
-          <div class="aluno-priority-icon"
-               [ngClass]="{
-                 'priority-alta': aluno.prioridade === 'Alta',
-                 'priority-media': aluno.prioridade === 'Média',
-                 'priority-baixa': aluno.prioridade === 'Baixa'
-               }"
-               [title]="'Prioridade ' + aluno.prioridade">
-            <ng-container [ngSwitch]="aluno.prioridade">
-              <i *ngSwitchCase="'Alta'" class="bi bi-exclamation-triangle-fill"></i>
-              <i *ngSwitchCase="'Média'" class="bi bi-exclamation-circle-fill"></i>
-              <i *ngSwitchCase="'Baixa'" class="bi bi-check-circle-fill"></i>
-              <i *ngSwitchDefault class="bi bi-circle-fill"></i>
-            </ng-container>
-          </div>
-
-          <div class="aluno-quick-actions" *ngIf="mode === 'full'">
-            <button (click)="viewAluno(aluno)" class="btn btn-sm btn-action-main">
-              <i class="bi bi-headset"></i> Atendimentos
-            </button>
-            <button (click)="editAluno($event, aluno)" class="btn btn-sm btn-action" title="Editar">
-              <i class="bi bi-pencil-fill"></i>
-            </button>
-            <button (click)="deleteAluno($event, aluno)" class="btn btn-sm btn-action btn-action-danger" title="Excluir">
-              <i class="bi bi-trash-fill"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="card-body" (click)="viewAluno(aluno)">
-          <h5 class="card-title mb-1" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
-          <div class="card-text-meta mb-1">
-            <span class="card-text-matricula">{{ aluno.matricula }}</span>
-            <span class="card-text-nascimento" *ngIf="aluno.dataNascimento">
-              {{ (aluno.dataNascimento | date: 'dd/MM/yyyy') }}
-            </span>
-            <span class="card-text-nascimento" *ngIf="!aluno.dataNascimento">
-              Nasc. N/A
-            </span>
-          </div>
-          <p class="card-text-curso">{{ aluno.curso?.nome || 'N/A' }}</p>
-          <div class="aluno-card-diagnosticos mt-2">
-            <span *ngFor="let diag of aluno.diagnosticos.slice(0, 2)"
-                  class="badge aluno-diag-badge me-1 mb-1"
-                  title="{{diag.nome}}">
-              {{ diag.sigla || diag.nome }}
-            </span>
-            <span *ngIf="aluno.diagnosticos.length > 2"
-                  class="badge aluno-diag-badge me-1 mb-1">
-              +{{ aluno.diagnosticos.length - 2 }}
-            </span>
-          </div>
-        </div>
-      </div>
-
+      <button (click)="scrollCarousel(1)" class="carousel-arrow next" title="Próximo">
+        <i class="bi bi-chevron-right"></i>
+      </button>
     </div>
   </div>
-
 </div>
-
-<button class="fab-add-button" title="Adicionar Novo Aluno" (click)="goToNewAlunoPage()" *ngIf="mode === 'full'">
-  <i class="bi bi-plus-lg"></i>
-</button>

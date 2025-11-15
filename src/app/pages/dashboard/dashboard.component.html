@@ -1,209 +1,150 @@
 <div class="dashboard-page animate-fadeIn">
 
-  <div id="graphCarousel" class="carousel slide" #graphCarouselEl>
-
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="6" aria-label="Slide 7"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="7" aria-label="Slide 8"></button>
-    </div>
-
-    <div class="carousel-inner">
-
-      <div class="carousel-item active slide-bg-1">
-        <div class="carousel-content-wrapper slide-kpi">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="stat-icon icon-alunos">
-                <i class="bi bi-people-fill"></i>
-              </div>
-              <div class="stat-content">
-                <h6 class="stat-title">Total de Alunos Ativos</h6>
-                <span class="stat-value">{{ (totalAlunosAtivos$ | async)?.total || 0 }}</span>
-              </div>
-            </div>
-            </div>
-        </div>
-      </div>
-
-      <div class="carousel-item slide-bg-2">
-        <div class="carousel-content-wrapper slide-kpi">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="stat-icon icon-atendimentos">
-                <i class="bi bi-headset"></i>
-              </div>
-              <div class="stat-content">
-                <h6 class="stat-title">Atendimentos Realizados</h6>
-                <span class="stat-value">{{ (totalAtendimentosRealizados$ | async)?.total || 0 }}</span>
-              </div>
-            </div>
-             </div>
-        </div>
-      </div>
-
-      <div class="carousel-item slide-bg-3">
-        <div class="carousel-content-wrapper slide-kpi">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="stat-icon icon-agendados">
-                <i class="bi bi-calendar-check"></i>
-              </div>
-              <div class="stat-content">
-                <h6 class="stat-title">Próximos Atendimentos (Agendados)</h6>
-                <span class="stat-value">{{ (totalAtendimentosAgendados$ | async)?.total || 0 }}</span>
-              </div>
-            </div>
-             </div>
-        </div>
-      </div>
-
-      <div class="carousel-item slide-bg-4">
-        <div class="carousel-content-wrapper">
-          <div class="card h-100">
-            <div class="card-header">
-              ALUNOS POR DIAGNÓSTICO
-            </div>
-            <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingTpl">
-              <div *ngIf="diagnosticos.length > 0; else noDataTpl" class="chart-donut-content-wrapper">
-                <div class="pie-chart-container">
-                  <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
-                </div>
-                <div class="pie-chart-legend">
-                  <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
-                    <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
-                    <span class="legend-label" [title]="item.diagnosticoNome">{{ item.diagnosticoNome }}</span>
-                    <span class="legend-value">{{ item.totalAlunos }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item slide-bg-5">
-        <div class="carousel-content-wrapper">
-          <div class="card h-100">
-            <div class="card-header">
-              Alunos por Prioridade
-            </div>
-            <div class="card-body chart-container-donut" *ngIf="(relatorioPrioridade$ | async) as prioridades; else loadingTpl">
-              <div *ngIf="prioridades.length > 0; else noDataTpl" class="chart-donut-content-wrapper">
-                <div class="pie-chart-container">
-                  <div class="pie-chart" [style.background]="prioridadeChartStyle"></div>
-                </div>
-                <div class="pie-chart-legend">
-                  <div *ngFor="let item of prioridades; trackBy: trackByNome" class="legend-item">
-                    <span class="legend-color-dot" [style.background-color]="prioridadeChartColors[item.nome]"></span>
-                    <span class="legend-label">{{ item.nome }}</span>
-                    <span class="legend-value">{{ item.total }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item slide-bg-6">
-        <div class="carousel-content-wrapper">
-          <div class="card h-100">
-            <div class="card-header">
-              Alunos por Curso
-            </div>
-            <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loadingTpl">
-              <div *ngIf="cursos.length > 0; else noDataTpl" class="chart-bar-content-wrapper">
-                <div *ngFor="let item of cursos; trackBy: trackByNome" class="chart-bar-item">
-                  <span class="bar-label">{{ item.cursoNome }}</span>
-                  <div class="bar-track">
-                    <div class="bar-fill" [style.width]="getBarPercentage(item.totalAlunos, maxCursoCount)">
-                      <span class="bar-value">{{ item.totalAlunos }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item slide-bg-7">
-        <div class="carousel-content-wrapper">
-          <div class="card h-100">
-            <div class="card-header">
-              Atendimentos Realizados por Responsável
-            </div>
-            <div class="card-body chart-container-bar" *ngIf="(relatorioAtendimentosResp$ | async) as atendimentos; else loadingTpl">
-              <div *ngIf="atendimentos.length > 0; else noDataTpl" class="chart-bar-content-wrapper">
-                <div *ngFor="let item of atendimentos; trackBy: trackByNome" class="chart-bar-item">
-                  <span class="bar-label">{{ item.nome }}</span>
-                  <div class="bar-track">
-                    <div class="bar-fill" [style.width]="getBarPercentage(item.total, maxAtendimentoRespCount)">
-                      <span class="bar-value">{{ item.total }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item slide-bg-8">
-        <div class="carousel-content-wrapper">
-          <div class="card h-100">
-            <div class="card-header">
-              Tendência de Atendimentos Realizados
-            </div>
-            <div class="card-body chart-container-line" *ngIf="(relatorioAtendimentosMes$ | async) as atendimentos; else loadingTpl">
-              <div *ngIf="atendimentos.length > 0; else noDataTpl" class="chart-line-content-wrapper">
-
-                <div *ngFor="let item of atendimentos; trackBy: trackByNome" class="line-bar-item">
-                   <div class="line-bar-fill" [style.height]="getBarPercentage(item.total, maxAtendimentoMesCount)">
-                      <span class="line-bar-value">{{ item.total }}</span>
-                   </div>
-                   <span class="line-bar-label">{{ item.nome }}</span>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <a routerLink="/relatorios" class="btn btn-primary dashboard-report-button">
-      Ver Relatórios Completos
-    </a>
-
+  <div class="dashboard-hero">
+    <h1 class="hero-title">Dashboard</h1>
+    <p class="hero-subtitle">Visão geral do painel de administração NAAPI.</p>
   </div>
 
-  </div> <div class="container-fluid mt-4 mb-5">
-    <div class="vitrine-header">
-      <h2>Alunos com Prioridade Alta</h2>
-      <a routerLink="/alunos">Ver todos</a>
+  <div class="kpi-grid page-container">
+
+    <div class="kpi-card">
+      <div class="kpi-content">
+        <h6 class="kpi-title">Total de Alunos Ativos</h6>
+        <span class="kpi-value">{{ (totalAlunosAtivos$ | async)?.total || 0 }}</span>
+      </div>
+      <div class="kpi-icon icon-alunos">
+        <i class="bi bi-people-fill"></i>
+      </div>
     </div>
 
-    <app-aluno-list [mode]="'vitrine'" [prioridade]="'Alta'"></app-aluno-list>
+    <div class="kpi-card">
+      <div class="kpi-content">
+        <h6 class="kpi-title">Atendimentos Realizados</h6>
+        <span class="kpi-value">{{ (totalAtendimentosRealizados$ | async)?.total || 0 }}</span>
+      </div>
+      <div class="kpi-icon icon-atendimentos">
+        <i class="bi bi-headset"></i>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-content">
+        <h6 class="kpi-title">Próximos Atendimentos</h6>
+        <span class="kpi-value">{{ (totalAtendimentosAgendados$ | async)?.total || 0 }}</span>
+      </div>
+      <div class="kpi-icon icon-agendados">
+        <i class="bi bi-calendar-check"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-grid page-container">
+
+    <div class="chart-card chart-card-donut">
+      <div class="chart-header">
+        <h5 class="chart-title">Alunos por Diagnóstico</h5>
+      </div>
+      <div class="chart-body" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingTpl">
+        <div *ngIf="diagnosticos.length > 0; else noDataTpl" class="chart-container-donut">
+          <div class="pie-chart-container">
+            <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
+          </div>
+          <div class="pie-chart-legend">
+            <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
+              <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
+              <span class="legend-label" [title]="item.diagnosticoNome">{{ item.diagnosticoNome }}</span>
+              <span class="legend-value">{{ item.totalAlunos }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card chart-card-donut">
+      <div class="chart-header">
+        <h5 class="chart-title">Alunos por Prioridade</h5>
+      </div>
+      <div class="chart-body" *ngIf="(relatorioPrioridade$ | async) as prioridades; else loadingTpl">
+        <div *ngIf="prioridades.length > 0; else noDataTpl" class="chart-container-donut">
+          <div class="pie-chart-container">
+            <div class="pie-chart" [style.background]="prioridadeChartStyle"></div>
+          </div>
+          <div class="pie-chart-legend">
+            <div *ngFor="let item of prioridades; trackBy: trackByNome" class="legend-item">
+              <span class="legend-color-dot" [style.background-color]="prioridadeChartColors[item.nome]"></span>
+              <span class="legend-label">{{ item.nome }}</span>
+              <span class="legend-value">{{ item.total }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card chart-card-bar">
+      <div class="chart-header">
+        <h5 class="chart-title">Alunos por Curso</h5>
+      </div>
+      <div class="chart-body" *ngIf="(relatorioCursos$ | async) as cursos; else loadingTpl">
+        <div *ngIf="cursos.length > 0; else noDataTpl" class="chart-container-bar">
+          <div *ngFor="let item of cursos; trackBy: trackByNome" class="chart-bar-item">
+            <span class="bar-label">{{ item.cursoNome }}</span>
+            <div class="bar-track">
+              <div class="bar-fill" [style.width]="getBarPercentage(item.totalAlunos, maxCursoCount)">
+                <span class="bar-value">{{ item.totalAlunos }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card chart-card-bar">
+      <div class="chart-header">
+        <h5 class="chart-title">Atendimentos por Responsável</h5>
+      </div>
+      <div class="chart-body" *ngIf="(relatorioAtendimentosResp$ | async) as atendimentos; else loadingTpl">
+        <div *ngIf="atendimentos.length > 0; else noDataTpl" class="chart-container-bar">
+          <div *ngFor="let item of atendimentos; trackBy: trackByNome" class="chart-bar-item">
+            <span class="bar-label">{{ item.nome }}</span>
+            <div class="bar-track">
+              <div class="bar-fill" [style.width]="getBarPercentage(item.total, maxAtendimentoRespCount)">
+                <span class="bar-value">{{ item.total }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card chart-card-line chart-card-full-width">
+      <div class="chart-header">
+        <h5 class="chart-title">Tendência de Atendimentos Realizados</h5>
+      </div>
+      <div class="chart-body" *ngIf="(relatorioAtendimentosMes$ | async) as atendimentos; else loadingTpl">
+        <div *ngIf="atendimentos.length > 0; else noDataTpl" class="chart-container-line">
+          <div *ngFor="let item of atendimentos; trackBy: trackByNome" class="line-bar-item">
+             <div class="line-bar-fill" [style.height]="getBarPercentage(item.total, maxAtendimentoMesCount)">
+                <span class="line-bar-value">{{ item.total }}</span>
+             </div>
+             <span class="line-bar-label">{{ item.nome }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
   </div>
 
 <ng-template #loadingTpl>
-  <div class="d-flex align-items-center justify-content-center h-100">
-    <span class="spinner-border spinner-border-sm"></span>
-    <p class="text-muted small mt-2 ms-2">A carregar dados...</p>
+  <div class="d-flex align-items-center justify-content-center h-100 p-5">
+    <span class="spinner-border spinner-border-sm text-primary"></span>
+    <p class="text-muted small ms-2 mb-0">A carregar dados...</p>
   </div>
 </ng-template>
 
 <ng-template #noDataTpl>
-  <div class="d-flex align-items-center justify-content-center h-100">
-    <p class="text-muted m-5">Sem dados disponíveis.</p>
+  <div class="d-flex align-items-center justify-content-center h-100 p-5">
+    <p class="text-muted m-0">Sem dados disponíveis.</p>
   </div>
 </ng-template>

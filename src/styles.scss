@@ -1,48 +1,44 @@
 // 1. Variáveis Globais de Fontes e Cores
 :root {
-  // Fontes
-  --font-principal: 'Raleway', sans-serif;
-  --font-titulos: 'Poppins', sans-serif;
-  --font-secundaria: 'Open Sans', sans-serif;
+  --font-principal: 'Inter', sans-serif;
+  --font-titulos: 'Inter', sans-serif;
+  --font-secundaria: 'Inter', sans-serif;
 
-  // Paleta de Cores Base
   --cor-branco: #FFFFFF;
-  --cor-claro01: #F1F5F9;
-  --cor-claro02: #F5F5F5;
-  --cor-claro03: #DDE5F0;
-  --cor-azul-claro: #8CA9C9;
+  --cor-fundo: #f9fafb;
+  --cor-borda-leve: #d0d5dd;
+  --cor-texto-claro: #5f6980;
   --cor-azul-cefet: #00376B;
   --cor-azul: #002C56;
   --cor-azul-escuro: #001D36;
   --cor-vermelho: #D0021B;
 
+  --cor-primaria: var(--cor-azul-cefet);
+  --cor-secundaria: var(--cor-azul-escuro);
 }
 
 // 2. Estilos Globais
 body {
   font-family: var(--font-principal);
   background-color: var(--cor-branco);
-  color: var(--cor-azul-cefet);
+  color: var(--cor-texto-principal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  // Esconde a scrollbar
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-// Esconde a scrollbar (Chrome, Safari, Edge)
 body::-webkit-scrollbar {
   display: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-titulos);
-  font-weight: 800;
-  color: var(--cor-secundaria);
+  font-weight: 600;
+  color: var(--cor-texto-principal);
 }
 
-// 3. Animações e Utilitários
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-in-out;
 }
@@ -52,32 +48,23 @@ h1, h2, h3, h4, h5, h6 {
   to { opacity: 1; }
 }
 
-// 4. Estilos reutilizáveis (ex: Page Header)
 .page-header-container {
-  background-color: var(--cor-branco);
+  background-color: var(--cor-fundo);
   padding: 2rem;
-  border-bottom: 1px solid var(--cor-claro03);
+  border-bottom: 1px solid var(--cor-borda-leve);
   margin-bottom: 1.5rem;
-
-  &.bg-color-2 { // Para o Aluno List
-    background-color: var(--cor-claro01);
-    h2.page-header-title {
-      color: var(--cor-branco);
-    }
-  }
 
   .page-header-title {
     margin: 0;
     font-size: 1.75rem;
-    font-weight: 800;
+    font-weight: 600;
   }
 }
 
-// Layout Básico da Página
 .page-container {
-  max-width: 1320px;
+  max-width: 1336px;
   margin: 0 auto;
-  padding: 0 1rem 2rem 1rem;
+  padding: 2rem 2.5rem;
 }
 
 @keyframes fadeInUp {
@@ -90,4 +77,3 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
   }
 }
-

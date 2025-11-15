@@ -1,16 +1,28 @@
 /* src/app/pages/login/login.component.scss */
 @import '../../../styles.scss'; // Importa nossas variáveis
 
-.login-container {
+// 1. Container principal da página (Flexbox)
+.login-page-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   width: 100%;
-  background-color: var(--cor-secundaria);
-  position: relative; // Necessário para o granulado
+}
 
-  // Efeito Granulado
+// 2. Painel Visual (Esquerda)
+.login-visual-panel {
+  flex: 1;
+  max-width: 655px; // Largura do protótipo
+  background-color: var(--cor-hero-bg, #222e3c); // Cor de fundo do dashboard
+  color: var(--cor-branco);
+  padding: 3rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; // Alinha header, content e footer
+
+  position: relative; // Para o efeito granulado
+
+  // Efeito Granulado (do seu login.scss original)
   &::after {
     content: '';
     position: absolute;
@@ -19,82 +31,147 @@
     pointer-events: none;
     z-index: 1;
   }
-}
 
-.login-wrapper {
-  max-width: 450px;
-  width: 100%;
-  padding: 2.5rem 3rem; // Mais padding lateral
-  background: var(--cor-branco);
-  border-radius: 2px; // MUDANÇA: Consistência de design
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  z-index: 2; // Fica à frente do granulado
-}
+  // Conteúdo sobrepõe o granulado
+  > * {
+    z-index: 2;
+  }
 
-.form-header {
   .logo-link {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 0.5rem; // Espaço entre os logos
+    gap: 0.5rem;
     text-decoration: none;
   }
-  .naapi-logo {
+
+  .naapi-logo-visual {
     height: 40px;
-    margin-bottom: 0.5rem;
   }
 
-  .card-title {
-    font-family: var(--font-titulos); // MUDANÇA: Fonte
+  .naapi-logo-text {
+    font-family: var(--font-titulos);
     font-weight: 800;
     font-size: 1.75rem;
+    letter-spacing: 4px;
+    color: var(--cor-branco);
+  }
+
+  .visual-title {
+    font-family: var(--font-titulos);
+    font-weight: 800;
+    font-size: 2.5rem; // 32px do protótipo é ~2rem, ajustado
+    line-height: 1.3; // 44px do protótipo
+    margin-bottom: 1rem;
+  }
+
+  .visual-subtitle {
+    font-family: var(--font-secundaria);
+    font-size: 1.1rem; // 16px do protótipo
+    line-height: 1.5; // 24px do protótipo
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 400px;
+  }
+
+  .visual-footer p {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+  }
+}
+
+// 3. Painel do Formulário (Direita)
+.login-form-panel {
+  flex: 1.5; // Ocupa o espaço restante
+  display: grid;
+  place-items: center; // Centraliza o .login-wrapper
+  padding: 2rem;
+  background-color: var(--cor-branco);
+}
+
+// 4. Wrapper do Formulário (centralizado à direita)
+.login-wrapper {
+  max-width: 450px; // Largura do protótipo (458px)
+  width: 100%;
+  // Removemos o fundo e sombra do .login-wrapper original
+}
+
+// 5. Cabeçalho do Formulário (Acesso ao Painel)
+.form-header {
+  .card-title {
+    font-family: var(--font-titulos);
+    font-weight: 800;
+    font-size: 2rem; // 32px
+    line-height: 1.375; // 44px
     color: var(--cor-secundaria);
   }
 
   .sub-title {
-    font-family: var(--font-secundaria); // MUDANÇA: Fonte
+    font-family: var(--font-secundaria);
+    font-size: 1rem; // 16px
+    line-height: 1.5; // 24px
+    color: var(--cor-texto-claro, #667085); // Cor do protótipo
+  }
+}
+
+// 6. Novo Estilo para os Inputs (com Ícones)
+.form-group-custom {
+  position: relative; // Fundamental para o ícone
+
+  .form-label {
+    font-family: var(--font-secundaria);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--cor-texto-claro);
+    margin-bottom: 0.25rem;
+  }
+
+  .form-control-icon {
+    position: absolute;
+    top: 45px; // Ajustado para alinhar com o input
+    left: 18px;
+    z-index: 3;
     color: var(--cor-texto-claro);
     font-size: 1.1rem;
   }
-}
 
-.form-label {
-  font-family: var(--font-secundaria); // MUDANÇA: Fonte
-  font-weight: 700;
-  font-size: 0.8rem; // MUDANÇA: Menor
-  text-transform: uppercase; // MUDANÇA
-  letter-spacing: 0.5px; // MUDANÇA
-  color: var(--cor-texto-claro); // MUDANÇA
-  margin-bottom: 0.25rem; // MUDANÇA
-}
+  .form-control {
+    font-family: var(--font-secundaria);
+    font-weight: 500; // 500 do protótipo
+    font-size: 1rem;
+    padding: 0.75rem 1rem 0.75rem 3rem; // Padding esquerdo para o ícone
+    background-color: #f2f4f7; // Cor do protótipo
+    border: 1px solid #f2f4f7; // Cor do protótipo
+    border-radius: 10px; // Raio do protótipo
+    box-shadow: none;
+    height: 64px; // Altura do protótipo
 
-.form-control {
-  font-family: var(--font-secundaria); // MUDANÇA: Fonte
-  font-weight: 400; // MUDANÇA
-  font-size: 1rem;
-  padding: 0.75rem 1rem;
-  background-color: var(--cor-fundo); // MUDANÇA: Fundo cinza
-  border: 1px solid var(--cor-borda); // MUDANÇA: Borda
-  border-radius: 2px; // MUDANÇA: Consistência
-  box-shadow: none; // MUDANÇA
+    &:focus {
+      background-color: var(--cor-branco);
+      border-color: var(--cor-primaria);
+      box-shadow: 0 0 0 3px rgba(0, 74, 145, 0.15);
+      z-index: 2;
+    }
 
-  &:focus {
-    background-color: var(--cor-branco);
-    border-color: var(--cor-primaria);
-    box-shadow: 0 0 0 3px rgba(0, 74, 145, 0.15);
+    &::placeholder {
+      color: #98a2b3; // Cor do protótipo
+    }
   }
 }
 
+// 7. Botão Principal
 .btn-primary {
-  padding: 0.85rem; // MUDANÇA: Mais alto
-  font-family: var(--font-titulos); // MUDANÇA: Fonte
+  padding: 0.85rem;
+  font-family: var(--font-titulos);
   font-weight: 700;
   font-size: 1rem;
-  text-transform: uppercase; // MUDANÇA
+  text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-radius: 2px; // MUDANÇA
-  background-color: var(--cor-secundaria); // MUDANÇA: Cor
-  border-color: var(--cor-secundaria); // MUDANÇA: Cor
+  border-radius: 8px; // Raio do protótipo
+  background-color: var(--cor-secundaria);
+  border-color: var(--cor-secundaria);
+  height: 60px; // Altura similar ao protótipo
 
   // Efeito Granulado
   position: relative;
@@ -115,8 +192,41 @@
   }
 }
 
-.alert-danger {
-  font-family: var(--font-secundaria);
-  font-weight: 700;
-  font-size: 0.9rem;
+// 8. Responsividade (Mobile)
+@media (max-width: 992px) {
+  .login-page-container {
+    flex-direction: column; // Empilha os painéis
+  }
+
+  .login-visual-panel {
+    flex: 0 0 auto; // Não cresce, altura baseada no conteúdo
+    max-width: 100%;
+    min-height: 250px;
+    padding: 2rem;
+    text-align: center;
+    justify-content: center;
+
+    .visual-header {
+      justify-content: center;
+    }
+    .visual-content {
+      margin: 2rem 0;
+    }
+    .visual-title {
+      font-size: 1.75rem;
+    }
+    .visual-subtitle {
+      font-size: 1rem;
+      max-width: none;
+    }
+    .visual-footer {
+      display: none; // Oculta o footer no mobile
+    }
+  }
+
+  .login-form-panel {
+    flex: 1; // Ocupa o resto do espaço
+    align-items: flex-start; // Alinha o form no topo
+    padding: 2rem 1rem;
+  }
 }

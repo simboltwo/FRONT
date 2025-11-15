@@ -1,27 +1,52 @@
 /* src/app/pages/alunos/aluno-detalhe/aluno-detalhe.component.scss */
 @import '../../../../styles.scss';
 
-// Adiciona as variáveis de cor para este componente
+// Cores de status
 :host {
   --cor-sucesso: #28a745;
   --cor-aviso: #ee9b00;
   --cor-perigo: #9b2226;
+  --cor-info: #0dcaf0;
+  --cor-agendado: var(--cor-primaria);
+
+  // Cores de fundo claras (para pills)
+  --cor-sucesso-claro: #e9f7ec;
+  --cor-aviso-claro: #fff8e6;
+  --cor-perigo-claro: #fbe9e9;
+  --cor-info-claro: #e7f9fd;
+  --cor-secundario-claro: var(--cor-fundo);
 }
 
-// Container principal da página
-.detalhe-page-container {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 4rem 1.5rem;
-  background-color: var(--cor-branco);
+// 1. Novo Cabeçalho de Página
+.page-header-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  background-color: var(--cor-fundo); // Cinza claro
+  padding: 1.5rem 2.5rem; // Padding
+  border-bottom: 1px solid var(--cor-borda-leve);
+
+  .btn-primary {
+    font-family: var(--font-principal);
+    font-weight: 600;
+    font-size: 0.9rem;
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+  }
 }
 
-// 1. Estilo do Breadcrumb
+// 2. Breadcrumb (agora dentro do header)
 .detalhe-breadcrumb {
-  font-family: var(--font-secundaria);
-  font-size: 0.8rem;
+  font-family: var(--font-principal);
+  font-size: 0.875rem; // 14px
   color: var(--cor-texto-claro);
-  padding: 1rem 0;
+  padding: 0;
+  margin: 0;
 
   a {
     color: var(--cor-texto-claro);
@@ -31,16 +56,23 @@
     }
   }
   i {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     margin: 0 0.5rem;
   }
   span {
-    color: var(--cor-texto);
-    font-weight: 700;
+    color: var(--cor-texto-principal);
+    font-weight: 600;
   }
 }
 
-// 2. Layout principal em Grid
+// 3. Container de Conteúdo (abaixo do header)
+.page-container {
+  max-width: 1336px; // Padrão
+  margin: 0 auto;
+  padding: 2rem 2.5rem 4rem 2.5rem; // Padding
+}
+
+// 4. Layout principal em Grid (mantido)
 .detalhe-main-content {
   display: grid;
   grid-template-columns: 1fr; // Mobile: 1 coluna
@@ -52,7 +84,7 @@
   }
 }
 
-// 3. Coluna da Esquerda (Galeria)
+// 5. Coluna da Esquerda (Galeria) - Estilo Limpo
 .detalhe-gallery {
   width: 100%;
 
@@ -62,6 +94,8 @@
     min-height: 85vh;
     position: relative;
     background-color: var(--cor-fundo);
+    border: 1px solid var(--cor-borda-leve);
+    border-radius: 8px; // Borda arredondada
   }
 
   .aluno-foto-principal {
@@ -72,37 +106,25 @@
     left: 0;
     object-fit: cover;
     display: block;
-    border-radius: 2px;
+    border-radius: 8px; // Borda arredondada
   }
 }
 
-// 4. Coluna da Direita (Painel de Informações)
+// 6. Coluna da Direita (Painel de Informações)
 .detalhe-info-panel {
   width: 100%;
 
   @media (min-width: 992px) {
     position: sticky;
-    top: 100px;
+    top: 100px; // 70px (header) + 30px (espaço)
     align-self: start;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
-
-    // --- MUDANÇAS AQUI ---
-
-    // 1. Restaura o padding para o conteúdo não colar na borda
-    padding-right: 1rem;
-
-    // 2. Esconde a scrollbar (Firefox)
+    padding-right: 1rem; // Espaço para scroll
     scrollbar-width: none;
-    // 3. Esconde a scrollbar (IE/Edge)
-    -ms-overflow-style: none;
-
-    // 4. Esconde a scrollbar (Chrome, Safari, Edge)
     &::-webkit-scrollbar {
-      width: 0; // Força a largura a zero
-      background: transparent; // Garante que é invisível
+      display: none;
     }
-    // --- FIM DAS MUDANÇAS ---
   }
 }
 
@@ -110,19 +132,19 @@
   margin-bottom: 1.5rem;
 }
 
-// Fontes
+// REMOVIDO: .info-actions (o botão saiu daqui)
+
+// Tipografia
 .aluno-nome {
-  font-family: var(--font-titulos);
-  text-transform: uppercase;
-  font-size: 2.25rem;
-  font-weight: 800;
+  font-family: var(--font-principal);
+  font-size: 2rem; // 32px
+  font-weight: 600;
   margin-bottom: 0.25rem;
-  letter-spacing: 4px;
   line-height: 1.2;
-  color: var(--cor-secundaria);
+  color: var(--cor-texto-principal);
 }
 .aluno-nome-social {
-  font-family: var(--font-secundaria);
+  font-family: var(--font-principal);
   font-size: 1.1rem;
   color: var(--cor-texto-claro);
   margin-top: 0;
@@ -130,142 +152,101 @@
 }
 .aluno-matricula {
   font-size: 1rem;
-  color: var(--cor-primaria);
-  font-weight: 800;
+  color: var(--cor-texto-claro);
+  font-weight: 500;
   font-family: var(--font-principal);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-// Emblemas com COR DE FUNDO
+// Emblemas (Pills de fundo claro)
 .info-badge-group {
   display: flex;
-  gap: 1.5rem;
-  border-top: 1px solid var(--cor-borda);
+  flex-wrap: wrap; // Quebra a linha em telas menores
+  gap: 1rem;
+  border-top: 1px solid var(--cor-borda-leve);
   padding: 1.25rem 0;
 }
 .info-item {
   .info-label {
     display: block;
-    font-family: var(--font-secundaria);
+    font-family: var(--font-principal);
     color: var(--cor-texto-claro);
     font-size: 0.8rem;
-    margin-bottom: 0.25rem;
-    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+    font-weight: 500;
   }
 
   .info-value-pill {
-    font-family: var(--font-secundaria);
-    font-weight: 700;
-    font-size: 0.9rem;
+    font-family: var(--font-principal);
+    font-weight: 600;
+    font-size: 0.875rem;
     padding: 0.4rem 0.75rem;
-    border-radius: 2px;
-    border: 1px solid transparent;
+    border-radius: 6px;
     display: inline-block;
-    color: var(--cor-branco);
 
-    &.pill-danger { background-color: var(--cor-perigo); }
-    &.pill-warning { background-color: var(--cor-aviso); color: var(--cor-secundaria); }
-    &.pill-success { background-color: var(--cor-sucesso); }
-    &.pill-info { background-color: #0dcaf0; }
+    // Cores (Fundo claro, texto escuro)
+    &.pill-danger { background-color: var(--cor-perigo-claro); color: var(--cor-perigo); }
+    &.pill-warning { background-color: var(--cor-aviso-claro); color: var(--cor-aviso); }
+    &.pill-success { background-color: var(--cor-sucesso-claro); color: var(--cor-sucesso); }
+    &.pill-info { background-color: var(--cor-info-claro); color: var(--cor-info); }
     &.pill-secondary {
-      background-color: var(--cor-fundo);
+      background-color: var(--cor-secundario-claro);
       color: var(--cor-texto-claro);
-      border-color: var(--cor-borda);
-    }
-  }
-}
-
-// Botão de Ação com GRANULADO
-.info-actions {
-  display: grid;
-  gap: 0.75rem;
-
-  .btn-primary {
-    background-color: var(--cor-secundaria);
-    border-color: var(--cor-secundaria);
-    font-family: var(--font-titulos);
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 0.85rem;
-    border-radius: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-
-    &:hover {
-      background-color: #000;
-      border-color: #000;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='10' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-      pointer-events: none;
-      opacity: 0.5;
     }
   }
 }
 
 // Link de Edição
 .info-edit-link {
-  font-family: var(--font-secundaria);
+  font-family: var(--font-principal);
   font-size: 0.9rem;
   color: var(--cor-texto-claro);
+  padding: 1rem;
+  background-color: var(--cor-fundo);
+  border-radius: 6px;
 
   a {
-    color: var(--cor-secundaria);
-    font-weight: 700;
+    color: var(--cor-primaria);
+    font-weight: 600;
     text-decoration: underline;
     margin-left: 0.5rem;
     &:hover {
-      color: var(--cor-primaria);
+      color: var(--cor-secundaria);
     }
   }
 }
 
-// Acordeão
-.hering-accordion {
+// 7. Estilo do Acordeão Padrão
+.accordion {
   .accordion-item {
-    border-bottom: 1px solid var(--cor-borda);
+    border: none;
+    border-bottom: 1px solid var(--cor-borda-leve);
     &:first-of-type {
-      border-top: none;
+      border-top: 1px solid var(--cor-borda-leve);
     }
   }
 
   .accordion-button {
-    font-family: var(--font-secundaria);
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--cor-secundaria);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 1.25rem 0;
+    font-family: var(--font-principal);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cor-texto-principal);
+    padding: 1.25rem 0.5rem;
     background: none;
     box-shadow: none;
 
-    .accordion-chevron {
-      transition: transform 0.2s ease-in-out;
-      margin-left: auto;
-      font-size: 1rem;
-    }
     &::after {
-      display: none;
+      // Usa o ícone padrão do Bootstrap
     }
     &:not(.collapsed) {
-      .accordion-chevron {
-        transform: rotate(180deg);
-      }
+      color: var(--cor-primaria);
+      background: none;
     }
     &:focus { box-shadow: none; }
   }
 
   .accordion-body {
-    padding: 0 0 1.5rem 0;
-    font-family: var(--font-secundaria);
+    padding: 0 0.5rem 1.5rem 0.5rem;
+    font-family: var(--font-principal);
     font-size: 0.95rem;
     line-height: 1.6;
     color: var(--cor-texto-claro);
@@ -273,6 +254,75 @@
 
   .info-content {
     white-space: pre-wrap;
-    color: var(--cor-texto);
+    color: var(--cor-texto-principal); // Texto mais escuro
+    font-size: 0.9rem;
   }
+}
+
+// 8. ESTILOS PARA O <app-atendimento-list>
+// (Estes estilos vêm do SCSS pai)
+
+.atendimento-list-header {
+  font-family: var(--font-principal);
+  font-weight: 600;
+  color: var(--cor-texto-principal);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--cor-borda-leve);
+}
+
+.atendimento-list-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--cor-fundo); // Borda cinza clara
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.atendimento-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.atendimento-item-title {
+  font-family: var(--font-principal);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--cor-texto-principal);
+}
+
+.atendimento-status {
+  font-family: var(--font-principal);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+
+  &.status-realizado {
+    color: var(--cor-sucesso);
+    background-color: var(--cor-sucesso-claro);
+  }
+  &.status-cancelado {
+    color: var(--cor-perigo);
+    background-color: var(--cor-perigo-claro);
+  }
+  &.status-agendado {
+    color: var(--cor-agendado);
+    background-color: var(--cor-info-claro);
+  }
+}
+
+.atendimento-item-body {
+  font-size: 0.9rem;
+  color: var(--cor-texto-claro);
+  margin-bottom: 0.5rem;
+}
+
+.atendimento-item-footer {
+  font-size: 0.8rem;
+  color: var(--cor-texto-claro);
+  font-style: italic;
 }
