@@ -1,46 +1,44 @@
-/* src/styles.scss */
-
-// 1. Variáveis Globais de Fontes
+// 1. Variáveis Globais de Fontes e Cores
 :root {
-  --font-principal: 'Roboto', sans-serif;
-  --font-titulos: 'Montserrat', sans-serif;
-  --font-secundaria: 'Roboto Condensed', sans-serif;
+  // Fontes
+  --font-principal: 'Raleway', sans-serif;
+  --font-titulos: 'Poppins', sans-serif;
+  --font-secundaria: 'Open Sans', sans-serif;
 
   // Paleta de Cores Base
-  --cor-primaria: #004a91; // Azul CEFET
-  --cor-secundaria: #003366;
-  --cor-texto: #333;
-  --cor-texto-claro: #666;
-  --cor-fundo: #f4f7f6;
-  --cor-branco: #ffffff;
-  --cor-borda: #dee2e6;
+  --cor-branco: #FFFFFF;
+  --cor-claro01: #F1F5F9;
+  --cor-claro02: #F5F5F5;
+  --cor-claro03: #DDE5F0;
+  --cor-azul-claro: #8CA9C9;
+  --cor-azul-cefet: #00376B;
+  --cor-azul: #002C56;
+  --cor-azul-escuro: #001D36;
+  --cor-vermelho: #D0021B;
+
 }
 
 // 2. Estilos Globais
 body {
   font-family: var(--font-principal);
-  background-color: var(--cor-fundo);
-  color: var(--cor-texto);
+  background-color: var(--cor-branco);
+  color: var(--cor-azul-cefet);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  // --- MUDANÇA: Adicione estas 2 linhas ---
-  // Esconde a scrollbar (Firefox)
+  // Esconde a scrollbar
   scrollbar-width: none;
-  // Esconde a scrollbar (IE/Edge)
   -ms-overflow-style: none;
 }
 
-// --- MUDANÇA: Adicione este bloco novo ---
 // Esconde a scrollbar (Chrome, Safari, Edge)
 body::-webkit-scrollbar {
   display: none;
 }
-// --- FIM DAS MUDANÇAS ---
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-titulos);
-  font-weight: 800; // Como em 'Montserrat:wght@800'
+  font-weight: 800;
   color: var(--cor-secundaria);
 }
 
@@ -58,14 +56,14 @@ h1, h2, h3, h4, h5, h6 {
 .page-header-container {
   background-color: var(--cor-branco);
   padding: 2rem;
-  border-bottom: 1px solid var(--cor-borda);
+  border-bottom: 1px solid var(--cor-claro03);
   margin-bottom: 1.5rem;
 
   &.bg-color-2 { // Para o Aluno List
-    background-color: var(--cor-secundaria);
-     h2.page-header-title {
-       color: var(--cor-branco);
-     }
+    background-color: var(--cor-claro01);
+    h2.page-header-title {
+      color: var(--cor-branco);
+    }
   }
 
   .page-header-title {
@@ -92,3 +90,4 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
   }
 }
+

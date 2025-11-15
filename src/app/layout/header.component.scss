@@ -1,0 +1,291 @@
+/* src/app/layout/layout.component.scss */
+@import '../../styles.scss';
+
+// --- 1. Estilo Base da Navbar ---
+.main-navbar {
+  background-color: var(--cor-branco);
+  border-bottom: 1px solid var(--cor-claro03);
+  align-self: stretch;
+  /* * REMOVIDO: display: flex, padding, justify-content, align-items
+   * O <div class="container"> no HTML cuida disso.
+   */
+}
+
+// --- 2. Links de Navegação (Desktop) ---
+.nav-link {
+  /* .alunos e .tabtext */
+  color: var(--cor-azul-cefet);
+  text-align: center;
+  font-family: var(--font-principal);
+  font-size: 0.9rem; /* Ajustado para 14px (mais legível) */
+  font-style: normal;
+  font-weight: 700; /* 400 é muito fino */
+  line-height: 1rem;
+  letter-spacing: 0.0125rem;
+  text-decoration: none;
+
+  display: flex;
+  align-items: center; /* Alinha ícones e texto */
+  padding: 1.25rem 0.75rem;
+  /* * REMOVIDO: flex-direction: column (Isto quebrava o perfil) */
+  /* * REMOVIDO: gap (desnecessário) */
+
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease-in-out;
+
+  &.dropdown-toggle::after {
+    display: none;
+  }
+
+  /* O seu CSS de hover já incluía o sublinhado, mantive */
+  &:hover,
+  &.dropdown-toggle:hover {
+    color: var(--cor-azul-escuro);
+    background-color: var(--cor-fundo);
+    border-bottom-color: var(--cor-azul-escuro);
+  }
+
+  &.active {
+    color: var(--cor-azul-escuro);
+    border-bottom-color: var(--cor-azul-escuro);
+  }
+
+  i.bi-person {
+    font-size: 1.25rem; /* Ícone de perfil um pouco maior */
+  }
+}
+
+// --- 3. Logo (Centro) ---
+.navbar-logo-cefet {
+  display: flex;
+  height: 35px; /* Altura da logo CEFET */
+  align-items: center;
+}
+
+/* === MUDANÇA: Logo de Letras Responsiva === */
+.logo {
+  /* width e height removidos para ser automático */
+  text-align: center;
+  margin-left: 0.5rem; /* Espaço entre as logos */
+}
+.n-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.a {
+  font-family: var(--font-principal);
+  color: var(--cor-azul-cefet);
+  font-weight: 800;
+  font-style: normal;
+  line-height: 1rem; /* 16px */
+  display: flex;
+
+  /* Tamanho Padrão (Desktop) */
+  font-size: 1.25rem; /* 20px */
+  letter-spacing: 0.5rem; /* 8px */
+
+  /* Ajuste para telas menores (tablets) */
+  @media (max-width: 1200px) {
+    font-size: 1rem; /* 16px */
+    letter-spacing: 0.3rem; /* 5px */
+  }
+
+  /* No mobile, usamos a logo de imagem (definida no HTML) */
+  @media (max-width: 991px) {
+    display: none; // Esconde a logo de letras no mobile
+  }
+}
+/* A logo de imagem .navbar-logo-naapi será usada no mobile */
+.d-lg-none .navbar-logo-naapi {
+  height: 25px;
+  margin-left: 0.5rem;
+}
+
+
+// --- 4. Toggler Mobile ---
+.navbar-toggler {
+  border: none;
+  font-size: 1.5rem;
+  color: var(--cor-azul-escuro);
+  &:focus { box-shadow: none; }
+}
+
+// --- 5. Estilos do Perfil (Dropdown) ---
+.navbar-profile {
+  .nav-link {
+    border-bottom-color: transparent !important;
+    padding: 0.75rem; /* Padding do "frame" do perfil */
+    font-weight: 400; // Texto do perfil mais leve
+
+    /* * REMOVIDO: flex-direction, align-items, gap
+     * (O .nav-link principal já cuida disso)
+     */
+
+    small {
+      font-family: var(--font-principal);
+      color: var(--cor-texto-claro); // Corrigido
+      display: block; // 'block' é o correto aqui
+      font-weight: 400;
+      line-height: 1;
+      font-size: 0.8rem;
+    }
+  }
+
+  /* === MUDANÇA: Menu de Perfil Melhorado === */
+  .profile-dropdown-menu {
+    border-radius: 4px;
+    border: 1px solid var(--cor-claro03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    min-width: 220px;
+    padding: 0.5rem;
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-principal);
+      font-weight: 500;
+      color: var(--cor-secundaria);
+
+      i {
+        font-size: 1rem;
+        color: var(--cor-texto-claro);
+      }
+
+      &:hover {
+        background-color: var(--cor-fundo);
+        color: var(--cor-primaria);
+      }
+    }
+  }
+}
+
+// --- 6. Menu Mobile (Offcanvas) ---
+/* (O seu código CSS para Offcanvas está bom, mantive) */
+.offcanvas-header { border-bottom: 1px solid var(--cor-borda); }
+.offcanvas-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+}
+.offcanvas-nav-links {
+  .nav-item { border-bottom: 1px solid var(--cor-fundo); }
+  .nav-link {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-bottom: none;
+  }
+  .dropdown-menu {
+    border: none; box-shadow: none; padding-left: 1.5rem;
+  }
+}
+.offcanvas-footer {
+  border-top: 1px solid var(--cor-borda);
+  background-color: var(--cor-fundo);
+  padding: 0.5rem;
+  .nav-link { padding: 0.5rem; }
+  .dropdown-menu { width: calc(100% - 1rem); }
+}
+
+// --- 7. Ajuste do Conteúdo Principal ---
+.main-content-area {
+  padding-top: 80px;
+}
+
+
+// --- 8. Estilos do Mega Menu (Hover) ---
+.dropdown-mega {
+  position: static;
+
+  .dropdown-menu-mega {
+    display: block;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 100%;
+    padding: 1.5rem 0; /* Padding vertical */
+
+    background-color: var(--cor-branco);
+    border-top: 1px solid var(--cor-claro03);
+    border-bottom: 1px solid var(--cor-claro03);
+    border-radius: 0;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(0); /* Remove o "gap" que fazia o menu fechar */
+
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  @media (min-width: 992px) {
+    &:hover > .dropdown-menu-mega {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  }
+
+  /* Estilos dos links dentro do Mega Menu */
+  .dropdown-header {
+    font-family: var(--font-titulos);
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 700;
+    color: var(--cor-azul-cefet);
+    text-transform: uppercase;
+    letter-spacing: 1px; // Ajustado
+    line-height: 1.5rem;
+    padding-left: 1rem; // Alinhado com os itens
+  }
+
+  .dropdown-item {
+    font-family: var(--font-principal);
+    color: var(--cor-azul);
+    font-weight: 500; // Ajustado
+    font-size: 0.9rem; // Ajustado
+    padding: 0.5rem 1rem; // Ajustado
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: var(--cor-azul-cefet);
+      font-size: 1rem; // Ajustado
+    }
+
+    &:hover {
+      color: var(--cor-azul-cefet);
+      background-color: var(--cor-fundo);
+    }
+  }
+}
+
+// --- 9. Hover para Dropdowns Simples (Admin / Perfil) ---
+.nav-item.dropdown:not(.dropdown-mega) > .dropdown-menu {
+  @media (min-width: 992px) {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+
+    /* === CORREÇÃO DO HOVER BUG === */
+    transform: translateY(0);
+
+    pointer-events: none;
+    margin-top: 0;
+    transition: all 0.3s ease;
+  }
+}
+
+.nav-item.dropdown:not(.dropdown-mega):hover > .dropdown-menu {
+  @media (min-width: 992px) {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
