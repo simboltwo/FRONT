@@ -20,8 +20,8 @@ import { Carousel } from 'bootstrap';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, RouterLink, AlunoListComponent],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  templateUrl: './inicio.component.html',
+  styleUrls: ['./inicio.component.scss']
 })
 // MUDANÇA: Implementa o AfterViewInit
 export class DashboardComponent implements OnInit, AfterViewInit {
