@@ -1,165 +1,2421 @@
-<ng-template #loading>
-  <div class="d-flex justify-content-center mt-5">
-    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-      <span class="visually-hidden">Carregando dados do aluno...</span>
-    </div>
-  </div>
-</ng-template>
+<!DOCTYPE html>
+<html>
+<head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="initial-scale=1, width=device-width">
 
-<div *ngIf="aluno$ | async as aluno; else loading">
-
-  <div class="page-header-container">
-    <div class="header-content">
-      <nav class="detalhe-breadcrumb">
-        <a routerLink="/alunos">Alunos</a>
-        <i class="bi bi-chevron-right"></i>
-        <span>{{ aluno.nome }}</span>
-      </nav>
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-primary"
-              data-bs-toggle="modal" data-bs-target="#modalAtendimento">
-        <i class="bi bi-plus-lg me-1"></i> Novo Atendimento
-      </button>
-    </div>
-  </div>
-
-  <div class="page-container animate-fadeIn">
-    <div class="detalhe-main-content">
-
-      <div class="detalhe-gallery">
-        <div class="gallery-image-main">
-          <img [src]="aluno.foto || 'https://via.placeholder.com/600x800.png?text=FOTO DO ALUNO'"
-               alt="Foto do Aluno"
-               class="aluno-foto-principal">
-        </div>
-      </div>
-
-      <div class="detalhe-info-panel">
-
-        <section class="info-section">
-          <h1 class="aluno-nome">{{ aluno.nome }}</h1>
-          <p *ngIf="aluno.nomeSocial" class="aluno-nome-social">({{ aluno.nomeSocial }})</p>
-          <p class="aluno-matricula">{{ aluno.matricula }} | {{ aluno.curso.nome }}</p>
-        </section>
-
-        <section class="info-section info-badge-group">
-          <div class="info-item">
-            <span class="info-label">Prioridade</span>
-            <span class="info-value-pill" [ngClass]="{
-              'pill-danger': aluno.prioridade === 'Alta',
-              'pill-warning': aluno.prioridade === 'Média',
-              'pill-success': aluno.prioridade === 'Baixa'
-            }">
-              {{ aluno.prioridade }}
-            </span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Prova Separada</span>
-            <span class="info-value-pill" [ngClass]="aluno.provaOutroEspaco ? 'pill-info' : 'pill-secondary'">
-              {{ aluno.provaOutroEspaco ? 'Sim' : 'Não' }}
-            </span>
-          </div>
-        </section>
-
-        <section class="info-section info-edit-link">
-          <span>Informações de cadastro:</span>
-          <a [routerLink]="['/alunos/editar', aluno.id]">Editar</a>
-        </section>
+  	<link rel="stylesheet"  href="./aluno-detalhe.component.scss" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=[object Object]&display=swap" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=[object Object]&display=swap" />
 
 
-        <section class="info-section">
-          <div class="accordion accordion-flush" id="naapiAccordion">
 
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingAtendimentos">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAtendimentos" aria-expanded="true" aria-controls="collapseAtendimentos">
-                  Histórico de Atendimentos
-                </button>
-              </h2>
-              <div id="collapseAtendimentos" class="accordion-collapse collapse show" aria-labelledby="headingAtendimentos" data-bs-parent="#naapiAccordion">
-                <div class="accordion-body">
-                  <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
-                </div>
-              </div>
-            </div>
+</head>
+<body>
 
-            <div class="accordion-item" *ngIf="aluno.adaptacoesNecessarias">
-              <h2 class="accordion-header" id="headingAdaptacoes">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdaptacoes" aria-expanded="false" aria-controls="collapseAdaptacoes">
-                  Adaptações Necessárias
-                </button>
-              </h2>
-              <div id="collapseAdaptacoes" class="accordion-collapse collapse" aria-labelledby="headingAdaptacoes" data-bs-parent="#naapiAccordion">
-                <div class="accordion-body info-content">
-                   {{ aluno.adaptacoesNecessarias }}
-                </div>
-              </div>
-            </div>
+  	<div class="w-light">
+    		<div class="container">
+      			<div class="section">
+        				<div class="navigation-breadcrumb-list">
+          					<div class="item">
+            						<div class="w-light-container">
+              							<div class="text">Home</div>
+            						</div>
+            						<div class="vertical-divider">
+            						</div>
+          					</div>
+          					<div class="w-light-item">
+            						<div class="w-light-container">
+              							<a class="w-light-text" href="https://www.hering.com.br/regatas/" target="_blank">Regatas</a>
+            						</div>
+            						<div class="vertical-divider">
+            						</div>
+          					</div>
+          					<div class="item2">
+            						<div class="w-light-container">
+              							<a class="w-light-text" href="https://www.hering.com.br/regatas/box/" target="_blank">Box</a>
+            						</div>
+            						<div class="vertical-divider">
+            						</div>
+          					</div>
+          					<div class="item3">
+            						<div class="w-light-container">
+              							<div class="text">Regata Feminina Decote V Box - Vinho</div>
+            						</div>
+          					</div>
+        				</div>
+        				<div class="container2">
+          					<div class="container3">
+            						<div class="w-light-section">
+              							<div class="container4">
+                								<div class="container5">
+                  									<img class="container-icon" alt="">
 
-            <div class="accordion-item" *ngIf="aluno.necessidadesRelatoriosMedicos">
-               <h2 class="accordion-header" id="headingNecessidades">
-                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNecessidades" aria-expanded="false" aria-controls="collapseNecessidades">
-                  Necessidades (Relatórios Médicos)
-                 </button>
-               </h2>
-               <div id="collapseNecessidades" class="accordion-collapse collapse" aria-labelledby="headingNecessidades" data-bs-parent="#naapiAccordion">
-                 <div class="accordion-body info-content">
-                   {{ aluno.necessidadesRelatoriosMedicos }}
-                 </div>
-               </div>
-            </div>
+                								</div>
+                								<div class="container6">
+                  									<img class="container-icon" alt="">
 
-            <div class="accordion-item" *ngIf="aluno.anotacoesNaapi">
-               <h2 class="accordion-header" id="headingAnotacoes">
-                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnotacoes" aria-expanded="false" aria-controls="collapseAnotacoes">
-                  Anotações Gerais (NAAPI)
-                 </button>
-               </h2>
-               <div id="collapseAnotacoes" class="accordion-collapse collapse" aria-labelledby="headingAnotacoes" data-bs-parent="#naapiAccordion">
-                 <div class="accordion-body info-content">
-                   {{ aluno.anotacoesNaapi }}
-                 </div>
-               </div>
-            </div>
+                								</div>
+                								<div class="container7">
+                  									<img class="container-icon" alt="">
 
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingLaudos">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLaudos" aria-expanded="false" aria-controls="collapseLaudos">
-                  Laudos e Documentos
-                </button>
-              </h2>
-              <div id="collapseLaudos" class="accordion-collapse collapse" aria-labelledby="headingLaudos" data-bs-parent="#naapiAccordion">
-                <div class="accordion-body">
-                   <app-laudo-list [alunoId]="aluno.id"></app-laudo-list>
-                </div>
-              </div>
-            </div>
+                								</div>
+                								<div class="container8">
+                  									<img class="container-icon" alt="">
 
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingPei">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePei" aria-expanded="false" aria-controls="collapsePei">
-                  Plano Educacional (PEI)
-                </button>
-              </h2>
-              <div id="collapsePei" class="accordion-collapse collapse" aria-labelledby="headingPei" data-bs-parent="#naapiAccordion">
-                <div class="accordion-body">
-                  <app-pei-list [alunoId]="aluno.id"></app-pei-list>
-                </div>
-              </div>
-            </div>
+                								</div>
+              							</div>
+              							<div class="container9">
+                								<img class="container-icon4" alt="">
 
-          </div>
-        </section>
+                								<div class="component-9">
+                  									<div class="container10">
+                    										<div class="container11">
+                      											<div class="container12">
+                        												<div class="div">Compre o look</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container13">
+              							<div class="container14">
+                								<div class="component-1">
+                  									<img class="vector-icon" alt="">
 
-      </div> </div> </div> </div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container15">
+            						<div class="container16">
+              							<div class="container17">
+                								<div class="link-link" id="linkLink">
+                  									<div class="container18">
+                    										<div class="container12">
+                      											<a class="lanamento" href="https://www.hering.com.br/lancamento" target="_blank">Lançamento</a>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container20">
+              							<div class="heading-1">regata feminina decote v box - vinho</div>
+              							<div class="margin">
+                								<div class="container21">
+                  									<div class="w-light-component-1">
+                    										<img class="w-light-vector-icon" alt="">
 
-<div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalAtendimentoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <app-atendimento-form
-      *ngIf="alunoId"
-      [alunoId]="alunoId"
-      (atendimentoSalvo)="onAtendimentoSalvo()">
-    </app-atendimento-form>
-  </div>
-</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container22">
+              							<div class="container23">
+                								<div class="container11">
+                  									<div class="container12">
+                    										<div class="div">0.0</div>
+                  									</div>
+                								</div>
+                								<div class="component-12">
+                  									<img class="vector-icon2" alt="">
+
+                  									<img class="vector-icon3" alt="">
+
+                								</div>
+                								<div class="w-light-margin">
+                  									<div class="container12">
+                    										<div class="w-light-div">(0)</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container27">
+              							<div class="container11">
+                								<div class="r-15999">R$ 159,99</div>
+              							</div>
+              							<div class="container29">
+                								<div class="border">
+                  									<div class="div">5% OFF no PIX</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container30">
+              							<div class="new">3x R$ 53,33</div>
+              							<div class="container31">
+                								<div class="div">sem juros</div>
+              							</div>
+            						</div>
+            						<div class="container32">
+              							<div class="container33">
+                								<div class="div">Vinho</div>
+              							</div>
+              							<div class="container12">
+                								<div class="div">|</div>
+              							</div>
+              							<div class="container12">
+                								<div class="div">K6AM8JSI</div>
+              							</div>
+            						</div>
+            						<div class="container36">
+              							<div class="container37">
+                								<div class="container17">
+                  									<img class="w-light-link-link" alt="" id="linkLink">
+
+                								</div>
+                								<div class="container17">
+                  									<div class="link-link2" id="linkLink">
+                    										<img class="image-icon" alt="">
+
+                    										<div class="container40">
+                      											<div class="container41">
+                        												<div class="background">
+                          													<div class="new">New</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container17">
+                  									<div class="link-link3" id="linkLink">
+                    										<img class="image-icon" alt="">
+
+                    										<div class="container40">
+                      											<div class="container41">
+                        												<div class="background">
+                          													<a class="w-light-new" href="https://www.hering.com.br/regata-feminina-decote-v-box-k6am8msi/p" target="_blank">New</a>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container17">
+                  									<img class="w-light-link-link" alt="" id="linkLink">
+
+                								</div>
+                								<div class="container17">
+                  									<img class="w-light-link-link" alt="" id="linkLink">
+
+                								</div>
+                								<div class="container17">
+                  									<img class="w-light-link-link" alt="" id="linkLink">
+
+                								</div>
+              							</div>
+              							<div class="container48">
+                								<div class="button">
+                  									<div class="container49">
+                    										<div class="container50">
+                      											<div class="container12">
+                        												<div class="ver-cores">Ver cores</div>
+                      											</div>
+                      											<div class="component-13">
+                        												<img class="vector-icon4" alt="">
+
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container52">
+              							<div class="container12">
+                								<div class="div">Tamanhos</div>
+              							</div>
+            						</div>
+            						<div class="container54">
+              							<div class="container12">
+                								<div class="container11">
+                  									<div class="component-4">
+                    										<div class="container57">
+                      											<div class="container12">
+                        												<div class="selecione-as-peas">XP</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container12">
+                								<div class="container11">
+                  									<div class="component-4">
+                    										<div class="container57">
+                      											<div class="container12">
+                        												<div class="selecione-as-peas">P</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container12">
+                								<div class="container11">
+                  									<div class="component-4">
+                    										<div class="container57">
+                      											<div class="container12">
+                        												<div class="selecione-as-peas">M</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container12">
+                								<div class="container11">
+                  									<div class="component-4">
+                    										<div class="container57">
+                      											<div class="container12">
+                        												<div class="selecione-as-peas">G</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container12">
+                								<div class="container11">
+                  									<div class="component-4">
+                    										<div class="container57">
+                      											<div class="container12">
+                        												<div class="selecione-as-peas">XG</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container75">
+              							<div class="container76">
+                								<div class="container77">
+                  									<div class="container78">
+                    										<div class="component-14">
+                      											<img class="vector-icon5" alt="">
+
+                      											<img class="vector-icon6" alt="">
+
+                    										</div>
+                  									</div>
+                  									<div class="container79">
+                    										<div class="container12">
+                      											<div class="div">Medidas e tamanhos</div>
+                    										</div>
+                    										<div class="component-15">
+                      											<img class="vector-icon7" alt="">
+
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container81">
+                								<div class="component-16">
+                  									<img class="vector-icon8" alt="">
+
+                								</div>
+                								<div class="container12">
+                  									<div class="div">Experimente o produto</div>
+                								</div>
+                								<div class="background2">
+                  									<div class="container12">
+                    										<div class="div">Novidade</div>
+                  									</div>
+                								</div>
+                								<div class="component-15">
+                  									<img class="vector-icon7" alt="">
+
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container84">
+              							<div class="component-3">
+                								<div class="component-2">
+                  									<div class="container85">
+                    										<div class="text9">1</div>
+                  									</div>
+                								</div>
+                								<div class="button-decrement-quantity">
+                  									<div class="container86">
+                    										<div class="container87">
+                      											<div class="component-18">
+                        												<img class="minus-icon" alt="">
+
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="button-increment-quantity">
+                  									<div class="container86">
+                    										<div class="container87">
+                      											<div class="component-18">
+                        												<img class="minus-icon" alt="">
+
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="component-45">
+                								<div class="backgroundborder">
+                  									<div class="container12">
+                    										<div class="entrega">Adicionar à sacola</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="section2">
+              							<div class="container91">
+                								<div class="container12">
+                  									<div class="entrega">Entrega</div>
+                								</div>
+              							</div>
+              							<div class="container92">
+                								<div class="input">
+                  									<div class="container93">
+                    										<div class="digite-seu-cep">Digite seu cep</div>
+                  									</div>
+                  									<div class="container94">
+                  									</div>
+                								</div>
+                								<div class="horizontalborder">
+                  									<div class="link-link" id="linkLink">
+                    										<div class="container12">
+                      											<a class="lanamento" href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank">Não sei meu CEP</a>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container96">
+              							<div class="container97">
+                								<div class="container12">
+                  									<div class="entrega">Sobre a peça</div>
+                								</div>
+              							</div>
+              							<div class="container98">
+                								<div class="composio-70-viscose">Composição: 70% VISCOSE + 30% LINHO</div>
+                								<div class="minimalista-fresca-e">Minimalista, fresca e cheia de estilo. Confeccionada em tecido rústico, essa regata une leveza e textura natural com um visual<br>contemporâneo. O decote V valoriza o colo com simplicidade, enquanto o shape box traz uma silhueta reta e moderna, perfeita<br>para composições descomplicadas e cheias de personalidade.</div>
+                								<div class="detalhes-da-pea">Detalhes da peça:</div>
+                								<div class="item4">
+                  									<div class="tecido-rstico">Tecido rústico</div>
+                								</div>
+              							</div>
+              							<div class="container99">
+                								<div class="container12">
+                  									<div class="continuar-lendo">Continuar lendo</div>
+                								</div>
+              							</div>
+              							<div class="w-light-horizontalborder">
+                								<div class="container101">
+                  									<div class="region">
+                    										<div class="horizontalborder2">
+                      											<div class="w-light-button">
+                        												<div class="container102">
+                          													<div class="container18">
+                            														<div class="entrega">Modelagem</div>
+                          													</div>
+                          													<img class="container-icon5" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container104">
+                  									<div class="region">
+                    										<div class="horizontalborder2">
+                      											<div class="w-light-button">
+                        												<div class="container102">
+                          													<div class="container18">
+                            														<div class="entrega">Cuidados</div>
+                          													</div>
+                          													<img class="container-icon5" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="section3">
+              							<div class="container12">
+                								<div class="div">Dúvidas sobre o produto?</div>
+              							</div>
+              							<div class="form">
+                								<div class="container108">
+                  									<div class="w-light-input">
+                    										<div class="container109">
+                      											<div class="digite-seu-cep">Digite sua dúvida aqui</div>
+                    										</div>
+                    										<div class="container110">
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container111">
+                  									<div class="button-acessar-minha-conta">
+                    										<div class="w-light-backgroundborder">
+                      											<div class="container23">
+                        												<div class="component-110">
+                          													<img class="minus-icon" alt="">
+
+                        												</div>
+                        												<div class="container12">
+                          													<div class="div">Perguntar</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+    		</div>
+    		<div class="section4">
+      			<div class="container12">
+        				<div class="compre-o-look">Compre o look</div>
+      			</div>
+      			<div class="container114">
+        				<div class="selecione-as-peas">Selecione as peças que combinam</div>
+      			</div>
+      			<div class="container115">
+        				<div class="section5">
+          					<div class="list">
+            						<div class="item5">
+              							<div class="container116">
+                								<div class="container117">
+                  									<div class="link-regata-feminina-decote" id="linkRegataFemininaDecote">
+                    										<div class="container118">
+                      											<img class="container-icon7" alt="">
+
+                      											<img class="container-icon7" alt="">
+
+                      											<div class="container119">
+                        												<div class="w-light-component-1">
+                          													<img class="w-light-vector-icon" alt="">
+
+                        												</div>
+                      											</div>
+                      											<div class="background3">
+                        												<div class="w-light-list">
+                          													<div class="item6">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="backgroundborder2">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">XP</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">P</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">M</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">G</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">XG</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                        												<div class="container130">
+                          													<div class="button-acessar-minha-conta">
+                            														<div class="backgroundborder3">
+                              															<div class="container131">
+                                																<div class="component-113">
+                                  																	<img class="vector-icon12" alt="">
+
+                                																</div>
+                                																<div class="container12">
+                                  																	<div class="div">Adicionar</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                    										<div class="container133">
+                      											<div class="heading-32">
+                        												<div class="w-light-regata-feminina-decote">Regata Feminina Decote V Box - Vinho</div>
+                      											</div>
+                      											<div class="container134">
+                        												<div class="container11">
+                          													<div class="w-light-r-15999">R$ 159,99</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="component-6">
+                  									<div class="background4">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background5">
+                								<div class="div3">+</div>
+              							</div>
+            						</div>
+            						<div class="item11">
+              							<div class="container116">
+                								<div class="container117">
+                  									<div class="link-regata-feminina-decote" id="linkShortsFemininoEvasC">
+                    										<div class="container118">
+                      											<img class="container-icon7" alt="">
+
+                      											<img class="container-icon7" alt="">
+
+                      											<div class="container139">
+                        												<div class="w-light-component-1">
+                          													<img class="w-light-vector-icon" alt="">
+
+                        												</div>
+                      											</div>
+                      											<div class="background3">
+                        												<div class="list2">
+                          													<div class="item12">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="backgroundborder2">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">034</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="item13">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">036</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="item13">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">038</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="item13">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">040</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="item13">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">042</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="item13">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">044</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="item18">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="backgroundborder5">
+                                  																	<div class="container153">
+                                    																		<div class="entrega">046</div>
+                                  																	</div>
+                                  																	<div class="horizontal-divider">
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                        												<div class="container154">
+                          													<div class="component-15">
+                            														<img class="vector-icon7" alt="">
+
+                          													</div>
+                        												</div>
+                        												<div class="container155">
+                          													<div class="button-acessar-minha-conta">
+                            														<div class="backgroundborder3">
+                              															<div class="container131">
+                                																<div class="component-113">
+                                  																	<img class="vector-icon12" alt="">
+
+                                																</div>
+                                																<div class="container12">
+                                  																	<div class="div">Adicionar</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                    										<div class="container133">
+                      											<div class="heading-32">
+                        												<a class="shorts-feminino-evas" href="https://www.hering.com.br/shorts-feminino-evase-com-linho-k6bh8jsi/p" target="_blank">Shorts Feminino Evasê Com Linho - Vinho</a>
+                      											</div>
+                      											<div class="container159">
+                        												<div class="container11">
+                          													<a class="r-17999" href="https://www.hering.com.br/shorts-feminino-evase-com-linho-k6bh8jsi/p" target="_blank">R$ 179,99</a>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="component-6">
+                  									<div class="background4">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background8">
+                								<div class="div3">+</div>
+              							</div>
+            						</div>
+            						<div class="item19">
+              							<div class="container116">
+                								<div class="container117">
+                  									<div class="link-regata-feminina-decote" id="linkCamisaFemininaListrad">
+                    										<div class="container118">
+                      											<img class="container-icon7" alt="">
+
+                      											<img class="container-icon7" alt="">
+
+                      											<div class="container119">
+                        												<div class="w-light-component-1">
+                          													<img class="w-light-vector-icon" alt="">
+
+                        												</div>
+                      											</div>
+                      											<div class="background3">
+                        												<div class="w-light-list">
+                          													<div class="item6">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="backgroundborder2">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">XP</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">P</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">M</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">G</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="w-light-border">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">XG</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                        												<div class="container155">
+                          													<div class="button-acessar-minha-conta">
+                            														<div class="backgroundborder3">
+                              															<div class="container131">
+                                																<div class="component-113">
+                                  																	<img class="vector-icon12" alt="">
+
+                                																</div>
+                                																<div class="container12">
+                                  																	<div class="div">Adicionar</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                    										<div class="container178">
+                      											<div class="heading-32">
+                        												<a class="shorts-feminino-evas" href="https://www.hering.com.br/camisa-feminina-listrada-em-liocel-k69p1bsi/p" target="_blank">Camisa Feminina Listrada Em Liocel - Bege</a>
+                      											</div>
+                      											<div class="container159">
+                        												<div class="container11">
+                          													<a class="r-17999" href="https://www.hering.com.br/camisa-feminina-listrada-em-liocel-k69p1bsi/p" target="_blank">R$ 269,99</a>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="component-6">
+                  									<div class="background4">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background5">
+                								<div class="div3">+</div>
+              							</div>
+            						</div>
+            						<div class="item25">
+              							<div class="container181">
+                								<div class="container117">
+                  									<div class="link-regata-feminina-decote" id="linkBolsaFemininaToteEm">
+                    										<div class="container118">
+                      											<img class="container-icon7" alt="">
+
+                      											<img class="container-icon7" alt="">
+
+                      											<div class="container139">
+                        												<div class="w-light-component-1">
+                          													<img class="w-light-vector-icon" alt="">
+
+                        												</div>
+                      											</div>
+                      											<div class="background3">
+                        												<div class="list4">
+                          													<div class="container11">
+                            														<div class="container120">
+                              															<div class="component-46">
+                                																<div class="backgroundborder2">
+                                  																	<div class="container12">
+                                    																		<div class="entrega">UNI</div>
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                        												<div class="container187">
+                          													<div class="button-acessar-minha-conta">
+                            														<div class="backgroundborder3">
+                              															<div class="container131">
+                                																<div class="component-113">
+                                  																	<img class="vector-icon12" alt="">
+
+                                																</div>
+                                																<div class="container12">
+                                  																	<div class="div">Adicionar</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                    										<div class="container178">
+                      											<div class="heading-32">
+                        												<a class="shorts-feminino-evas" href="https://www.hering.com.br/bolsa-feminina-tote-em-fio-tinto-km9z1asi/p" target="_blank">Bolsa Feminina Tote em Fio Tinto - Marrom</a>
+                      											</div>
+                      											<div class="container159">
+                        												<div class="container11">
+                          													<a class="r-17999" href="https://www.hering.com.br/bolsa-feminina-tote-em-fio-tinto-km9z1asi/p" target="_blank">R$ 179,99</a>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="component-6">
+                  									<div class="background4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container193">
+            						<div class="button-previous">
+              							<div class="background14">
+                								<div class="container11">
+                  									<div class="button-passar-para-esquerda">
+                    										<div class="container195">
+                      											<div class="component-8">
+                        												<img class="vector-icon20" alt="">
+
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="button-previous">
+              							<div class="background14">
+                								<div class="container11">
+                  									<div class="button-passar-para-esquerda">
+                    										<div class="container195">
+                      											<div class="component-15">
+                        												<img class="vector-icon7" alt="">
+
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="tablist">
+            						<div class="tab-current-page-from-fs-car">
+              							<div class="background16">
+              							</div>
+            						</div>
+            						<div class="tab-go-to-page-2-from-fs-car">
+              							<div class="background17">
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+        				<div class="background18">
+          					<div class="container12">
+            						<div class="entrega">Compre o look completo por</div>
+          					</div>
+          					<div class="heading-22">
+            						<div class="entrega">R$ 789,96</div>
+          					</div>
+          					<div class="container198">
+            						<div class="w-light-component-9">
+              							<div class="backgroundborder">
+                								<div class="container11">
+                  									<div class="container12">
+                    										<div class="div">Comprar look completo</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+    		</div>
+    		<div class="sectionmargin">
+      			<div class="section6">
+        				<div class="container201">
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+    		</div>
+    		<div class="w-light-sectionmargin">
+      			<div class="section6">
+        				<div class="container201">
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container202">
+            						<div class="container203">
+              							<div class="background19">
+                								<div class="container204">
+                  									<div class="overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background20">
+                								<div class="container204">
+                  									<div class="w-light-overlayshadow">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background22">
+                								<div class="container204">
+                  									<div class="overlayshadow3">
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="background23">
+                								<div class="container204">
+                  									<div class="overlayshadow4">
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+    		</div>
+    		<div class="background59">
+      			<div class="container101">
+        				<div class="link-link8" id="linkLink">
+          					<div class="container260">
+            						<div class="container261">
+              							<div class="container262">
+                								<div class="container263">
+                  									<div class="div6">:</div>
+                								</div>
+                								<div class="container264">
+                  									<div class="div6">:</div>
+                								</div>
+                								<div class="container265">
+                  									<div class="background60">
+                    										<div class="div8">2</div>
+                  									</div>
+                  									<div class="background61">
+                    										<div class="div8">3</div>
+                  									</div>
+                  									<div class="container266">
+                    										<div class="horas">horas</div>
+                  									</div>
+                								</div>
+                								<div class="container267">
+                  									<div class="background60">
+                    										<div class="div8">2</div>
+                  									</div>
+                  									<div class="background61">
+                    										<div class="div8">9</div>
+                  									</div>
+                  									<div class="container268">
+                    										<div class="horas">min</div>
+                  									</div>
+                								</div>
+                								<div class="container269">
+                  									<div class="background60">
+                    										<div class="div8">5</div>
+                  									</div>
+                  									<div class="background61">
+                    										<div class="div8">3</div>
+                  									</div>
+                  									<div class="container268">
+                    										<div class="horas">seg</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container271">
+              							<div class="container272">
+                								<div class="ltimas-horas-peas-container">
+                  									<span>ÚLTIMAS HORAS! PEÇAS ATÉ </span>
+                  									<span class="off">70% OFF</span>
+                  									<span> + PROGRESSIVA ATÉ </span>
+                  									<span class="off">25% OFF</span>
+                  									<span> NAS<br>COMPRAS DE 4 PEÇAS OU MAIS</span>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container273">
+              							<div class="container101">
+                								<div class="button3">
+                  									<div class="container275">
+                    										<div class="container12">
+                      											<div class="entrega">APROVEITE</div>
+                    										</div>
+                    										<div class="container277">
+                      											<div class="component-13">
+                        												<img class="vector-icon4" alt="">
+
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container278">
+              							<div class="container279">
+                								<a class="ver-regras" href="https://www.hering.com.br/black-friday/promocao" target="_blank">Ver regras</a>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+    		</div>
+    		<div class="footermargin">
+      			<div class="footer">
+        				<div class="horizontalborder4">
+          					<div class="container280">
+            						<div class="container281">
+              							<div class="container282">
+                								<div class="container21">
+                  									<div class="component-16">
+                    										<img class="vector-icon23" alt="">
+
+                  									</div>
+                								</div>
+                								<div class="container12">
+                  									<div class="div">Atendimento ao cliente</div>
+                								</div>
+              							</div>
+              							<div class="container285">
+                								<div class="container21">
+                  									<div class="component-124">
+                    										<img class="vector-icon24" alt="">
+
+                  									</div>
+                								</div>
+                								<div class="container12">
+                  									<div class="div">Status do pedido</div>
+                								</div>
+              							</div>
+              							<div class="container288">
+                								<div class="container21">
+                  									<div class="component-125">
+                    										<img class="vector-icon25" alt="">
+
+                  									</div>
+                								</div>
+                								<div class="container12">
+                  									<div class="div">Devoluções</div>
+                								</div>
+              							</div>
+              							<div class="container291">
+                								<div class="link-link9" id="linkLink">
+                  									<div class="container21">
+                    										<div class="component-126">
+                      											<img class="vector-icon26" alt="">
+
+                    										</div>
+                  									</div>
+                  									<div class="container12">
+                    										<a class="lanamento" href="https://www.hering.com.br/nossas-lojas" target="_blank">Encontre uma loja</a>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+        				<div class="margin2">
+          					<div class="container294">
+            						<div class="container295">
+              							<div class="section8">
+                								<div class="background66">
+                  									<div class="heading-23">
+                    										<div class="ltimas-horas-peas-container">Inscreva-se e receba novidades e promoções<br>exclusivas</div>
+                  									</div>
+                  									<div class="margin3">
+                    										<div class="w-light-form">
+                      											<div class="container296">
+                        												<div class="container297">
+                          													<div class="input-insira-seu-e-mail-para">
+                            														<div class="container298">
+                              															<div class="digite-seu-cep">Insira seu e-mail</div>
+                            														</div>
+                            														<div class="container299">
+                            														</div>
+                          													</div>
+                        												</div>
+                        												<div class="container300">
+                          													<div class="component-423">
+                            														<div class="backgroundborder12">
+                              															<div class="container12">
+                                																<div class="entrega">Inscrever</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                      											<div class="container302">
+                        												<div class="container303">
+                          													<div class="component-64">
+                            														<div class="background67">
+                            														</div>
+                          													</div>
+                          													<div class="container153">
+                            														<div class="compre-o-look">Feminino</div>
+                          													</div>
+                        												</div>
+                        												<div class="container303">
+                          													<div class="component-65">
+                            														<div class="background68">
+                            														</div>
+                          													</div>
+                          													<div class="container153">
+                            														<div class="compre-o-look">Infantil</div>
+                          													</div>
+                        												</div>
+                        												<div class="container303">
+                          													<div class="component-65">
+                            														<div class="background68">
+                            														</div>
+                          													</div>
+                          													<div class="container153">
+                            														<div class="compre-o-look">Masculino</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                  									<div class="margin4">
+                    										<div class="paragraph">
+                      											<div class="entrega">Ao se inscrever, você aceita nossas </div>
+                      											<a class="link-polticas" href="https://www.hering.com.br/politica-de-privacidade" target="_blank">Políticas de Privacidade</a>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container309">
+                								<div class="container310">
+                  									<div class="ajuda">Ajuda</div>
+                								</div>
+                								<div class="container311">
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/entrega" target="_blank">Entrega</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/devolucao" target="_blank">Devolução</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/pagamento" target="_blank">Pagamento</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/account#/profile" target="_blank">Meu Cadastro</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/account#/orders" target="_blank">Meus Pedidos</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://ajuda.hering.com.br/hc/pt-br" target="_blank">Central de Atendimento</a>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container318">
+                								<div class="container310">
+                  									<div class="ajuda">Institucional</div>
+                								</div>
+                								<div class="container311">
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/sobre" target="_blank">Sobre a Hering</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://ciahering.gupy.io/" target="_blank">Trabalhe Conosco</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/politica-de-privacidade" target="_blank">Política de Privacidade</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/seguranca" target="_blank">Segurança</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/termos-de-uso" target="_blank">Termos de Uso</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/sustentabilidade" target="_blank">Sustentabilidade</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/mapa-do-site" target="_blank">Mapa do Site</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/mapa-de-buscas" target="_blank">Mapa de Buscas</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/nossas-lojas" target="_blank">Nossas Lojas</a>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container330">
+                								<div class="container310">
+                  									<div class="ajuda">Mais Hering</div>
+                								</div>
+                								<div class="container311">
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/regulamentos" target="_blank">Regulamentos</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/black-friday" target="_blank">Black Friday</a>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container335">
+                								<div class="container310">
+                  									<div class="ajuda">Nossas Marcas</div>
+                								</div>
+                								<div class="container311">
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/kids" target="_blank">Hering Kids</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/intimates" target="_blank">Hering Intimates</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/sports" target="_blank">Hering Sports</a>
+                    										</div>
+                  									</div>
+                  									<div class="container101">
+                    										<div class="component-10" id="component10Container">
+                      											<a class="text36" href="https://www.hering.com.br/calcados" target="_blank">Hering Shoes</a>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+              							<div class="container309">
+                								<div class="container310">
+                  									<div class="ajuda">Certificações</div>
+                								</div>
+                								<div class="container344">
+                  									<div class="container345">
+                    										<div class="component-127">
+                      											<div class="clip-path-group">
+                        												<div class="group">
+                          													<img class="vector-icon27" alt="">
+
+                          													<img class="vector-icon28" alt="">
+
+                          													<img class="vector-icon29" alt="">
+
+                          													<img class="vector-icon30" alt="">
+
+                          													<img class="vector-icon31" alt="">
+
+                          													<img class="vector-icon32" alt="">
+
+                          													<img class="vector-icon33" alt="">
+
+                          													<img class="vector-icon34" alt="">
+
+                          													<img class="vector-icon35" alt="">
+
+                          													<img class="vector-icon36" alt="">
+
+                          													<img class="vector-icon37" alt="">
+
+                          													<img class="vector-icon38" alt="">
+
+                          													<img class="vector-icon39" alt="">
+
+                          													<img class="vector-icon40" alt="">
+
+                          													<img class="vector-icon41" alt="">
+
+                          													<img class="vector-icon42" alt="">
+
+                          													<img class="vector-icon43" alt="">
+
+                          													<img class="vector-icon44" alt="">
+
+                          													<img class="vector-icon45" alt="">
+
+                          													<img class="vector-icon46" alt="">
+
+                          													<img class="vector-icon47" alt="">
+
+                          													<img class="vector-icon48" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                  									<div class="container346">
+                    										<div class="container347">
+                      											<div class="link" id="linkContainer">
+                        												<div class="border14">
+                          													<div class="empresa-ra1000-pelo-selo-recla">
+                            														<div class="ra-1000svg-fill">
+                              															<div class="component-128">
+                                																<img class="group-icon" alt="">
+
+                              															</div>
+                            														</div>
+                          													</div>
+                          													<div class="container348">
+                            														<a class="ra-1000" href="https://www.reclameaqui.com.br/empresa/hering-lojas-fisicas/" target="_blank">RA 1000</a>
+                          													</div>
+                          													<div class="selo-reclame-aqui">
+                            														<div class="reclame-aqui-logosvg-fill">
+                              															<div class="component-129">
+                                																<div class="w-light-group">
+                                  																	<div class="group2">
+                                    																		<img class="vector-icon49" alt="">
+
+                                    																		<img class="vector-icon50" alt="">
+
+                                    																		<img class="vector-icon51" alt="">
+
+                                    																		<img class="vector-icon52" alt="">
+
+                                    																		<img class="vector-icon53" alt="">
+
+                                    																		<img class="vector-icon54" alt="">
+
+                                    																		<img class="vector-icon55" alt="">
+
+                                    																		<img class="vector-icon56" alt="">
+
+                                    																		<img class="vector-icon57" alt="">
+
+                                    																		<img class="vector-icon58" alt="">
+
+                                    																		<img class="vector-icon59" alt="">
+
+                                  																	</div>
+                                																</div>
+                              															</div>
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                  									<div class="container345">
+                    										<div class="component-130">
+                      											<img class="container-icon7" alt="">
+
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+        				<div class="margin5">
+          					<div class="container350">
+            						<div class="container351">
+              							<div class="container352">
+                								<div class="div">Siga nas redes sociais</div>
+              							</div>
+              							<div class="list5">
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="vector-icon61" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="vector-icon62" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="vector-icon63" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="w-light-clip-path-group" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="vector-icon64" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="vector-icon65" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="vector-icon66" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container17">
+                    										<div class="link-link" id="linkLink">
+                      											<div class="container354">
+                        												<div class="social-media">
+                          													<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                            														<div class="component-131">
+                              															<img class="minus-icon" alt="">
+
+                            														</div>
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+            						<div class="container369">
+              							<div class="div">Cia. Hering Rua Hermann Hering, 1790, Bom Retiro, Blumenau - SC ∙ CEP 89010-900 CNPJ: 78.876.950/0001-71 • Insc. Estadual: 251.213.749</div>
+            						</div>
+            						<div class="container370">
+              							<div class="rectangle">
+              							</div>
+              							<div class="list5">
+                								<div class="container11">
+                  									<img class="container-icon15" alt="">
+
+                								</div>
+                								<div class="container11">
+                  									<div class="container354">
+                    										<div class="social-media">
+                      											<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                        												<div class="component-131">
+                          													<img class="vector-icon67" alt="">
+
+                          													<img class="vector-icon68" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container354">
+                    										<div class="social-media">
+                      											<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                        												<div class="component-131">
+                          													<img class="vector-icon69" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container354">
+                    										<div class="social-media">
+                      											<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                        												<div class="component-131">
+                          													<img class="vector-icon70" alt="">
+
+                          													<img class="vector-icon71" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container354">
+                    										<div class="social-media">
+                      											<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                        												<div class="component-131">
+                          													<img class="vector-icon72" alt="">
+
+                          													<img class="vector-icon73" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container354">
+                    										<div class="social-media">
+                      											<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                        												<div class="component-143">
+                          													<img class="clip-path-group3" alt="">
+
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+                								<div class="container11">
+                  									<div class="container354">
+                    										<div class="social-media">
+                      											<div class="c9183-2073-4d39-a249-8cd1b2e4b">
+                        												<div class="component-143">
+                          													<div class="clip-path-group4">
+                            														<img class="w-light-group-icon" alt="">
+
+                          													</div>
+                        												</div>
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+    		</div>
+    		<div class="header">
+      			<div class="background70">
+        				<div class="container11">
+          					<div class="container17">
+            						<div class="link-voltar-para-a-homepage" id="linkVoltarParaAHomepage">
+              							<div class="component-145">
+                								<div class="clip-path-group5">
+                  									<img class="group-icon2" alt="">
+
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+        				<div class="container379">
+          					<div class="container380">
+            						<div class="container14">
+              							<div class="container17">
+                								<div class="container14">
+                  									<a class="text57" href="https://www.hering.com.br/black-friday" target="_blank">Black<br>Friday</a>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container383">
+            						<div class="container14">
+              							<div class="container17">
+                								<div class="container14">
+                  									<a class="text58" href="https://www.hering.com.br/novidades-da-semana" target="_blank">Novidades</a>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container383">
+            						<div class="container14">
+              							<div class="container17">
+                								<div class="container14">
+                  									<a class="text58" href="https://www.hering.com.br/home/feminino" target="_blank">Feminino</a>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container383">
+            						<div class="container14">
+              							<div class="container17">
+                								<div class="container14">
+                  									<a class="text58" href="https://www.hering.com.br/home/masculino" target="_blank">Masculino</a>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container383">
+            						<div class="container14">
+              							<div class="container17">
+                								<div class="container14">
+                  									<a class="text58" href="https://www.hering.com.br/sports" target="_blank">Sports</a>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container383">
+            						<div class="container14">
+              							<div class="container17">
+                								<div class="container14">
+                  									<a class="text58" href="https://www.hering.com.br/kids" target="_blank">Kids</a>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container383">
+            						<div class="container399">
+              							<div class="component-146">
+                								<img class="vector-icon74" alt="">
+
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+        				<div class="container400">
+          					<div class="container401">
+            						<div class="container402">
+              							<div class="button">
+                								<div class="container403">
+                  									<div class="container404">
+                    										<div class="w-light-component-1">
+                      											<img class="vector-icon75" alt="">
+
+                    										</div>
+                    										<div class="container12">
+                      											<div class="div">Insira seu CEP</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container406">
+            						<div class="button-acessar-minha-conta">
+              							<div class="container407">
+                								<div class="container404">
+                  									<div class="component-148">
+                    										<img class="vector-icon76" alt="">
+
+                    										<img class="vector-icon77" alt="">
+
+                  									</div>
+                  									<div class="container12">
+                    										<div class="div">Buscar ...</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container410">
+            						<div class="button-sacola-de-compras">
+              							<div class="container407">
+                								<div class="container412">
+                  									<div class="component-126">
+                    										<img class="vector-icon78" alt="">
+
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+          					<div class="container413">
+            						<div class="link-acessar-minha-conta" id="linkAcessarMinhaConta">
+              							<div class="container11">
+                								<div class="button-acessar-minha-conta">
+                  									<div class="container407">
+                    										<div class="container412">
+                      											<div class="component-150">
+                        												<img class="vector-icon79" alt="">
+
+                        												<img class="vector-icon80" alt="">
+
+                      											</div>
+                    										</div>
+                  									</div>
+                								</div>
+              							</div>
+            						</div>
+          					</div>
+        				</div>
+      			</div>
+    		</div>
+  	</div>
+
+
+
+
+  	<script>
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/lancamento");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6amnmcsi/p");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6am8jsi/p");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6am8msi/p");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6amrx8si/p");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6amlnhsi/p");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6am8nsi/p");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://buscacepinter.correios.com.br/app/endereco/index.php");
+      			});
+    		}
+
+    		var linkRegataFemininaDecote = document.getElementById("linkRegataFemininaDecote");
+    		if(linkRegataFemininaDecote) {
+      			linkRegataFemininaDecote.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6am8jsi/p");
+      			});
+    		}
+
+    		var linkShortsFemininoEvasC = document.getElementById("linkShortsFemininoEvasC");
+    		if(linkShortsFemininoEvasC) {
+      			linkShortsFemininoEvasC.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/shorts-feminino-evase-com-linho-k6bh8jsi/p");
+      			});
+    		}
+
+    		var linkCamisaFemininaListrad = document.getElementById("linkCamisaFemininaListrad");
+    		if(linkCamisaFemininaListrad) {
+      			linkCamisaFemininaListrad.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/camisa-feminina-listrada-em-liocel-k69p1bsi/p");
+      			});
+    		}
+
+    		var linkBolsaFemininaToteEm = document.getElementById("linkBolsaFemininaToteEm");
+    		if(linkBolsaFemininaToteEm) {
+      			linkBolsaFemininaToteEm.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/bolsa-feminina-tote-em-fio-tinto-km9z1asi/p");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/black-friday/promocao");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/nossas-lojas");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/entrega");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/devolucao");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/pagamento");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/account#/profile");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/account#/orders");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://ajuda.hering.com.br/hc/pt-br");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/sobre");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://ciahering.gupy.io/");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/politica-de-privacidade");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/seguranca");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/termos-de-uso");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/sustentabilidade");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/mapa-do-site");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/mapa-de-buscas");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/nossas-lojas");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/regulamentos");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/black-friday");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/kids");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/intimates");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/sports");
+      			});
+    		}
+
+    		var component10Container = document.getElementById("component10Container");
+    		if(component10Container) {
+      			component10Container.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/calcados");
+      			});
+    		}
+
+    		var linkContainer = document.getElementById("linkContainer");
+    		if(linkContainer) {
+      			linkContainer.addEventListener("click", function () {
+        				window.open("https://www.reclameaqui.com.br/empresa/hering-lojas-fisicas/");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.facebook.com/CiaHering");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.instagram.com/hering_oficial/");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://x.com/hering_oficial");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.youtube.com/channel/UCkMSfeELcO0A_ULT8SWZsmQ");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.tiktok.com/@heringoficial");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://open.spotify.com/user/3y1vxlfmpk5lca6pccfhl2zbh");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://www.deezer.com/en/profile/5010426622");
+      			});
+    		}
+
+    		var linkLink = document.getElementById("linkLink");
+    		if(linkLink) {
+      			linkLink.addEventListener("click", function () {
+        				window.open("https://br.pinterest.com/hering_oficial/");
+      			});
+    		}
+
+    		var linkVoltarParaAHomepage = document.getElementById("linkVoltarParaAHomepage");
+    		if(linkVoltarParaAHomepage) {
+      			linkVoltarParaAHomepage.addEventListener("click", function (e) {
+        				// Add your code here
+      			});
+    		}
+
+    		var linkAcessarMinhaConta = document.getElementById("linkAcessarMinhaConta");
+    		if(linkAcessarMinhaConta) {
+      			linkAcessarMinhaConta.addEventListener("click", function () {
+        				window.open("https://www.hering.com.br/api/io/login");
+      			});
+    		}</script></body>
+</html>
