@@ -1,0 +1,109 @@
+/* ==============================================
+ * NOVO COMPONENTE: Cabeçalho de Página Colorido
+ * ATUALIZADO com altura mínima
+ * ============================================== */
+
+.page-header-container {
+  padding: 2.5rem 1.5rem;
+  margin: -1.5rem -1.5rem 2rem -1.5rem; /* Compensa o padding do container-fluid */
+  text-align: center;
+  border-radius: var(--raio-borda);
+  animation: fadeIn 0.6s ease-out;
+
+  /* --- MUDANÇA: Altura Fixa e Centralização --- */
+  min-height: 250px; /* Altura mínima consistente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centraliza verticalmente */
+  /* --- Fim da Mudança --- */
+
+  /* Título Principal */
+  .page-header-title {
+  color: #FFFFFF;
+  font-size: 30px;
+  line-height: 32px;
+  vertical-align: baseline;
+  letter-spacing: 5px;
+  word-spacing: 0px;
+  margin: 0px;
+  padding: 0px;
+  font-kerning: auto;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variant: normal;
+  font-stretch: 100%;
+  font-weight: 700;
+  text-align: center;
+}
+
+  /* Descrição */
+  .page-header-desc {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+  }
+}
+
+/* * Classes de Cores (Texto claro ou escuro)
+ */
+
+/* Cores Claras (Texto Escuro) */
+.page-header-container.bg-color-2 {
+  background-color: var(--header-bg-2); // #f0ddaa
+  color: var(--cor-texto);
+}
+.page-header-container.bg-color-8 {
+  background-color: var(--header-bg-8); // #b3c262
+  color: var(--cor-texto);
+}
+.page-header-container.bg-color-9 {
+  background-color: var(--header-bg-9); // #d5ca98
+  color: var(--cor-texto);
+}
+.page-header-container.bg-color-11 {
+  background-color: var(--header-bg-11); // #93c2b1
+  color: var(--cor-texto);
+}
+.page-header-container.bg-color-12 {
+  background-color: var(--header-bg-12); // #ff995e
+  color: var(--cor-texto);
+}
+.page-header-container.bg-color-13 {
+  background-color: var(--header-bg-13); // #ffeacc
+  color: var(--cor-texto);
+}
+
+
+/* Cores Escuras (Texto Claro) */
+.page-header-container.bg-color-1 {
+  background-color: var(--header-bg-1); // #59b390
+  color: #ffffff;
+}
+.page-header-container.bg-color-3 {
+  background-color: var(--header-bg-3); // #e47c5d
+  color: #ffffff;
+}
+.page-header-container.bg-color-4 {
+  background-color: var(--header-bg-4); // #e32d40
+  color: #ffffff;
+}
+.page-header-container.bg-color-5 {
+  background-color: var(--header-bg-5); // #152b3c
+  color: #ffffff;
+}
+.page-header-container.bg-color-6 {
+  background-color: var(--header-bg-6); // #66424c
+  color: #ffffff;
+}
+.page-header-container.bg-color-7 {
+  background-color: var(--header-bg-7); // #768a4f
+  color: #ffffff;
+}
+.page-header-container.bg-color-10 {
+  background-color: var(--header-bg-10); // #3f324d
+  color: #ffffff;
+}
+.page-header-container.bg-color-14 {
+  background-color: var(--header-bg-14); // #de1d6a
+  color: #ffffff;
+}

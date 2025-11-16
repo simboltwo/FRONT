@@ -1,348 +1,161 @@
-<!DOCTYPE html>
-<html>
-<head>
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="initial-scale=1, width=device-width">
+<ng-template #loading>
+  <div class="d-flex justify-content-center mt-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Carregando dados do aluno...</span>
+    </div>
+  </div>
+</ng-template>
 
-  	<link rel="stylesheet"  href="./aluno-detalhe.component.scss" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=[object Object]&display=swap" />
+<div class="aluno-detalhe-page" *ngIf="aluno$ | async as aluno; else loading">
+  <div class="row g-0">
 
+    <div class="col-lg-5">
+      <div class="aluno-foto-container">
+        <img [src]="aluno.foto || 'https://via.placeholder.com/600x800.png?text=FOTO DO ALUNO'"
+             alt="Foto do Aluno"
+             class="aluno-foto-principal">
+      </div>
+    </div>
 
+    <div class="col-lg-7">
+      <div class="aluno-info-container">
 
-</head>
-<body>
+        <div class="info-section">
+          <h2 class="aluno-nome">{{ aluno.nome }}</h2>
+          <p *ngIf="aluno.nomeSocial" class="aluno-nome-social">({{ aluno.nomeSocial }})</p>
+          <p class="aluno-matricula">{{ aluno.matricula }} | {{ aluno.curso.nome }}</p>
+        </div>
 
-  	<div class="container">
-    		<div class="section">
-      			<div class="navigation-breadcrumb-list">
-        				<div class="item">
-          					<div class="component-11">
-            						<div class="text">Alunos</div>
-          					</div>
-          					<div class="vertical-divider">
-          					</div>
-        				</div>
-        				<div class="item2">
-          					<div class="component-11">
-            						<div class="text">Ânderson Lopes Nunes</div>
-          					</div>
-        				</div>
-      			</div>
-      			<div class="container3">
-        				<div class="container4">
-          					<div class="section2">
-            						<div class="container5">
-              							<img class="gemini-generated-image-4fvl7v4-icon" alt="">
+        <div class="info-section d-grid">
+          <a [routerLink]="['/alunos/editar', aluno.id]" class="btn btn-primary btn-lg">
+            <i class="bi bi-pencil-fill me-2"></i> Editar Cadastro
+          </a>
+        </div>
 
-            						</div>
-            						<div class="container6">
-              							<div class="container7">
-                								<img class="beige-and-cobalt-modern-retro" alt="">
+        <div class="info-section stacked-info-container">
+          <div class="info-item">
+            <span class="info-label">Prioridade</span>
+            <span class="badge" [ngClass]="{
+              'text-bg-danger': aluno.prioridade === 'Alta',
+              'text-bg-warning': aluno.prioridade === 'Média',
+              'text-bg-success': aluno.prioridade === 'Baixa'
+            }">
+              {{ aluno.prioridade }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Prova Separada</span>
+            <span class="badge" [ngClass]="aluno.provaOutroEspaco ? 'text-bg-info' : 'text-bg-secondary'">
+              {{ aluno.provaOutroEspaco ? 'Sim' : 'Não' }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">CPF</span>
+            <span class="info-value">{{ (aluno.cpf | slice:0:3) + '.***.***-**' || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Data Nasc.</span>
+            <span class="info-value">{{ (aluno.dataNascimento | date: 'dd/MM/yyyy') || 'Não informada' }}</span>
+          </div>
+        </div>
 
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container8">
-            						<div class="container9">
-              							<div class="component-1">
-                								<img class="vector-icon" alt=""  href="../../../../../public/assets/icons/Component 1.svg">
+        <hr class="section-divider">
 
-              							</div>
-            						</div>
-          					</div>
-        				</div>
-        				<div class="container10">
-          					<div class="container11">
-            						<div class="container12">
-              							<div class="container13">
-                								<div class="prova-separada">Prova Separada?</div>
-              							</div>
-              							<div class="background">
-                								<div class="container13">
-                  									<div class="prova-separada">Não</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div class="container15">
-              							<div class="button">
-                								<div class="container16">
-                  									<div class="container17">
-                    										<div class="container13">
-                      											<div class="alterar">Alterar</div>
-                    										</div>
-                    										<div class="component-12">
-                      											<img class="vector-icon2" alt="">
+        <div class="accordion accordion-flush hering-accordion" id="naapiAccordion">
 
-                    										</div>
-                  									</div>
-                								</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container19">
-            						<div class="container20">
-              							<div class="link-link" id="linkLink">
-                								<div class="container21">
-                  									<div class="container13">
-                    										<div class="prova-separada">Informações Gerais</div>
-                  									</div>
-                								</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container23">
-            						<div class="heading-1">Ânderson Lopes Nunes</div>
-          					</div>
-          					<div class="container24">
-            						<div class="container25">
-              							<div class="container26">
-                								<div class="container13">
-                  									<div class="prova-separada">20223004723</div>
-                								</div>
-              							</div>
-              							<div class="margin">
-                								<div class="container13">
-                  									<div class="div2">(19/04/2000)</div>
-                								</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container29">
-            						<div class="container26">
-              							<div class="engenharia-metalrgica">Engenharia Metalúrgica</div>
-            						</div>
-            						<div class="container31">
-              							<div class="border">
-                								<div class="prova-separada">SEM.</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container32">
-            						<div class="telefone">Telefone</div>
-            						<div class="container33">
-              							<div class="telefone">(31) 9 9999-9999</div>
-            						</div>
-          					</div>
-          					<div class="container34">
-            						<div class="telefone">CPF</div>
-            						<div class="container33">
-              							<div class="telefone">999.999.999-99</div>
-            						</div>
-          					</div>
-          					<div class="container36">
-            						<div class="container13">
-              							<div class="prova-separada">Prioridade</div>
-            						</div>
-          					</div>
-          					<div class="container38">
-            						<div class="container39">
-              							<div class="container20">
-                								<div class="link-link2" id="linkLink">
-                  									<div class="image">
-                  									</div>
-                								</div>
-              							</div>
-              							<div class="container20">
-                								<div class="link-link3" id="linkLink">
-                  									<div class="image2">
-                  									</div>
-                								</div>
-              							</div>
-              							<div class="container20">
-                								<div class="link-link4" id="linkLink">
-                  									<div class="image3">
-                  									</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div class="container26">
-              							<div class="button2">
-                								<div class="container44">
-                  									<div class="container17">
-                    										<div class="container13">
-                      											<div class="alterar">Alterar</div>
-                    										</div>
-                    										<div class="component-12">
-                      											<img class="vector-icon2" alt="">
+          <div class="accordion-item" *ngIf="aluno.adaptacoesNecessarias">
+            <h2 class="accordion-header" id="headingAdaptacoes">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdaptacoes" aria-expanded="false" aria-controls="collapseAdaptacoes">
+                Adaptações Necessárias
+              </button>
+            </h2>
+            <div id="collapseAdaptacoes" class="accordion-collapse collapse" aria-labelledby="headingAdaptacoes" data-bs-parent="#naapiAccordion">
+              <div class="accordion-body info-content">
+                 {{ aluno.adaptacoesNecessarias }}
+              </div>
+            </div>
+          </div>
 
-                    										</div>
-                  									</div>
-                								</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container47">
-            						<div class="container13">
-              							<div class="prova-separada">Diagnósticos</div>
-            						</div>
-          					</div>
-          					<div class="container49">
-            						<div class="container13">
-              							<div class="container26">
-                								<div class="component-4">
-                  									<div class="container52">
-                    										<div class="container13">
-                      											<div class="text2">TDAH</div>
-                    										</div>
-                  									</div>
-                								</div>
-              							</div>
-            						</div>
-            						<div class="container13">
-              							<div class="container26">
-                								<div class="component-4">
-                  									<div class="container52">
-                    										<div class="container13">
-                      											<div class="text2">Depressão</div>
-                    										</div>
-                  									</div>
-                								</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container58">
-            						<div class="component-3">
-              							<div class="component-2">
-                								<div class="container59">
-                  									<div class="text4">EDITAR</div>
-                								</div>
-              							</div>
-              							<div class="button-increment-quantity">
-              							</div>
-            						</div>
-            						<div class="component-43">
-              							<div class="backgroundborder">
-                								<div class="container13">
-                  									<div class="anotaes-gerais">REGISTRAR ATENDIMENTO</div>
-                								</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="container61">
-            						<div class="container62">
-              							<div class="sem-documentao-mdica">Sem documentação médica</div>
-            						</div>
-            						<div class="horizontalborder">
-              							<div class="container63">
-                								<div class="region">
-                  									<div class="horizontalborder2">
-                    										<div class="button3">
-                      											<div class="container64">
-                        												<div class="container21">
-                          													<div class="anotaes-gerais">Anotações Gerais</div>
-                        												</div>
-                      											</div>
-                    										</div>
-                  									</div>
-                  									<img class="component-1-icon" alt="">
+          <div class="accordion-item" *ngIf="aluno.necessidadesRelatoriosMedicos">
+             <h2 class="accordion-header" id="headingNecessidades">
+               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNecessidades" aria-expanded="false" aria-controls="collapseNecessidades">
+                Necessidades (Relatórios Médicos)
+               </button>
+             </h2>
+             <div id="collapseNecessidades" class="accordion-collapse collapse" aria-labelledby="headingNecessidades" data-bs-parent="#naapiAccordion">
+               <div class="accordion-body info-content">
+                 {{ aluno.necessidadesRelatoriosMedicos }}
+               </div>
+             </div>
+          </div>
 
-                								</div>
-              							</div>
-              							<div class="container66">
-                								<div class="region">
-                  									<div class="horizontalborder2">
-                    										<div class="button4">
-                      											<div class="container64">
-                        												<div class="container21">
-                          													<div class="anotaes-gerais">Adaptações Necessárias</div>
-                        												</div>
-                      											</div>
-                    										</div>
-                  									</div>
-                  									<img class="component-1-icon" alt="">
+          <div class="accordion-item" *ngIf="aluno.anotacoesNaapi">
+             <h2 class="accordion-header" id="headingAnotacoes">
+               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnotacoes" aria-expanded="false" aria-controls="collapseAnotacoes">
+                Anotações Gerais (NAAPI)
+               </button>
+             </h2>
+             <div id="collapseAnotacoes" class="accordion-collapse collapse" aria-labelledby="headingAnotacoes" data-bs-parent="#naapiAccordion">
+               <div class="accordion-body info-content">
+                 {{ aluno.anotacoesNaapi }}
+               </div>
+             </div>
+          </div>
 
-                								</div>
-              							</div>
-              							<div class="container66">
-                								<div class="region">
-                  									<div class="horizontalborder2">
-                    										<div class="button4">
-                      											<div class="container64">
-                        												<div class="container21">
-                          													<div class="anotaes-gerais">Histórico de Atendimentos</div>
-                        												</div>
-                      											</div>
-                    										</div>
-                  									</div>
-                  									<img class="component-1-icon" alt="">
+          <hr class="section-divider">
 
-                								</div>
-              							</div>
-              							<div class="container66">
-                								<div class="region">
-                  									<div class="horizontalborder2">
-                    										<div class="button4">
-                      											<div class="container64">
-                        												<div class="container21">
-                          													<div class="anotaes-gerais">Laudos</div>
-                        												</div>
-                      											</div>
-                    										</div>
-                  									</div>
-                  									<img class="component-1-icon" alt="">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingAtendimentos">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAtendimentos" aria-expanded="true" aria-controls="collapseAtendimentos">
+                Histórico de Atendimentos
+              </button>
+            </h2>
+            <div id="collapseAtendimentos" class="accordion-collapse collapse show" aria-labelledby="headingAtendimentos" data-bs-parent="#naapiAccordion">
+              <div class="accordion-body">
+                <div class="list-section-header">
+                  <h5 class="list-title-sub">Registros</h5>
+                  <button class="btn btn-success btn-sm"
+                          data-bs-toggle="modal" data-bs-target="#modalAtendimento">
+                    <i class="bi bi-plus-lg"></i> Novo
+                  </button>
+                </div>
+                <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
+              </div>
+            </div>
+          </div>
 
-                								</div>
-              							</div>
-              							<div class="container66">
-                								<div class="region">
-                  									<div class="horizontalborder2">
-                    										<div class="button4">
-                      											<div class="container64">
-                        												<div class="container21">
-                          													<div class="anotaes-gerais">Plano Educacional (PEI)</div>
-                        												</div>
-                      											</div>
-                    										</div>
-                  									</div>
-                  									<img class="component-1-icon" alt="">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingLaudos">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLaudos" aria-expanded="false" aria-controls="collapseLaudos">
+                Laudos
+              </button>
+            </h2>
+            <div id="collapseLaudos" class="accordion-collapse collapse" aria-labelledby="headingLaudos" data-bs-parent="#naapiAccordion">
+              <div class="accordion-body">
+                 <app-laudo-list [alunoId]="aluno.id"></app-laudo-list>
+              </div>
+            </div>
+          </div>
 
-                								</div>
-              							</div>
-            						</div>
-          					</div>
-          					<div class="section3">
-            						<div class="container78">
-              							<div class="container13">
-                								<div class="anotaes-gerais">Necessidades (Relatórios Médicos)</div>
-              							</div>
-            						</div>
-            						<img class="component-1-icon6" alt="">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingPei">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePei" aria-expanded="false" aria-controls="collapsePei">
+                Plano Educacional (PEI)
+              </button>
+            </h2>
+            <div id="collapsePei" class="accordion-collapse collapse" aria-labelledby="headingPei" data-bs-parent="#naapiAccordion">
+              <div class="accordion-body">
+                <app-pei-list [alunoId]="aluno.id"></app-pei-list>
+              </div>
+            </div>
+          </div>
 
-          					</div>
-        				</div>
-      			</div>
-    		</div>
-  	</div>
-
-
-
-
-  	<script>
-    		var linkLink = document.getElementById("linkLink");
-    		if(linkLink) {
-      			linkLink.addEventListener("click", function () {
-        				window.open("https://www.hering.com.br/lancamento");
-      			});
-    		}
-
-    		var linkLink = document.getElementById("linkLink");
-    		if(linkLink) {
-      			linkLink.addEventListener("click", function () {
-        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6amnmcsi/p");
-      			});
-    		}
-
-    		var linkLink = document.getElementById("linkLink");
-    		if(linkLink) {
-      			linkLink.addEventListener("click", function () {
-        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6am8jsi/p");
-      			});
-    		}
-
-    		var linkLink = document.getElementById("linkLink");
-    		if(linkLink) {
-      			linkLink.addEventListener("click", function () {
-        				window.open("https://www.hering.com.br/regata-feminina-decote-v-box-k6am8msi/p");
-      			});
-    		}</script></body>
-</html>
+        </div> </div> </div> </div> </div> <div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalAtendimentoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <app-atendimento-form
+      *ngIf="alunoId"
+      [alunoId]="alunoId"
+      (atendimentoSalvo)="onAtendimentoSalvo()">
+    </app-atendimento-form>
+  </div>
+</div>

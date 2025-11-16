@@ -1,56 +1,40 @@
-<div class="login-page-container">
+<div class="login-container">
+  <div class="login-wrapper">
 
-  <div class="login-visual-panel">
-    <div class="visual-header">
+    <div class="form-header text-center mb-4">
       <a class="logo-link" routerLink="/">
-        <img src="assets/img/CEFET-MG_simplificada-negativo-menor.png" alt="Logo CEFET" class="naapi-logo-visual">
-        <span class="naapi-logo-text">NAAPI</span>
+        <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="naapi-logo">
+        <img src="assets/img/NAAPI_completa-negativo.png" alt="Logo NAAPI" class="naapi-logo">
       </a>
+      <h3 class="card-title mt-3">Acesso ao Painel</h3>
+      <p class="sub-title">Use as suas credenciais para entrar.</p>
     </div>
-    <div class="visual-content">
-      <h2 class="visual-title">Sistema de Gestão e Acompanhamento</h2>
-      <p class="visual-subtitle">Plataforma do Núcleo de Apoio a Pessoas com Necessidades Específicas.</p>
-    </div>
-    <div class="visual-footer">
-      <p>© {{ currentYear }} CEFET-MG</p>
-    </div>
-  </div>
 
-  <div class="login-form-panel">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-    <div class="login-wrapper">
-
-      <div class="form-header text-center">
-        <h3 class="card-title mt-3">Acesso ao Painel</h3>
-        <p class="sub-title">Use as suas credenciais para entrar.</p>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" class="form-control"
+               formControlName="email" placeholder="seuemail@naapi.com">
       </div>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha</label>
+        <input type="password" id="senha" class="form-control"
+               formControlName="senha" placeholder="*******">
+      </div>
 
-        <div class="form-group-custom mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" id="email" class="form-control"
-                 formControlName="email" placeholder="seuemail@naapi.com">
-        </div>
+      <div *ngIf="errorMessage" class="alert alert-danger p-2 mt-3 text-center small">
+        {{ errorMessage }}
+      </div>
 
-        <div class="form-group-custom mb-3">
-          <label for="senha" class="form-label">Senha</label>
-          <input type="password" id="senha" class="form-control"
-                 formControlName="senha" placeholder="*******">
-        </div>
+      <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ isLoading ? 'Entrando...' : 'Entrar' }}
+        </button>
+      </div>
+    </form>
 
-        <div *ngIf="errorMessage" class="alert alert-danger p-2 mt-3 text-center small">
-          {{ errorMessage }}
-        </div>
-
-        <div class="d-grid mt-4">
-          <button type="submit" class="btn btn-primary btn-lg" [disabled]="loginForm.invalid || isLoading">
-            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            {{ isLoading ? 'Entrando...' : 'Entrar' }}
-          </button>
-        </div>
-      </form>
-
-    </div>
   </div>
 </div>

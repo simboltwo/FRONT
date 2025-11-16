@@ -1,0 +1,20 @@
+/*
+  Este SCSS é para o wrapper .page-container
+  que adicionámos em aluno-list.html e aluno-form.html.
+*/
+.page-container {
+  /* Restaura o espaçamento do container-fluid */
+  width: 100%;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  margin-right: auto;
+  margin-left: auto;
+
+  /* Restaura a margem superior (mt-4) */
+  margin-top: 1.5rem;
+  /* Restaura a margem inferior (mb-5) */
+  margin-bottom: 3rem;
+
+  /* ADICIONA O PADDING para a navbar fixa */
+  padding-top: 94px; // 70px (navbar) + 24px (1.5rem de margem)
+}

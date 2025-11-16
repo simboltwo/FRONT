@@ -21,7 +21,6 @@ export class LoginComponent {
     senha: ['', [Validators.required]]
   });
 
-  protected currentYear = new Date().getFullYear();
   protected isLoading = false;
   protected errorMessage: string | null = null;
 
@@ -38,7 +37,7 @@ export class LoginComponent {
       next: (success) => {
         if (success) {
           // Sucesso! Navega para a página principal
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/alunos']);
         } else {
           // Falha (controlada pelo service)
           this.errorMessage = "Email ou senha inválidos.";

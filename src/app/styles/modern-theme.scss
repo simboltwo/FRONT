@@ -1,0 +1,285 @@
+/* ==============================================
+ * TEMA NAAPI (Base Hering/Branca + Primária #00376b + Paleta Colorida)
+ * ATUALIZADO com Estilos de Dropdown Globais
+ * ============================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:root {
+  /* (Variáveis de :root permanecem as mesmas) */
+  --cor-primaria: #00376b;
+  --cor-primaria-hover: #002a52;
+  --cor-primaria-suave: #f0f4f8;
+  --cor-fundo: #f5f5f5;
+  --cor-fundo-card: #ffffff;
+  --cor-fundo-header: #ffffff;
+  --cor-texto: #1a1a1a;
+  --cor-texto-suave: #767676;
+  --cor-borda: #eaeaea;
+  --cor-link: var(--cor-primaria);
+  --cor-sucesso: #28a745;
+  --cor-perigo: #e32d40;
+  --cor-aviso: #ff995e;
+  --header-bg-1: #59b390;
+  --header-bg-2: #572f36;
+  --header-bg-3: #e47c5d;
+  --header-bg-4: #e32d40;
+  --header-bg-5: #152b3c;
+  --header-bg-6: #66424c;
+  --header-bg-7: #768a4f;
+  --header-bg-8: #b3c262;
+  --header-bg-9: #d5ca98;
+  --header-bg-10: #3f324d;
+  --header-bg-11: #93c2b1;
+  --header-bg-12: #ff995e;
+  --header-bg-13: #ffeacc;
+  --header-bg-14: #de1d6a;
+  --cor-grafico-1: #59b390;
+  --cor-grafico-2: #e47c5d;
+  --cor-grafico-3: #b3c262;
+  --cor-grafico-4: #93c2b1;
+  --cor-grafico-5: #ff995e;
+  --cor-grafico-6: #de1d6a;
+  --cor-grafico-7: #768a4f;
+  --cor-grafico-8: #3f324d;
+  --cor-grafico-9: #e32d40;
+  --cor-grafico-10: #66424c;
+  --sombra-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --sombra-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --sombra-lg: 0 4px 10px rgba(0, 0, 0, 0.05);
+  --raio-borda: 4px;
+}
+
+/* (Estilos de body, btn, links, cards, forms, checkbox, fab... permanecem os mesmos) */
+/* ... */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  letter-spacing: 0.2px;
+}
+.btn {
+  border-radius: var(--raio-borda) !important;
+  border-width: 1px !important;
+  font-weight: 400;
+  transition: all 0.2s ease-in-out;
+  box-shadow: none !important;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  padding: 0.75rem 1.5rem;
+}
+.btn:hover {
+  transform: none;
+  opacity: 0.85;
+}
+.btn-primary {
+  background-color: var(--cor-primaria) !important;
+  border-color: var(--cor-primaria) !important;
+  color: #fff !important;
+}
+.btn-primary:hover {
+  background-color: var(--cor-primaria-hover) !important;
+  border-color: var(--cor-primaria-hover) !important;
+  opacity: 1;
+}
+.btn-outline-primary {
+  color: var(--cor-primaria) !important;
+  border-color: var(--cor-primaria) !important;
+  background-color: transparent !important;
+}
+.btn-outline-primary:hover {
+  background-color: var(--cor-primaria) !important;
+  color: #fff !important;
+}
+.btn-outline-secondary {
+  color: var(--cor-texto-suave) !important;
+  border-color: var(--cor-borda) !important;
+}
+.btn-outline-secondary:hover {
+  background-color: var(--cor-primaria-suave) !important;
+  color: var(--cor-primaria) !important;
+  border-color: var(--cor-borda) !important;
+}
+.btn-success { background-color: var(--cor-sucesso) !important; border-color: var(--cor-sucesso) !important; }
+.btn-danger { background-color: var(--cor-perigo) !important; border-color: var(--cor-perigo) !important; }
+a, .text-link, .text-primary {
+  color: var(--cor-link) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover, .text-link:hover, .text-primary:hover {
+  color: var(--cor-primaria-hover) !important;
+  text-decoration: none;
+}
+.card {
+  border-radius: var(--raio-borda) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--cor-borda) !important;
+  background-color: var(--cor-fundo-card);
+  transition: all 0.3s ease;
+}
+.card:hover {
+  box-shadow: var(--sombra-md) !important;
+}
+.card-header {
+  background-color: var(--cor-fundo-card) !important;
+  border-bottom: 1px solid var(--cor-borda) !important;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  padding: 1rem 1.25rem;
+}
+.form-control, .form-select {
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid var(--cor-borda) !important;
+  padding: 0.75rem 0.25rem;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  background-color: transparent;
+  box-shadow: none !important;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--cor-primaria) !important;
+  background-color: transparent;
+}
+.form-label {
+  font-weight: 400;
+  color: var(--cor-texto-suave);
+  margin-bottom: 0.25rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: center;
+  text-indent: 0px;
+  line-height: 24px;
+  vertical-align: baseline;
+  letter-spacing: normal;
+  word-spacing: 0px;
+  margin: 0px;
+  padding: 0px;
+  font-kerning: auto;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variant: normal;
+  font-stretch: 100%;
+}
+.form-check-input {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  width: 20px; height: 20px;
+  border: 1px solid var(--cor-primaria);
+  background-color: #fff;
+  border-radius: 0;
+  margin-top: 0.15em;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.form-check-input:hover {
+  background-color: var(--cor-primaria-suave);
+}
+.form-check-input:checked {
+  background-color: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+}
+.form-check-input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute; left: 6px; top: 2px;
+  width: 5px; height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.form-check-input[type="radio"] { border-radius: 50%; }
+.form-check-input[type="radio"]:checked { background-color: var(--cor-primaria); }
+.form-check-input[type="radio"]:checked::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background-color: white;
+}
+.form-check-label {
+  padding-left: 0.5em;
+  cursor: pointer;
+  color: var(--cor-texto);
+}
+.fab-add-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  box-shadow: var(--sombra-lg);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+.fab-add-button:hover {
+  background-color: var(--cor-primaria-hover);
+  transform: scale(1.05);
+  color: white;
+}
+
+/* --- MUDANÇA: Estilo Global do Dropdown (Correção) --- */
+
+/* 1. Define o espaçamento flutuante (estilo Hering) */
+.dropdown {
+  --bs-dropdown-spacer: 0.5rem; /* O "gap" de 0.5rem */
+}
+
+.dropdown-menu {
+  border-radius: var(--raio-borda) !important;
+  border: none !important;
+  box-shadow: var(--sombra-lg) !important;
+  padding: 0.75rem !important; /* Acolchoamento interno */
+  background-clip: padding-box;
+  background-color: var(--cor-fundo-card) !important;
+  margin-top: 0 !important; /* 2. REMOVE o margin-top manual */
+}
+
+/* Aplica a animação quando o menu é mostrado */
+.dropdown-menu.show {
+  animation: dropdownFadeIn 0.2s ease-out forwards;
+}
+
+.dropdown-item {
+  transition: all 0.2s ease;
+  padding: 0.6rem 1rem !important;
+  border-radius: 4px;
+  /* 3. Define a fonte global para FINA e MENOR */
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  color: var(--cor-texto) !important;
+
+  &:hover {
+    background-color: var(--cor-primaria-suave) !important;
+    color: var(--cor-primaria) !important;
+  }
+  &:active {
+    background-color: var(--cor-primaria) !important;
+    color: #fff !important;
+  }
+}
