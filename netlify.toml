@@ -1,13 +1,18 @@
 [build]
-  # Comando que o Netlify executa para construir o site
   command = "npm run build"
-
-  # O diretório que o Netlify deve publicar
-  # (Esta é a correção que o log de erro pediu)
   publish = "dist/naapi-frontend/browser"
 
-# Suas regras de proxy (que já estavam corretas)
+# Regra 1: Proxy da API (Deve vir primeiro)
 [[redirects]]
   from = "/api/*"
   to = "https://naapi-api.onrender.com/:splat"
   status = 200
+
+# --- INÍCIO DA CORREÇÃO ---
+# Regra 2: SPA Fallback (Redireciona todas as outras rotas para o index.html)
+# Isso permite que o Angular controle o roteamento.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+# --- FIM DA CORREÇÃO ---
