@@ -1,3 +1,12 @@
+[build]
+  # Comando que o Netlify executa para construir o site
+  command = "npm run build"
+
+  # O diretório que o Netlify deve publicar
+  # (Esta é a correção que o log de erro pediu)
+  publish = "dist/naapi-frontend/browser"
+
+# Suas regras de proxy (que já estavam corretas)
 [[redirects]]
   from = "/api/*"
   to = "https://naapi-api.onrender.com/:splat"
