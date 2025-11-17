@@ -1,0 +1,55 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modalPeiLabel">Elaborar Novo PEI</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-wrapper-flat">
+      <form [formGroup]="peiForm" (ngSubmit)="onSubmit()">
+
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+        <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <label for="dataInicio" class="form-label">Data de Início *</label>
+            <input type="date" class="form-control" id="dataInicio" formControlName="dataInicio"
+                   [class.is-invalid]="form.get('dataInicio')!.invalid && form.get('dataInicio')!.touched">
+          </div>
+          <div class="col-md-6 mb-4">
+            <label for="dataFim" class="form-label">Data de Fim (Opcional)</label>
+            <input type="date" class="form-control" id="dataFim" formControlName="dataFim">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="metas" class="form-label">Metas *</label>
+          <textarea class="form-control" id="metas" rows="4" formControlName="metas"
+                    placeholder="Defina as metas educacionais para o aluno..."
+                    [class.is-invalid]="form.get('metas')!.invalid && form.get('metas')!.touched"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="estrategias" class="form-label">Estratégias *</label>
+          <textarea class="form-control" id="estrategias" rows="4" formControlName="estrategias"
+                    placeholder="Descreva as estratégias e adaptações a serem utilizadas..."
+                    [class.is-invalid]="form.get('estrategias')!.invalid && form.get('estrategias')!.touched"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="avaliacao" class="form-label">Avaliação (Opcional)</label>
+          <textarea class="form-control" id="avaliacao" rows="3" formControlName="avaliacao"
+                    placeholder="Descreva como o progresso será avaliado..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal" [disabled]="isLoading">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="peiForm.invalid || isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isLoading ? 'Salvando...' : 'Salvar PEI' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

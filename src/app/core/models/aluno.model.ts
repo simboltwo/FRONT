@@ -78,3 +78,8 @@ export interface AlunoInsert {
   adaptacoesNecessarias?: string;
   necessidadesRelatoriosMedicos?: string;
 }
+
+export interface AlunoStatusUpdate {
+  prioridade?: string;
+  provaOutroEspaco?: boolean;
+}

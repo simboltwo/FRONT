@@ -31,4 +31,15 @@ export interface UsuarioUpdate {
   email: string;
   papeis: number[]; // Enviamos apenas os IDs
 }
+
+export interface UsuarioSelfUpdate {
+  nome: string;
+  email: string;
+}
+
+export interface UsuarioPasswordUpdate {
+  senhaAtual: string;
+  novaSenha: string;
+  confirmacaoNovaSenha: string;
+}
 // --- FIM DA MUDANÇA ---

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Aluno, AlunoInsert } from '../models/aluno.model';
+import { Aluno, AlunoInsert, AlunoStatusUpdate } from '../models/aluno.model';
 
 export interface AlunoFilter {
   nome?: string;
@@ -46,6 +46,10 @@ export class AlunoService {
   update(id: number, aluno: AlunoInsert): Observable<Aluno> {
     console.warn('O método "update" está obsoleto. Use "updateWithFile".');
     return this.http.put<Aluno>(`${API_URL}/${id}`, aluno);
+  }
+
+  updateStatus(id: number, data: AlunoStatusUpdate): Observable<Aluno> {
+    return this.http.patch<Aluno>(`${API_URL}/${id}/status`, data);
   }
 
   // --- NOVOS MÉTODOS PARA UPLOAD DE FICHEIRO ---

@@ -1,0 +1,5 @@
+/* src/app/pages/laudos/laudo-form/laudo-form.component.scss */
+@import '../../../styles/modern-theme.scss';
+
+// Importa os estilos do modal de atendimento, pois são idênticos
+@import '../../atendimentos/atendimento-form/atendimento-form.component.scss';

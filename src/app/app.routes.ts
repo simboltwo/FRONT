@@ -20,6 +20,11 @@ export const routes: Routes = [
         // MUDANÇA: Aponta para o novo componente
         loadComponent: () => import('./pages/inicio/inicio.component').then(m => m.InicioComponent)
       },
+      {
+        path: 'perfil',
+        title: 'Meu Perfil',
+        loadComponent: () => import('./pages/perfil/perfil.component').then(m => m.PerfilComponent)
+      },
       // --- FIM DA MUDANÇA ---
       {
         path: 'alunos',
@@ -33,6 +38,7 @@ export const routes: Routes = [
         path: 'relatorios',
         loadChildren: () => import('./pages/relatorios.routes').then(m => m.RELATORIOS_ROUTES)
       },
+
       // --- INÍCIO DA MUDANÇA ---
       {
         path: '',

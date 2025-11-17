@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Laudo } from '../models/laudo.model'; // Importa o novo modelo
+import { Laudo } from '../models/laudo.model';
 
 const API_URL = '/api/laudos';
 
@@ -10,13 +10,17 @@ const API_URL = '/api/laudos';
 export class LaudoService {
   private http = inject(HttpClient);
 
-  /**
-   * Busca todos os laudos de um aluno específico.
-   * Baseado no endpoint: GET /laudos/aluno/{alunoId}
-   */
   findByAlunoId(alunoId: number): Observable<Laudo[]> {
     return this.http.get<Laudo[]>(`${API_URL}/aluno/${alunoId}`);
   }
 
-  // (Aqui podem ser adicionados os métodos create, update, delete no futuro)
+  // --- NOVO: Método para criar com upload ---
+  createWithFile(formData: FormData): Observable<Laudo> {
+    return this.http.post<Laudo>(API_URL, formData);
+  }
+
+  // --- NOVO: Método para deletar ---
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/${id}`);
+  }
 }

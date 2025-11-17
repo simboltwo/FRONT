@@ -126,6 +126,8 @@
               <i class="bi bi-person fs-5 me-2"></i> <span><small>{{ user.nome }}</small></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="navbarUserDropdown">
+              <li><a class="dropdown-item" routerLink="/perfil" (click)="closeOffcanvas()"><i class="bi bi-person-fill-gear me-2"></i> Meu Perfil</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" (click)="logoutAndCloseOffcanvas()"><i class="bi bi-box-arrow-right me-2"></i> Sair</a></li>
             </ul>
           </li>
@@ -142,6 +144,8 @@
           </span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="navbarUserDropdownDesktop">
+          <li><a class="dropdown-item" routerLink="/perfil"><i class="bi bi-person-fill-gear me-2"></i> Meu Perfil</a></li>
+          <li><hr class="dropdown-divider"></li>
           <li>
             <a class="dropdown-item" (click)="logout()">
               <i class="bi bi-box-arrow-right me-2"></i> Sair

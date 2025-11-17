@@ -1,0 +1,46 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modalLaudoLabel">Adicionar Novo Laudo</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-wrapper-flat">
+      <form [formGroup]="laudoForm" (ngSubmit)="onSubmit()">
+
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+        <div class="mb-4">
+          <label for="file" class="form-label">Arquivo (PDF, DOC, Imagem) *</label>
+          <input type="file" class="form-control" id="file"
+                 (change)="onFileChange($event)"
+                 accept=".pdf,.doc,.docx,image/*"
+                 [class.is-invalid]="form.get('file')!.invalid && form.get('file')!.touched">
+          <div class="form-text" *ngIf="selectedFileName">
+            Arquivo selecionado: {{ selectedFileName }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-4">
+            <label for="dataEmissao" class="form-label">Data de Emissão</label>
+            <input type="date" class="form-control" id="dataEmissao" formControlName="dataEmissao">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição</label>
+          <textarea class="form-control" id="descricao" rows="3" formControlName="descricao"
+                    placeholder="Descrição breve do laudo (ex: Laudo Oftalmológico)..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="laudoForm.invalid || isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isLoading ? 'Enviando...' : 'Salvar Laudo' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

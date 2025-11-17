@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Curso, Diagnostico, Turma, TipoAtendimento } from '../models/aluno.model';
-import { Papel, Usuario, UsuarioInsert, UsuarioUpdate } from '../models/usuario.model';
+import { Papel, Usuario, UsuarioInsert, UsuarioUpdate, UsuarioSelfUpdate, UsuarioPasswordUpdate } from '../models/usuario.model';
 import { Aluno } from '../models/aluno.model';
 
 // URL base da API (usando o proxy)
@@ -79,6 +79,14 @@ export class UsuarioService {
   // Busca o usuário logado
   getMe(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.url}/me`);
+  }
+
+  updateSelfDetails(data: UsuarioSelfUpdate): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.url}/me/detalhes`, data);
+  }
+
+  updateSelfPassword(data: UsuarioPasswordUpdate): Observable<void> {
+    return this.http.put<void>(`${this.url}/me/senha`, data);
   }
 
   // Métodos CRUD para o admin

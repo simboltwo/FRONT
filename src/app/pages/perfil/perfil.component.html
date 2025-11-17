@@ -1,0 +1,85 @@
+<div class="admin-page animate-fadeIn">
+
+  <div class="page-container">
+    <div class="page-header-container bg-color-5">
+      <h2 class="page-header-title">MEU PERFIL</h2>
+    </div>
+  </div>
+
+  <div class="admin-layout-container">
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-lg-7">
+        <div class="card card-form-container">
+          <div class="card-header">
+            Atualizar Meus Dados
+          </div>
+          <div class="card-body">
+            <form [formGroup]="detailsForm" (ngSubmit)="onDetailsSubmit()">
+
+              <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+              <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+              <div class="mb-4">
+                <label for="nome" class="form-label">Nome *</label>
+                <input type="text" id="nome" class="form-control" formControlName="nome"
+                       [class.is-invalid]="detailsForm.get('nome')!.invalid && detailsForm.get('nome')!.touched">
+              </div>
+              <div class="mb-4">
+                <label for="email" class="form-label">Email *</label>
+                <input type="email" id="email" class="form-control" formControlName="email"
+                       [class.is-invalid]="detailsForm.get('email')!.invalid && detailsForm.get('email')!.touched">
+              </div>
+
+              <div class="card-footer d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary" [disabled]="detailsForm.invalid || isLoadingDetails">
+                  <span *ngIf="isLoadingDetails" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  {{ isLoadingDetails ? 'Salvando...' : 'Salvar Detalhes' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card card-form-container">
+          <div class="card-header">
+            Alterar Senha
+          </div>
+          <div class="card-body">
+            <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
+
+              <div *ngIf="passwordSuccessMessage" class="alert alert-success">{{ passwordSuccessMessage }}</div>
+              <div *ngIf="passwordErrorMessage" class="alert alert-danger">{{ passwordErrorMessage }}</div>
+
+              <div class="mb-4">
+                <label for="senhaAtual" class="form-label">Senha Atual *</label>
+                <input type="password" id="senhaAtual" class="form-control" formControlName="senhaAtual"
+                       [class.is-invalid]="passwordForm.get('senhaAtual')!.invalid && passwordForm.get('senhaAtual')!.touched">
+              </div>
+              <div class="mb-4">
+                <label for="novaSenha" class="form-label">Nova Senha *</label>
+                <input type="password" id="novaSenha" class="form-control" formControlName="novaSenha"
+                       [class.is-invalid]="passwordForm.get('novaSenha')!.invalid && passwordForm.get('novaSenha')!.touched">
+              </div>
+              <div class="mb-4">
+                <label for="confirmacaoNovaSenha" class="form-label">Confirmar Nova Senha *</label>
+                <input type="password" id="confirmacaoNovaSenha" class="form-control" formControlName="confirmacaoNovaSenha"
+                       [class.is-invalid]="passwordForm.get('confirmacaoNovaSenha')!.invalid && passwordForm.get('confirmacaoNovaSenha')!.touched">
+              </div>
+
+              <div class="card-footer d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid || isPasswordLoading">
+                  <span *ngIf="isPasswordLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  {{ isPasswordLoading ? 'Salvando...' : 'Alterar Senha' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
