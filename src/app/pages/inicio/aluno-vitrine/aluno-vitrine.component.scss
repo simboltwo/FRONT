@@ -1,0 +1,182 @@
+/* src/app/pages/inicio/aluno-vitrine/aluno-vitrine.component.scss */
+@import '../../../styles/modern-theme.scss';
+
+/* ==============================================
+ * 1. Importa os Estilos de Card
+ * ============================================== */
+@import '../../../styles/aluno-card.scss';
+
+/* * 2. Sobrescreve os estilos de Card
+ * (copiado do aluno-list.scss para manter consistência)
+*/
+.card-img-container .icon-prioridade {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1.5rem;
+  color: var(--cor-perigo);
+  background-color: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  animation: pulse-alta 2s infinite;
+}
+.aluno-card .card-body {
+  padding: 0.75rem 1rem;
+}
+.aluno-card .card-title {
+  font-size: 0.9rem;
+  margin-bottom: 0.1rem;
+}
+.aluno-card .card-matricula,
+.aluno-card .card-curso {
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+.aluno-card .card-curso {
+  margin-bottom: 0.5rem;
+}
+.aluno-card .card-diagnosticos .badge-diag {
+  font-size: 0.7rem;
+}
+
+/* Botões de Ação */
+.card-img-container .card-hover-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease-out;
+  z-index: 3;
+}
+.aluno-card:hover .card-hover-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+.btn-atender {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-align: center;
+  flex-grow: 1;
+  padding: 0.65rem;
+  border-radius: var(--raio-borda);
+  border: none;
+  background-color: #fff;
+  color: var(--cor-texto) !important;
+  &:hover { background-color: #f5f5f5; opacity: 1; }
+  .bi { margin-right: 0.5rem; }
+}
+.btn-action-icon {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #fff;
+  border: none;
+  border-radius: var(--raio-borda);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-texto) !important;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  &:hover { background-color: #f5f5f5; }
+  .bi { margin: 0; }
+}
+.btn-primary-icon {
+  @extend .btn-action-icon;
+  background-color: var(--cor-primaria);
+  color: #fff !important;
+  &:hover { background-color: var(--cor-primaria-hover); }
+}
+.btn-danger-icon {
+  @extend .btn-action-icon;
+  background-color: var(--cor-perigo);
+  color: #fff !important;
+  &:hover { background-color: #c82333; }
+}
+
+
+/* ==============================================
+ * 3. Estilos do Carrossel (Vitrine)
+ * ============================================== */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.aluno-carousel-track {
+  display: flex;
+  overflow-x: auto; /* Permite arrastar */
+  scroll-behavior: smooth;
+  padding-bottom: 0.5rem;
+
+  /* Garante o padding nas pontas */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+
+  /* Esconde a barra de scroll interna */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}
+
+.carousel-item-wrapper {
+  /* MUDANÇA: Define a largura dos cards no carrossel */
+  flex: 0 0 280px;
+  max-width: 280px;
+  margin-right: 1.5rem;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Botões de Seta */
+.carousel-arrow {
+  position: absolute;
+  top: 40%; /* Alinha com o meio da imagem */
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: #fff;
+  border: 1px solid var(--cor-borda);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  box-shadow: var(--sombra-md);
+  color: var(--cor-primaria);
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--cor-primaria);
+    color: #fff;
+  }
+
+  &.prev { left: 0.5rem; }
+  &.next { right: 0.5rem; }
+
+  /* Esconde setas no mobile (pode arrastar) */
+  @media (max-width: 767.98px) {
+    display: none !important;
+  }
+}

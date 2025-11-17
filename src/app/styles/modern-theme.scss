@@ -1,7 +1,4 @@
-/* ==============================================
- * TEMA NAAPI (Base Hering/Branca + Primária #00376b + Paleta Colorida)
- * ATUALIZADO com Estilos de Dropdown Globais
- * ============================================== */
+/* src/app/styles/modern-theme.scss */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @keyframes dropdownFadeIn {
@@ -16,20 +13,33 @@
 }
 
 :root {
-  /* (Variáveis de :root permanecem as mesmas) */
+  /* ================================== */
+  /* --- INÍCIO DA MUDANÇA (TEMA) --- */
+  /* ================================== */
+
+  /* 1. Cor primária volta a ser o AZUL NAAPI */
   --cor-primaria: #00376b;
   --cor-primaria-hover: #002a52;
-  --cor-primaria-suave: #f0f4f8;
+  --cor-primaria-suave: #f0f4f8; /* Fundo azul-cinza claro */
+
+  /* 2. Fundo geral e de cards (Mantém o estilo Hering) */
   --cor-fundo: #f5f5f5;
   --cor-fundo-card: #ffffff;
   --cor-fundo-header: #ffffff;
+
+  /* 3. Cores de Texto (Link agora é o azul Hering) */
   --cor-texto: #1a1a1a;
   --cor-texto-suave: #767676;
   --cor-borda: #eaeaea;
   --cor-link: var(--cor-primaria);
-  --cor-sucesso: #28a745;
-  --cor-perigo: #e32d40;
-  --cor-aviso: #ff995e;
+  --cor-link-claro: #337ab8;
+
+  /* 4. Cores de Status (Mantidas) */
+  --cor-sucesso: #7bb559;
+  --cor-perigo: #bd3535;
+  --cor-aviso: #ffd361;
+
+  /* 5. Cores dos Headers (Mantidas) */
   --header-bg-1: #59b390;
   --header-bg-2: #572f36;
   --header-bg-3: #e47c5d;
@@ -54,24 +64,34 @@
   --cor-grafico-8: #3f324d;
   --cor-grafico-9: #e32d40;
   --cor-grafico-10: #66424c;
+
+  /* 6. Sombras (Mantidas) */
   --sombra-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
   --sombra-md: 0 2px 4px rgba(0, 0, 0, 0.05);
   --sombra-lg: 0 4px 10px rgba(0, 0, 0, 0.05);
-  --raio-borda: 4px;
+
+  /* 7. RAIO DA BORDA: Esta é a mudança principal. TUDO ficará "sharp". */
+  --raio-borda: 0px;
+  /* ================================== */
+  /* --- FIM DA MUDANÇA (TEMA) --- */
+  /* ================================== */
 }
 
-/* (Estilos de body, btn, links, cards, forms, checkbox, fab... permanecem os mesmos) */
-/* ... */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Raleway', sans-serif; /* Fonte base */
   background-color: var(--cor-fundo);
   color: var(--cor-texto);
   letter-spacing: 0.2px;
 }
+
+/* ================================== */
+/* --- INÍCIO DA MUDANÇA (BOTÕES) --- */
+/* ================================== */
 .btn {
+  font-family: 'Open Sans', sans-serif; /* MUDANÇA */
   border-radius: var(--raio-borda) !important;
   border-width: 1px !important;
-  font-weight: 400;
+  font-weight: 700;
   transition: all 0.2s ease-in-out;
   box-shadow: none !important;
   text-transform: uppercase;
@@ -79,6 +99,13 @@ body {
   font-size: 14px;
   padding: 0.75rem 1.5rem;
 }
+/* ... (o resto das definições de .btn, .btn-primary, .btn-outline-secondary, etc.
+   já usam as variáveis --cor-primaria e --raio-borda,
+   então elas serão atualizadas automaticamente) ... */
+/* ================================== */
+/* --- FIM DA MUDANÇA (BOTÕES) --- */
+/* ================================== */
+
 .btn:hover {
   transform: none;
   opacity: 0.85;
@@ -113,6 +140,8 @@ body {
 }
 .btn-success { background-color: var(--cor-sucesso) !important; border-color: var(--cor-sucesso) !important; }
 .btn-danger { background-color: var(--cor-perigo) !important; border-color: var(--cor-perigo) !important; }
+
+/* Links usarão a nova variável --cor-link */
 a, .text-link, .text-primary {
   color: var(--cor-link) !important;
   text-decoration: none;
@@ -122,6 +151,8 @@ a:hover, .text-link:hover, .text-primary:hover {
   color: var(--cor-primaria-hover) !important;
   text-decoration: none;
 }
+
+/* Cards, Forms, Checkbox, etc. herdarão --raio-borda: 0px */
 .card {
   border-radius: var(--raio-borda) !important;
   box-shadow: none !important;
@@ -147,7 +178,7 @@ a:hover, .text-link:hover, .text-primary:hover {
   border-bottom: 1px solid var(--cor-borda) !important;
   padding: 0.75rem 0.25rem;
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Raleway', sans-serif;
   background-color: transparent;
   box-shadow: none !important;
 }
@@ -156,13 +187,13 @@ a:hover, .text-link:hover, .text-primary:hover {
   background-color: transparent;
 }
 .form-label {
-  font-weight: 400;
+  font-family: 'Open Sans', sans-serif; /* MUDANÇA */
+  font-weight: 600; /* Open Sans SemiBold */
   color: var(--cor-texto-suave);
   margin-bottom: 0.25rem;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  text-transform: uppercase;
   text-align: center;
   text-indent: 0px;
   line-height: 24px;
@@ -182,7 +213,7 @@ a:hover, .text-link:hover, .text-primary:hover {
   width: 20px; height: 20px;
   border: 1px solid var(--cor-primaria);
   background-color: #fff;
-  border-radius: 0;
+  border-radius: 0; /* Já estava 0, o que é bom */
   margin-top: 0.15em;
   cursor: pointer;
   position: relative;
@@ -218,14 +249,17 @@ a:hover, .text-link:hover, .text-primary:hover {
   padding-left: 0.5em;
   cursor: pointer;
   color: var(--cor-texto);
+  font-family: 'Raleway', sans-serif;
 }
+
+/* O FAB (Botão flutuante) agora será preto */
 .fab-add-button {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   width: 56px;
   height: 56px;
-  border-radius: 50%;
+  border-radius: 50%; /* Mantemos redondo para ser um FAB */
   background-color: var(--cor-primaria);
   color: white;
   border: none;
@@ -243,34 +277,25 @@ a:hover, .text-link:hover, .text-primary:hover {
   color: white;
 }
 
-/* --- MUDANÇA: Estilo Global do Dropdown (Correção) --- */
-
-/* 1. Define o espaçamento flutuante (estilo Hering) */
-.dropdown {
-  --bs-dropdown-spacer: 0.5rem; /* O "gap" de 0.5rem */
-}
-
+/* Dropdowns herdarão --raio-borda: 0px */
 .dropdown-menu {
   border-radius: var(--raio-borda) !important;
-  border: none !important;
+  border: 1px solid var(--cor-borda) !important; /* Adiciona borda Hering */
   box-shadow: var(--sombra-lg) !important;
-  padding: 0.75rem !important; /* Acolchoamento interno */
+  padding: 0.75rem !important;
   background-clip: padding-box;
   background-color: var(--cor-fundo-card) !important;
-  margin-top: 0 !important; /* 2. REMOVE o margin-top manual */
+  margin-top: 0 !important;
 }
-
-/* Aplica a animação quando o menu é mostrado */
 .dropdown-menu.show {
   animation: dropdownFadeIn 0.2s ease-out forwards;
 }
-
 .dropdown-item {
   transition: all 0.2s ease;
   padding: 0.6rem 1rem !important;
-  border-radius: 4px;
-  /* 3. Define a fonte global para FINA e MENOR */
-  font-weight: 400 !important;
+  border-radius: 0px; /* Dropdown items são sharp */
+  font-family: 'Raleway', sans-serif; /* MUDANÇA */
+  font-weight: 500 !important; /* Raleway Medium */
   font-size: 14px !important;
   color: var(--cor-texto) !important;
 

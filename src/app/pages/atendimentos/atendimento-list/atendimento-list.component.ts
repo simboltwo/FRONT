@@ -1,3 +1,4 @@
+// src/app/pages/atendimentos/atendimento-list/atendimento-list.component.ts
 import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AtendimentoService } from '../../../core/services/atendimento.service';
@@ -16,7 +17,8 @@ import { Atendimento } from '../../../core/models/atendimento.model';
         <div *ngFor="let item of atendimentos" class="list-group-item">
           <div class="d-flex justify-content-between">
             <h6 class="mb-1">{{ item.tipoAtendimentoNome }}</h6>
-            <span class_="badge" [ngClass]="getStatusClass(item.status)">
+
+            <span class="badge" [ngClass]="getStatusClass(item.status)">
               {{ item.status }}
             </span>
           </div>

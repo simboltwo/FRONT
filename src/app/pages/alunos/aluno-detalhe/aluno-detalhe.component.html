@@ -6,19 +6,26 @@
   </div>
 </ng-template>
 
-<div class="aluno-detalhe-page" *ngIf="aluno$ | async as aluno; else loading">
+<div class="aluno-detalhe-page" *ngIf="aluno; else loading">
   <div class="row g-0">
 
     <div class="col-lg-5">
-      <div class="aluno-foto-container">
+      <div class="aluno-foto-wrapper">
         <img [src]="aluno.foto || 'https://via.placeholder.com/600x800.png?text=FOTO DO ALUNO'"
              alt="Foto do Aluno"
              class="aluno-foto-principal">
-      </div>
+        </div>
     </div>
 
     <div class="col-lg-7">
       <div class="aluno-info-container">
+
+        <nav aria-label="breadcrumb" class="breadcrumb-container">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/alunos">Alunos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ aluno.nome | slice:0:30 }}{{ aluno.nome.length > 30 ? '...' : '' }}</li>
+          </ol>
+        </nav>
 
         <div class="info-section">
           <h2 class="aluno-nome">{{ aluno.nome }}</h2>
@@ -26,36 +33,72 @@
           <p class="aluno-matricula">{{ aluno.matricula }} | {{ aluno.curso.nome }}</p>
         </div>
 
-        <div class="info-section d-grid">
-          <a [routerLink]="['/alunos/editar', aluno.id]" class="btn btn-primary btn-lg">
-            <i class="bi bi-pencil-fill me-2"></i> Editar Cadastro
-          </a>
+        <div class="info-section">
+          <ul class="dados-list">
+            <li *ngIf="aluno.dataNascimento">
+              <span class="label">Data Nasc.</span>
+              <span class="value">{{ aluno.dataNascimento | date: 'dd/MM/yyyy' }}</span>
+            </li>
+            <li *ngIf="aluno.cpf">
+              <span class="label">CPF</span>
+              <span class="value">{{ aluno.cpf }}</span>
+            </li>
+            <li *ngIf="aluno.telefoneEstudante">
+              <span class="label">Telefone</span>
+              <span class="value">{{ aluno.telefoneEstudante }}</span>
+            </li>
+            <li *ngIf="aluno.turma">
+              <span class="label">Turma</span>
+              <span class="value">{{ aluno.turma.nome }}</span>
+            </li>
+            <li *ngIf="aluno.processoSipac">
+              <span class="label">Proc. SIPAC</span>
+              <span class="value">{{ aluno.processoSipac }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="info-section">
+          <label class="form-label-hering">Prioridade</label>
+          <div class="swatch-group">
+            <button
+              class="swatch-color swatch-danger"
+              [class.active]="aluno.prioridade === 'Alta'"
+              (click)="updateAlunoField('prioridade', 'Alta')"
+              title="Prioridade Alta">
+              <span>Alta</span>
+            </button>
+            <button
+              class="swatch-color swatch-warning"
+              [class.active]="aluno.prioridade === 'Média'"
+              (click)="updateAlunoField('prioridade', 'Média')"
+              title="Prioridade Média">
+              <span>Média</span>
+            </button>
+            <button
+              class="swatch-color swatch-success"
+              [class.active]="aluno.prioridade === 'Baixa'"
+              (click)="updateAlunoField('prioridade', 'Baixa')"
+              title="Prioridade Baixa">
+              <span>Baixa</span>
+            </button>
+          </div>
         </div>
 
-        <div class="info-section stacked-info-container">
-          <div class="info-item">
-            <span class="info-label">Prioridade</span>
-            <span class="badge" [ngClass]="{
-              'text-bg-danger': aluno.prioridade === 'Alta',
-              'text-bg-warning': aluno.prioridade === 'Média',
-              'text-bg-success': aluno.prioridade === 'Baixa'
-            }">
-              {{ aluno.prioridade }}
-            </span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Prova Separada</span>
-            <span class="badge" [ngClass]="aluno.provaOutroEspaco ? 'text-bg-info' : 'text-bg-secondary'">
-              {{ aluno.provaOutroEspaco ? 'Sim' : 'Não' }}
-            </span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">CPF</span>
-            <span class="info-value">{{ (aluno.cpf | slice:0:3) + '.***.***-**' || 'Não informado' }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Data Nasc.</span>
-            <span class="info-value">{{ (aluno.dataNascimento | date: 'dd/MM/yyyy') || 'Não informada' }}</span>
+        <div class="info-section">
+          <label class="form-label-hering">Prova em Espaço Separado</label>
+          <div class="swatch-group">
+            <button
+              class="swatch-size"
+              [class.active]="aluno.provaOutroEspaco === true"
+              (click)="updateAlunoField('provaOutroEspaco', true)">
+              Sim
+            </button>
+            <button
+              class="swatch-size"
+              [class.active]="aluno.provaOutroEspaco === false"
+              (click)="updateAlunoField('provaOutroEspaco', false)">
+              Não
+            </button>
           </div>
         </div>
 
@@ -63,7 +106,7 @@
 
         <div class="accordion accordion-flush hering-accordion" id="naapiAccordion">
 
-          <div class="accordion-item" *ngIf="aluno.adaptacoesNecessarias">
+          <div class="accordion-item" *ngIf="aluno.adaptacoesNecessarias && aluno.adaptacoesNecessarias.trim() !== ''">
             <h2 class="accordion-header" id="headingAdaptacoes">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdaptacoes" aria-expanded="false" aria-controls="collapseAdaptacoes">
                 Adaptações Necessárias
@@ -71,12 +114,12 @@
             </h2>
             <div id="collapseAdaptacoes" class="accordion-collapse collapse" aria-labelledby="headingAdaptacoes" data-bs-parent="#naapiAccordion">
               <div class="accordion-body info-content">
-                 {{ aluno.adaptacoesNecessarias }}
+                {{ aluno.adaptacoesNecessarias }}
               </div>
             </div>
           </div>
 
-          <div class="accordion-item" *ngIf="aluno.necessidadesRelatoriosMedicos">
+          <div class="accordion-item" *ngIf="aluno.necessidadesRelatoriosMedicos && aluno.necessidadesRelatoriosMedicos.trim() !== ''">
              <h2 class="accordion-header" id="headingNecessidades">
                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNecessidades" aria-expanded="false" aria-controls="collapseNecessidades">
                 Necessidades (Relatórios Médicos)
@@ -89,7 +132,7 @@
              </div>
           </div>
 
-          <div class="accordion-item" *ngIf="aluno.anotacoesNaapi">
+          <div class="accordion-item" *ngIf="aluno.anotacoesNaapi && aluno.anotacoesNaapi.trim() !== ''">
              <h2 class="accordion-header" id="headingAnotacoes">
                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnotacoes" aria-expanded="false" aria-controls="collapseAnotacoes">
                 Anotações Gerais (NAAPI)
@@ -101,8 +144,6 @@
                </div>
              </div>
           </div>
-
-          <hr class="section-divider">
 
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingAtendimentos">
@@ -150,7 +191,20 @@
             </div>
           </div>
 
-        </div> </div> </div> </div> </div> <div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalAtendimentoLabel" aria-hidden="true">
+        </div>
+
+        <div class="info-section mt-5 d-grid">
+          <a [routerLink]="['/alunos/editar', aluno.id]" class="btn btn-primary btn-lg">
+            <i class="bi bi-pencil-fill me-2"></i> Editar Cadastro Completo
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalAtendimentoLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <app-atendimento-form
       *ngIf="alunoId"

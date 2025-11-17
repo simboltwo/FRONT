@@ -1,34 +1,58 @@
-<div class="dashboard-page animate-fadeIn">
+<div class="inicio-page animate-fadeIn">
 
-  <div id="graphCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div id="graphCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
       <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
     </div>
 
     <div class="carousel-inner">
 
       <div class="carousel-item active">
         <div class="carousel-content-wrapper slide-kpi">
-          <div class="card stat-card">
-            <div class="card-body">
-              <div class="stat-icon icon-alunos">
-                <i class="bi bi-people-fill"></i>
-              </div>
-              <div class="stat-content">
-                <h6 class="stat-title">Total de Alunos</h6>
-                <span class="stat-value">{{ (totalAlunos$ | async) || 0 }}</span>
-              </div>
-            </div>
-            <a routerLink="/alunos" class="card-footer-link">
-              Ver Alunos <i class="bi bi-arrow-right-short"></i>
-            </a>
+          <div class="stat-icon icon-alunos">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="stat-content">
+            <h6 class="stat-title">Total de Alunos</h6>
+            <span class="stat-value">{{ (totalAlunos$ | async) || 0 }}</span>
+          </div>
+          <a routerLink="/alunos" class="stat-footer-link">
+            Ver Alunos <i class="bi bi-arrow-right-short"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-content-wrapper slide-kpi">
+          <div class="stat-icon icon-agendados">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+          <div class="stat-content">
+            <h6 class="stat-title">Atendimentos Agendados</h6>
+            <span class="stat-value">{{ (totalAgendados$ | async) || 0 }}</span>
           </div>
         </div>
       </div>
+
       <div class="carousel-item">
-        <div class="carousel-content-wrapper">
+        <div class="carousel-content-wrapper slide-kpi">
+          <div class="stat-icon icon-realizados">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <div class="stat-content">
+            <h6 class="stat-title">Atendimentos Realizados</h6>
+            <span class="stat-value">{{ (totalRealizados$ | async) || 0 }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="carousel-content-wrapper slide-graph">
           <div class="card h-100">
             <div class="card-header">
               Alunos por Diagnóstico
@@ -36,10 +60,7 @@
             <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingDiag">
               <div *ngIf="diagnosticos.length > 0; else noDataDiag">
                 <div class="pie-chart-container">
-                  <div class="pie-chart" [style.background]="diagnosticoChartStyle">
-                    <div class="pie-chart-center">
-                      </div>
-                  </div>
+                  <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
                 </div>
                 <div class="pie-chart-legend">
                   <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
@@ -59,7 +80,7 @@
       </div>
 
       <div class="carousel-item">
-        <div class="carousel-content-wrapper">
+        <div class="carousel-content-wrapper slide-graph">
           <div class="card h-100">
             <div class="card-header">
               Alunos por Curso
@@ -87,14 +108,25 @@
     </div>
   </div>
 
+  <div class="summary-section">
+    <div class="container-fluid">
+      <h2 class="summary-title">Gestão e Acolhimento.</h2>
+      <p class="summary-text">
+        O sistema de gestão do NAAPI centraliza as informações vitais dos alunos,
+        permitindo um acompanhamento individualizado e eficiente.
+        Visualize históricos, diagnósticos e acesse relatórios com facilidade.
+      </p>
+    </div>
+  </div>
 
   <div class="container-fluid mt-4 mb-5">
     <div class="vitrine-header">
-      <h2>Alunos Atendidos</h2>
-      <a routerLink="/alunos">Ver todos</a>
+      <h2>Acompanhamento Prioritário</h2>
     </div>
 
-    <app-aluno-list></app-aluno-list>
+    <app-aluno-vitrine></app-aluno-vitrine>
+
+    <a routerLink="/alunos" class="ver-todos-link">Ver todos os alunos</a>
   </div>
 
 </div>

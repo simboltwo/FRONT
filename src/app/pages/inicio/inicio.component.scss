@@ -1,0 +1,241 @@
+/* src/app/pages/inicio/inicio.component.scss */
+@import '../../styles/modern-theme.scss';
+@import '../../styles/chart-styles.scss';
+
+/* Oculta a UI do app-aluno-list (Toolbar, Header, FAB) */
+:host ::ng-deep app-aluno-list .page-header-container,
+:host ::ng-deep app-aluno-list .page-toolbar,
+:host ::ng-deep app-aluno-list .fab-add-button {
+  display: none;
+}
+:host ::ng-deep app-aluno-list .aluno-list-page {
+  animation: none;
+}
+:host ::ng-deep app-aluno-list .page-container {
+  padding-top: 0;
+  margin-top: 0;
+}
+
+
+/* ==============================================
+ * Carrossel (Fundo por Slide)
+ * ============================================== */
+
+#graphCarousel {
+  margin-bottom: 0;
+  background-color: var(--cor-fundo-card); /* Fundo padrão branco */
+  border-bottom: 1px solid var(--cor-borda);
+  color: var(--cor-texto); /* Texto padrão preto */
+
+  /* Indicadores */
+  .carousel-indicators [data-bs-target] {
+    background-color: #ccc;
+  }
+  .carousel-indicators .active {
+    background-color: var(--cor-texto);
+  }
+  .carousel-indicators {
+    bottom: 20px;
+  }
+  .carousel-item {
+    height: 450px;
+  }
+
+  .carousel-content-wrapper {
+    padding-top: 70px; /* MUDANÇA: Apenas a altura da navbar */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    height: 100%; /* Ocupa os 450px */
+
+    /* MUDANÇA: O .card agora tem a altura correta */
+    .card {
+      /* Ocupa 100% da altura restante DENTRO do wrapper (450px - 70px) */
+      height: calc(100% - 70px);
+      background-color: transparent;
+      border: none;
+    }
+
+    /* Slides de KPI (Fundo Azul Gradiente) */
+    &.slide-kpi {
+      background-color: var(--cor-primaria);
+      background-image: linear-gradient(30deg, var(--cor-primaria), var(--cor-primaria-hover));
+      color: #fff;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      /* O padding-top já está no wrapper, não precisamos de altura calculada */
+      .card {
+        height: auto;
+      }
+    }
+
+    /* Slides de Gráfico (Fundo Branco) */
+    &.slide-graph {
+      background-color: var(--cor-fundo-card);
+      color: var(--cor-texto);
+
+      .card {
+        border: none; /* MUDANÇA: Remove a borda feia */
+        background-color: var(--cor-fundo-card);
+      }
+      .card-header {
+         color: var(--cor-texto);
+         /* MUDANÇA: Remove a borda do header */
+         border-bottom: none !important;
+         text-align: center;
+         font-family: 'Open Sans', sans-serif;
+         font-weight: 600;
+         font-size: 0.9rem;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+      }
+      .bar-label { color: var(--cor-texto); }
+      .legend-label { color: var(--cor-texto); }
+      .legend-value { color: var(--cor-texto-suave); }
+    }
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    display: none;
+  }
+}
+
+/* ==============================================
+ * Estilo dos KPIs (Sem .card)
+ * ============================================== */
+/* MUDANÇA: O .stat-card não existe mais, aplicamos no .slide-kpi */
+.slide-kpi {
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+
+    &.icon-alunos {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    &.icon-agendados {
+      background-color: var(--cor-aviso);
+      color: var(--cor-texto);
+    }
+    &.icon-realizados {
+      background-color: var(--cor-sucesso);
+      color: #fff;
+    }
+  }
+  .stat-title {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .stat-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+  }
+  .stat-footer-link {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff !important;
+    text-decoration: none;
+    margin-top: 1.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+
+/* ==================================
+ * Secção de Resumo (Tipografia)
+ * ==================================
+*/
+.summary-section {
+  background-color: var(--cor-primaria-suave);
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--cor-borda);
+}
+.summary-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.75rem;
+  color: var(--cor-texto);
+  margin-bottom: 1rem;
+}
+.summary-text {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.1rem;
+  color: var(--cor-texto-suave);
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ==================================
+ * Vitrine de Alunos (Estilo Hering)
+ * ==================================
+*/
+.vitrine-header {
+  border-bottom: 1px solid var(--cor-borda);
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
+  margin-top: 3.5rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  text-align: center;
+
+  h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--cor-texto);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  a { display: none; }
+}
+
+/* Link "Ver Todos" (abaixo do grid) */
+.ver-todos-link {
+  display: block;
+  text-align: center;
+  margin: 2.5rem 0 3rem 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--cor-link);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    color: var(--cor-primaria-hover);
+  }
+}
+
+/* Importa os estilos dos cards de aluno */
+@import '../../styles/aluno-card.scss';

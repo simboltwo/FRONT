@@ -34,7 +34,7 @@ export class AlunoFormComponent implements OnInit {
   protected errorMessage: string | null = null;
 
   // Para o Upload
-  protected previewUrl: string | ArrayBuffer | null = "https://via.placeholder.com/150.png?text=Preview";
+  protected previewUrl: string | ArrayBuffer | null = null;
   protected currentFotoUrl: string | null = null;
 
   // Dados
@@ -127,7 +127,7 @@ export class AlunoFormComponent implements OnInit {
 
         if (aluno.foto) {
           this.currentFotoUrl = aluno.foto;
-          this.previewUrl = aluno.foto;
+          this.previewUrl = null;
         }
 
         this.isLoading = false;
@@ -234,7 +234,7 @@ export class AlunoFormComponent implements OnInit {
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.previewUrl = reader.result;
+        this.previewUrl = reader.result; // Isto irá ativar o *ngIf no HTML
       };
       reader.readAsDataURL(file);
     }

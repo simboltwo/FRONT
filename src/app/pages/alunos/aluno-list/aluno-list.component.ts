@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core'; // REMOVIDO: AfterViewInit
+// src/app/pages/alunos/aluno-list/aluno-list.component.ts
+import { Component, OnInit, inject, Input, ViewChild, ElementRef, numberAttribute } from '@angular/core'; // MUDANÇA: Adiciona 'numberAttribute'
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Observable, BehaviorSubject, switchMap, startWith, combineLatest, map, tap } from 'rxjs';
 import { Aluno, Curso, Diagnostico } from '../../../core/models/aluno.model';
 import { AlunoService, AlunoFilter } from '../../../core/services/aluno.service';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CursoService, DiagnosticoService } from '../../../core/services/api.service';
 
 @Component({
@@ -14,23 +15,25 @@ import { CursoService, DiagnosticoService } from '../../../core/services/api.ser
   templateUrl: './aluno-list.component.html',
   styleUrls: ['./aluno-list.component.scss']
 })
-// REMOVIDO: AfterViewInit
 export class AlunoListComponent implements OnInit {
+
+  @Input() filterPrioridade: 'Alta' | 'Média' | 'Baixa' | null = null;
+
+  // --- INÍCIO DA CORREÇÃO ---
+  /** Converte o input (que é uma string do HTML) para um número */
+  @Input({ transform: numberAttribute }) limit: number | null = null;
+  // --- FIM DA CORREÇÃO ---
+
+  @Input() showBanner: boolean = true;
+
+  // ... (o resto do componente permanece exatamente o mesmo)
+
   // Serviços
   private alunoService = inject(AlunoService);
-  private cursoService = inject(CursoService);
+  private cursoService = inject(DiagnosticoService);
   private diagnosticoService = inject(DiagnosticoService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
-  // MUDANÇA: Usando um setter para o ViewChild (mais robusto)
-  private carouselTrackEl!: HTMLDivElement;
-  @ViewChild('carouselTrack') set carouselTrackRef(el: ElementRef<HTMLDivElement> | undefined) {
-    if (el) {
-      // Assim que o Angular encontra o #carouselTrack, ele define a variável
-      this.carouselTrackEl = el.nativeElement;
-    }
-  }
 
   // Observables para os dados
   protected alunos$!: Observable<Aluno[]>;
@@ -71,7 +74,6 @@ export class AlunoListComponent implements OnInit {
         return this.alunoService.findAll(filterParams);
       }),
       map(alunos => {
-        // (Lógica de filtro e sort)
         const { cursoIds, diagnosticoIds } = this.filterForm.value;
         let alunosFiltrados = [...alunos];
 
@@ -80,30 +82,29 @@ export class AlunoListComponent implements OnInit {
             cursoIds.includes(aluno.curso.id)
           );
         }
-
         if (diagnosticoIds && diagnosticoIds.length > 0) {
           alunosFiltrados = alunosFiltrados.filter(aluno =>
             aluno.diagnosticos.some(diag => diagnosticoIds.includes(diag.id))
           );
         }
 
+        if (this.filterPrioridade) {
+          alunosFiltrados = alunosFiltrados.filter(a => a.prioridade === this.filterPrioridade);
+        }
+
         const sortValue = this.filterForm.value.sort;
-        return this.sortAlunos(alunosFiltrados, sortValue || 'nome-asc');
+        alunosFiltrados = this.sortAlunos(alunosFiltrados, sortValue || 'nome-asc');
+
+        if (this.limit) {
+          alunosFiltrados = alunosFiltrados.slice(0, this.limit);
+        }
+
+        return alunosFiltrados;
       }),
       tap(alunos => this.updateAlunoCount(alunos.length))
     );
 
     this.alunosCount$ = this.alunos$.pipe(map(alunos => alunos.length));
-  }
-
-  // REMOVIDO: ngAfterViewInit()
-
-  // Esta função agora funcionará
-  protected scrollCarousel(direction: number): void {
-    if (this.carouselTrackEl) {
-      const scrollAmount = this.carouselTrackEl.clientWidth * 0.8;
-      this.carouselTrackEl.scrollLeft += scrollAmount * direction;
-    }
   }
 
   private updateAlunoCount(count: number): void {
@@ -121,7 +122,7 @@ export class AlunoListComponent implements OnInit {
     }
   }
 
-  // --- Funções para Checkbox ---
+  // --- Funções para Checkbox de Filtro ---
   onCursoChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     const id = Number(target.value);
@@ -138,12 +139,6 @@ export class AlunoListComponent implements OnInit {
   isCursoChecked(id: number): boolean {
     const A_ids: number[] = this.filterForm.get('cursoIds')?.value || [];
     return A_ids.includes(id);
-  }
-
-  getCursoSelecionadoTexto(): string {
-    const count = this.filterForm.get('cursoIds')?.value?.length || 0;
-    if (count === 0) return 'Curso';
-    return `Curso (${count})`;
   }
 
   onDiagnosticoChange(event: Event): void {
@@ -164,20 +159,13 @@ export class AlunoListComponent implements OnInit {
     return A_ids.includes(id);
   }
 
-  getDiagnosticoSelecionadoTexto(): string {
-    const count = this.filterForm.get('diagnosticoIds')?.value?.length || 0;
-    if (count === 0) return 'Diagnóstico';
-    return `Diagnóstico (${count})`;
-  }
-
   getSortSelecionadoNome(): string {
     const value = this.filterForm.get('sort')?.value;
     return this.sortOptions.find(opt => opt.value === value)?.label || 'Ordenar por';
   }
 
   clearFilters(): void {
-    this.filterForm.reset({
-      nome: '',
+    this.filterForm.patchValue({
       cursoIds: [],
       diagnosticoIds: [],
       sort: 'nome-asc'
@@ -206,12 +194,11 @@ export class AlunoListComponent implements OnInit {
       case 'TDM': return 'diag-tdm';
       case 'TAG': return 'diag-tag';
       case 'TDAH': return 'diag-tdah';
-      // Adicione outros casos aqui
       default: return 'diag-default';
     }
   }
 
-  // --- Navegação e Ações ---
+  // --- Navegação e Ações ---//
   deleteAluno(event: MouseEvent, aluno: Aluno): void {
     event.stopPropagation();
     if (confirm(`Tem a certeza de que deseja excluir o(a) aluno(a) ${aluno.nome}? Esta ação não pode ser desfeita.`)) {
@@ -229,6 +216,11 @@ export class AlunoListComponent implements OnInit {
 
   viewAluno(aluno: Aluno): void {
     this.router.navigate(['/alunos', 'detalhe', aluno.id]);
+  }
+
+  protected atenderAluno(event: MouseEvent, aluno: Aluno): void {
+    event.stopPropagation();
+    this.viewAluno(aluno);
   }
 
   goToNewAlunoPage(): void {

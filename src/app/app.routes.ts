@@ -1,3 +1,4 @@
+// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './layout/layout.component';
@@ -8,27 +9,37 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
   },
   {
-    // Rota "pai" que usa o LayoutComponent
     path: '',
     component: LayoutComponent,
     canActivate: [authGuard],
     children: [
+      // --- INÍCIO DA MUDANÇA ---
       {
-        path: 'dashboard',
-        title: 'Dashboard',
-        loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+        path: 'inicio', // MUDANÇA: de 'dashboard'
+        title: 'Início',  // MUDANÇA: de 'Dashboard'
+        // MUDANÇA: Aponta para o novo componente
+        loadComponent: () => import('./pages/inicio/inicio.component').then(m => m.InicioComponent)
       },
+      // --- FIM DA MUDANÇA ---
       {
         path: 'alunos',
-        // As rotas de alunos agora são "filhas" do layout
         loadChildren: () => import('./pages/alunos.routes').then(m => m.ALUNOS_ROUTES)
       },
-      // (Adicionar rotas futuras para /cursos, /diagnosticos, /relatorios aqui)
+      {
+        path: 'cadastros',
+        loadChildren: () => import('./pages/cadastros.routes').then(m => m.CADASTROS_ROUTES)
+      },
+      {
+        path: 'relatorios',
+        loadChildren: () => import('./pages/relatorios.routes').then(m => m.RELATORIOS_ROUTES)
+      },
+      // --- INÍCIO DA MUDANÇA ---
       {
         path: '',
-        redirectTo: 'dashboard', // MUDANÇA: O padrão agora é o dashboard
+        redirectTo: 'inicio', // MUDANÇA: O padrão agora é 'inicio'
         pathMatch: 'full'
       }
+      // --- FIM DA MUDANÇA ---
     ]
   },
   {

@@ -1,0 +1,86 @@
+<div class="admin-page animate-fadeIn">
+
+  <div class="page-container">
+    <div class="page-header-container bg-color-10">
+      <h2 class="page-header-title">CADASTROS</h2>
+    </div>
+  </div>
+
+  <div class="admin-layout-container">
+    <div class="row g-4">
+
+      <div class="col-lg-4">
+        <div class="card card-list-container">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            Gerir Diagnósticos
+            <button class="btn btn-sm btn-outline-primary" (click)="clearForm()" title="Novo Diagnóstico">
+              <i class="bi bi-plus-lg"></i> Novo
+            </button>
+          </div>
+          <div class="list-group list-group-flush">
+            <ng-container *ngIf="(diagnosticos$ | async) as list; else loading">
+              <a *ngFor="let item of list"
+                 class="list-group-item list-group-item-action"
+                 [class.active]="item.id === selectedDiagnosticoId"
+                 (click)="selectDiagnostico(item)">
+                {{ item.nome }}
+                <span *ngIf="item.sigla" class="text-muted small">({{ item.sigla }})</span>
+              </a>
+            </ng-container>
+            <ng-template #loading>
+              <div class="list-group-item text-muted">Carregando...</div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="card card-form-container">
+          <div class="card-header">
+            {{ isEditMode ? 'Editar Diagnóstico' : 'Novo Diagnóstico' }}
+          </div>
+          <div class="card-body">
+            <form [formGroup]="crudForm" (ngSubmit)="onSubmit()">
+
+              <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+              <div class="mb-4">
+                <label for="nome" class="form-label">Nome *</label>
+                <input type="text" id="nome" class="form-control" formControlName="nome"
+                       [class.is-invalid]="crudForm.get('nome')!.invalid && crudForm.get('nome')!.touched">
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <label for="sigla" class="form-label">Sigla (Ex: TDAH)</label>
+                  <input type="text" id="sigla" class="form-control" formControlName="sigla">
+                </div>
+                <div class="col-md-6 mb-4">
+                  <label for="cid" class="form-label">CID</label>
+                  <input type="text" id="cid" class="form-control" formControlName="cid">
+                </div>
+              </div>
+
+              <div class="card-footer d-flex justify-content-between">
+                <div>
+                  <button type="button" class="btn btn-danger"
+                          *ngIf="isEditMode" (click)="onDelete()">
+                    Excluir
+                  </button>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-outline-secondary me-2" (click)="clearForm()">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" [disabled]="crudForm.invalid">
+                    Salvar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

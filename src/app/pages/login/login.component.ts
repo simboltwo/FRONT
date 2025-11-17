@@ -36,8 +36,8 @@ export class LoginComponent {
     this.authService.login(email!, senha!).subscribe({
       next: (success) => {
         if (success) {
-          // Sucesso! Navega para a página principal
-          this.router.navigate(['/alunos']);
+          // --- MUDANÇA: Redireciona para /inicio (que é o padrão '/') ---
+          this.router.navigate(['/inicio']);
         } else {
           // Falha (controlada pelo service)
           this.errorMessage = "Email ou senha inválidos.";

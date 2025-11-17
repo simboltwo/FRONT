@@ -19,25 +19,27 @@
 
   /* Título Principal */
   .page-header-title {
-  color: #FFFFFF;
-  font-size: 30px;
-  line-height: 32px;
-  vertical-align: baseline;
-  letter-spacing: 5px;
-  word-spacing: 0px;
-  margin: 0px;
-  padding: 0px;
-  font-kerning: auto;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-variant: normal;
-  font-stretch: 100%;
-  font-weight: 700;
-  text-align: center;
+    font-family: 'Poppins', sans-serif; /* MUDANÇA */
+    color: #FFFFFF;
+    font-size: 30px;
+    line-height: 32px;
+    vertical-align: baseline;
+    letter-spacing: 5px;
+    font-weight: 700; /* Poppins Bold */
+    text-align: center;
+    word-spacing: 0px;
+    margin: 0px;
+    padding: 0px;
+    font-kerning: auto;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variant: normal;
+    font-stretch: 100%;
 }
 
   /* Descrição */
   .page-header-desc {
+    font-family: 'Raleway', sans-serif; /* MUDANÇA */
     font-size: 1rem;
     font-weight: 400;
     opacity: 0.9;

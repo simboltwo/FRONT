@@ -1,0 +1,23 @@
+/* src/app/pages/admin/usuario-admin/usuario-admin.component.scss */
+@import '../admin-layout.scss';
+
+/* Estilo específico para a lista de checkboxes */
+.checkbox-container {
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Duas colunas */
+  gap: 0.5rem;
+
+  .form-check {
+    padding: 0.6rem 0.75rem;
+    border-radius: 4px;
+    &:hover {
+      background-color: var(--cor-primaria-suave);
+    }
+  }
+}

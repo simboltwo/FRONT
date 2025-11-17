@@ -1,0 +1,106 @@
+<div class="admin-page animate-fadeIn">
+
+  <div class="page-container">
+    <div class="page-header-container bg-color-5"> <h2 class="page-header-title">ADMINISTRAÇÃO</h2>
+    </div>
+  </div>
+
+  <div class="admin-layout-container">
+    <div class="row g-4">
+
+      <div class="col-lg-4">
+        <div class="card card-list-container">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            Gerir Usuários
+            <button class="btn btn-sm btn-outline-primary" (click)="clearForm()" title="Novo Usuário">
+              <i class="bi bi-plus-lg"></i> Novo
+            </button>
+          </div>
+          <div class="list-group list-group-flush">
+            <ng-container *ngIf="(usuarios$ | async) as list; else loading">
+              <a *ngFor="let item of list"
+                 class="list-group-item list-group-item-action"
+                 [class.active]="item.id === selectedUsuarioId"
+                 (click)="selectUsuario(item)">
+                {{ item.nome }}
+                <span class="text-muted small d-block">{{ item.email }}</span>
+              </a>
+            </ng-container>
+            <ng-template #loading>
+              <div class="list-group-item text-muted">Carregando...</div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="card card-form-container">
+          <div class="card-header">
+            {{ isEditMode ? 'Editar Usuário' : 'Novo Usuário' }}
+          </div>
+          <div class="card-body">
+            <form [formGroup]="crudForm" (ngSubmit)="onSubmit()">
+
+              <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <label for="nome" class="form-label">Nome *</label>
+                  <input type="text" id="nome" class="form-control" formControlName="nome"
+                         [class.is-invalid]="crudForm.get('nome')!.invalid && crudForm.get('nome')!.touched">
+                </div>
+                <div class="col-md-6 mb-4">
+                  <label for="email" class="form-label">Email *</label>
+                  <input type="email" id="email" class="form-control" formControlName="email"
+                         [class.is-invalid]="crudForm.get('email')!.invalid && crudForm.get('email')!.touched">
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="senha" class="form-label">
+                  Senha {{ isEditMode ? '(Deixe em branco para não alterar)' : '*' }}
+                </label>
+                <input type="password" id="senha" class="form-control" formControlName="senha"
+                       [class.is-invalid]="crudForm.get('senha')!.invalid && crudForm.get('senha')!.touched">
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label">Papéis *</label>
+                <div class="checkbox-container">
+                  <ng-container *ngIf="(papeis$ | async) as papeisList">
+                    <div *ngFor="let papel of papeisList" class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                             [value]="papel.id" [id]="'papel-' + papel.id"
+                             [checked]="isPapelChecked(papel.id)"
+                             (change)="onPapelChange($event)">
+                      <label class="form-check-label" [for]="'papel-' + papel.id">
+                        {{ papel.authority | slice:5 }} </label>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+
+
+              <div class="card-footer d-flex justify-content-between">
+                <div>
+                  <button type="button" class="btn btn-danger"
+                          *ngIf="isEditMode" (click)="onDelete()">
+                    Excluir
+                  </button>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-outline-secondary me-2" (click)="clearForm()">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="btn btn-primary" [disabled]="crudForm.invalid">
+                    Salvar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

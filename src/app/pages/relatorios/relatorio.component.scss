@@ -1,0 +1,30 @@
+/* src/app/pages/relatorios/relatorio.component.scss */
+
+/* Importa os estilos partilhados de tema e gráficos */
+@import '../../styles/modern-theme.scss';
+@import '../../styles/chart-styles.scss';
+
+/* Container principal que usa o padding do page-container */
+.chart-layout-container {
+  width: 100%;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 3rem;
+}
+
+/* Garante que os cards de gráfico tenham uma altura mínima */
+.card-body {
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-header .btn-sm {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}

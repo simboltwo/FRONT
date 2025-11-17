@@ -1,0 +1,69 @@
+<div class="relatorio-page animate-fadeIn">
+
+  <div class="page-container">
+    <div class="page-header-container bg-color-7"> <h2 class="page-header-title">RELATÓRIOS</h2>
+    </div>
+
+    <div class="chart-layout-container">
+      <div class="row g-4">
+
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              Alunos por Diagnóstico
+              <button class="btn btn-sm btn-outline-primary" (click)="downloadDiagnosticoCSV()">
+                <i class="bi bi-download me-2"></i> Exportar CSV
+              </button>
+            </div>
+            <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loading">
+              <div *ngIf="diagnosticos.length > 0; else noData">
+                <div class="pie-chart-container">
+                  <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
+                </div>
+                <div class="pie-chart-legend">
+                  <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
+                    <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
+                    <span class="legend-label" [title]="item.diagnosticoNome">{{ item.diagnosticoNome }}</span>
+                    <span class="legend-value">{{ item.totalAlunos }}</span>
+                  </div>
+                </div>
+              </div>
+              <ng-template #noData><p class="text-muted text-center m-5">Sem dados de diagnósticos.</p></ng-template>
+            </div>
+            <ng-template #loading>
+              <div class="card-body text-center p-5"><span class="spinner-border spinner-border-sm"></span></div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              Alunos por Curso
+              <button class="btn btn-sm btn-outline-primary" (click)="downloadCursoCSV()">
+                <i class="bi bi-download me-2"></i> Exportar CSV
+              </button>
+            </div>
+            <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loading">
+              <div *ngIf="cursos.length > 0; else noData">
+                <div *ngFor="let item of cursos" class="chart-bar-item">
+                  <span class="bar-label">{{ item.cursoNome }}</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" [style.width]="getBarPercentage(item.totalAlunos, maxCursoCount)">
+                      <span class="bar-value">{{ item.totalAlunos }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ng-template #noData><p class="text-muted text-center m-0">Sem dados de cursos.</p></ng-template>
+            </div>
+            <ng-template #loading>
+              <div class="card-body text-center p-3"><span class="spinner-border spinner-border-sm"></span></div>
+            </ng-template>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

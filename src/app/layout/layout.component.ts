@@ -1,8 +1,12 @@
+// src/app/layout/layout.component.ts
+
 import { Component, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
-import { Observable } from 'rxjs';
+// --- INÍCIO DA MUDANÇA: Importar 'map' ---
+import { Observable, map } from 'rxjs';
+// --- FIM DA MUDANÇA ---
 import { Usuario } from '../core/models/usuario.model';
 import * as bootstrap from 'bootstrap';
 import { AlunoListComponent } from "../pages/alunos/aluno-list/aluno-list.component";
@@ -16,7 +20,7 @@ import { AlunoListComponent } from "../pages/alunos/aluno-list/aluno-list.compon
     RouterLink,
     RouterLinkActive,
     AlunoListComponent
-],
+  ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
@@ -25,24 +29,53 @@ export class LayoutComponent {
   protected router = inject(Router);
   protected currentUser$: Observable<Usuario | null>;
 
-  // Variável para controlar o estado da navbar
-  protected isNavbarScrolled = false;
+  // --- INÍCIO DA MUDANÇA: Observables de Permissão ---
+  protected isCoordenador$: Observable<boolean>;
+  protected isMembroOuCoordenador$: Observable<boolean>;
+  protected canViewRelatorios$: Observable<boolean>;
+  protected canEditAlunos$: Observable<boolean>;
+  // --- FIM DA MUDANÇA ---
+
 
   constructor() {
     this.currentUser$ = this.authService.currentUser$;
+
+    // --- INÍCIO DA MUDANÇA: Definir a lógica dos papéis ---
+
+    // 1. O utilizador é Coordenador? (Acesso máximo)
+    this.isCoordenador$ = this.currentUser$.pipe(
+      map(user => user?.papeis.some(p => p.authority === 'ROLE_COORDENADOR_NAAPI') || false)
+    );
+
+    // 2. O utilizador pode gerir Cadastros? (Coordenador OU Membro Técnico)
+    this.isMembroOuCoordenador$ = this.currentUser$.pipe(
+      map(user => user?.papeis.some(p =>
+        p.authority === 'ROLE_COORDENADOR_NAAPI' ||
+        p.authority === 'ROLE_MEMBRO_TECNICO'
+      ) || false)
+    );
+
+    // 3. O utilizador pode ver Relatórios?
+    this.canViewRelatorios$ = this.currentUser$.pipe(
+      map(user => user?.papeis.some(p =>
+        p.authority === 'ROLE_COORDENADOR_NAAPI' ||
+        p.authority === 'ROLE_MEMBRO_TECNICO' ||
+        p.authority === 'ROLE_ESTAGIARIO_NAAPI' ||
+        p.authority === 'ROLE_COORDENADOR_CURSO'
+      ) || false)
+    );
+
+    // 4. O utilizador pode editar Alunos? (Necessário para o link "Novo Aluno")
+    this.canEditAlunos$ = this.currentUser$.pipe(
+      map(user => user?.papeis.some(p =>
+        p.authority === 'ROLE_COORDENADOR_NAAPI' ||
+        p.authority === 'ROLE_MEMBRO_TECNICO' ||
+        p.authority === 'ROLE_ESTAGIARIO_NAAPI'
+      ) || false)
+    );
+    // --- FIM DA MUDANÇA ---
   }
 
-  // Listener que observa o scroll da janela (CORRIGIDO)
-  @HostListener('window:scroll', []) // Sem '$event'
-  onWindowScroll() { // Sem o parâmetro 'event'
-    // Verifica a posição do scroll
-    const scrollOffset = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-
-    // Se o scroll for maior que 10px, ativa a classe
-    this.isNavbarScrolled = scrollOffset > 10;
-  }
-
-  // Ação de Logout
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

@@ -1,0 +1,123 @@
+/* src/app/styles/aluno-card.scss */
+@import 'modern-theme.scss'; // Certifique-se de importar o tema principal
+
+.aluno-card {
+  border: none !important;
+  background-color: #fff;
+  border-radius: var(--raio-borda);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  cursor: pointer;
+  box-shadow: var(--sombra-sm);
+
+  &:hover {
+    box-shadow: var(--sombra-lg);
+  }
+}
+
+.card-img-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4; /* Proporção Retrato (Largura / Altura) */
+  overflow: hidden;
+  background-color: var(--cor-primaria-suave); /* Fundo para quando a imagem não carrega */
+
+  .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem preencha, cortando se necessário */
+    transition: all 0.4s ease;
+  }
+}
+
+.aluno-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* Ícone de Prioridade Padrão - Será sobrescrito no componente específico */
+.icon-prioridade {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1.3rem;
+  color: var(--cor-perigo);
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: var(--sombra-sm);
+}
+
+@keyframes pulse-alta {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Corpo do Card */
+.card-body {
+  padding: 1rem;
+  text-align: left;
+}
+
+.card-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--cor-texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.25rem;
+}
+
+.card-matricula, .card-curso {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+.card-curso {
+  margin-bottom: 0.75rem;
+}
+
+.card-diagnosticos {
+  .badge-diag {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--cor-texto-suave);
+    background-color: var(--cor-primaria-suave);
+    padding: 0.3em 0.6em;
+    border-radius: 4px;
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+    display: inline-block;
+  }
+}
+
+/* Ações do Card - Padrão, pode ser sobrescrito */
+.card-hover-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  padding: 1rem;
+  padding-top: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease-out;
+  z-index: 3;
+}

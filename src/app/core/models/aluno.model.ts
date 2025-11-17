@@ -67,7 +67,7 @@ export interface AlunoInsert {
   // Etapa 2
   matricula: string;
   prioridade: string; // "Baixa", "Média", "Alta"
-  provaOutroEspaco: boolean;
+  provaOutroEspaco?: boolean;
   processoSipac?: string;
   cursoId: number;
   turmaId: number;

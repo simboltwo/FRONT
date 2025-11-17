@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg main-navbar" [class.navbar-scrolled]="isNavbarScrolled">
+<nav class="navbar navbar-expand-lg main-navbar">
   <div class="container-fluid">
 
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#naapiOffcanvasMenu" aria-controls="naapiOffcanvasMenu">
@@ -6,18 +6,17 @@
     </button>
 
     <div class="navbar-brand-container">
-      <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
-        <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="navbar-logo">
-
+      <a class="navbar-brand d-flex align-items-center" routerLink="/inicio">
+        <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="navbar-logo logo-positivo">
         <span class="naapi-logo-text">NAAPI</span>
       </a>
     </div>
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="naapiOffcanvasMenu" aria-labelledby="naapiOffcanvasMenuLabel">
       <div class="offcanvas-header">
-        <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard" (click)="closeOffcanvas()">
+        <a class="navbar-brand d-flex align-items-center" routerLink="/inicio" (click)="closeOffcanvas()">
           <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="navbar-logo">
-           <span class="naapi-logo-text">NAAPI</span>
+           <span class="naapi-logo-text logo-text-mobile">NAAPI</span>
         </a>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -25,26 +24,56 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav offcanvas-nav-links d-lg-none">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeOffcanvas()">
-              Dashboard <i class="bi bi-chevron-right"></i>
+            <a class="nav-link" routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeOffcanvas()">
+              Início
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/alunos" routerLinkActive="active" (click)="closeOffcanvas()">
-              Alunos <i class="bi bi-chevron-right"></i>
+              Alunos
             </a>
           </li>
-           <li class="nav-item">
+
+           <li class="nav-item nav-item-submenu" *ngIf="isMembroOuCoordenador$ | async">
+            <a class="nav-link nav-link-toggle"
+               data-bs-toggle="collapse"
+               href="#collapseCadastrosMobile"
+               role="button"
+               aria-expanded="false"
+               aria-controls="collapseCadastrosMobile">
+              Cadastros
+              <i class="bi bi-chevron-down"></i> </a>
+            <div class="collapse" id="collapseCadastrosMobile">
+              <ul class="nav submenu-nav">
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/cadastros/diagnosticos" routerLinkActive="active" (click)="closeOffcanvas()">Diagnósticos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/cadastros/cursos" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Cursos</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/cadastros/turmas" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Turmas</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/cadastros/tipos-atendimento" routerLinkActive="active" (click)="closeOffcanvas()">Tipos de Atendimento</a>
+                </li>
+                <li class="nav-item" *ngIf="isCoordenador$ | async">
+                  <a class="nav-link" routerLink="/cadastros/usuarios" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Usuários</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item" *ngIf="canViewRelatorios$ | async">
             <a class="nav-link" routerLink="/relatorios" routerLinkActive="active" (click)="closeOffcanvas()">
-              Relatórios <i class="bi bi-chevron-right"></i>
+              Relatórios
             </a>
           </li>
           </ul>
-
         <ul class="navbar-nav ms-lg-4 d-none d-lg-flex">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-              Dashboard
+            <a class="nav-link" routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              Início
             </a>
           </li>
           <li class="nav-item">
@@ -52,45 +81,39 @@
               Alunos
             </a>
           </li>
-
-          <li class="nav-item dropdown dropdown-mega">
+          <li class="nav-item dropdown dropdown-mega" *ngIf="isMembroOuCoordenador$ | async">
             <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Cadastros <i class="bi bi-chevron-down small"></i>
+              Cadastros
             </a>
-
             <div class="dropdown-menu dropdown-menu-mega">
               <div class="container-fluid">
                 <div class="row">
-
                   <div class="col-lg-3">
                     <h6 class="dropdown-header">Alunos</h6>
                     <a class="dropdown-item" routerLink="/alunos" routerLinkActive="active">Listar Alunos</a>
-                    <a class="dropdown-item" routerLink="/alunos/novo" routerLinkActive="active">Novo Aluno</a>
+                    <a class="dropdown-item dropdown-item-special" routerLink="/alunos/novo" routerLinkActive="active" *ngIf="canEditAlunos$ | async">
+                      Novo Aluno
+                    </a>
                   </div>
-
                   <div class="col-lg-3">
                     <h6 class="dropdown-header">Acadêmico</h6>
-                    <a class="dropdown-item item-secondary-style" routerLink="/cursos" routerLinkActive="active">Gerenciar Cursos</a>
-                    <a class="dropdown-item item-secondary-style" routerLink="/turmas" routerLinkActive="active">Gerenciar Turmas</a>
+                    <a class="dropdown-item item-secondary-style" routerLink="/cadastros/cursos" routerLinkActive="active">Gerenciar Cursos</a>
+                    <a class="dropdown-item item-secondary-style" routerLink="/cadastros/turmas" routerLinkActive="active">Gerenciar Turmas</a>
                   </div>
-
                   <div class="col-lg-3">
                     <h6 class="dropdown-header">NAAPI</h6>
-                     <a class="dropdown-item" routerLink="/diagnosticos" routerLinkActive="active">Diagnósticos</a>
-                    <a class="dropdown-item item-secondary-style" routerLink="/tipos-atendimento" routerLinkActive="active">Tipos de Atendimento</a>
+                     <a class="dropdown-item" routerLink="/cadastros/diagnosticos" routerLinkActive="active">Diagnósticos</a>
+                    <a class="dropdown-item item-secondary-style" routerLink="/cadastros/tipos-atendimento" routerLinkActive="active">Tipos de Atendimento</a>
                   </div>
-
-                  <div class="col-lg-3 d-none d-lg-block">
+                  <div class="col-lg-3 d-none d-lg-block" *ngIf="isCoordenador$ | async">
                      <h6 class="dropdown-header">Administração</h6>
-                     <a class="dropdown-item item-secondary-style" routerLink="/usuarios" routerLinkActive="active">Gerenciar Usuários</a>
+                     <a class="dropdown-item item-secondary-style" routerLink="/cadastros/usuarios" routerLinkActive="active">Gerenciar Usuários</a>
                   </div>
-
                 </div>
               </div>
             </div>
           </li>
-
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="canViewRelatorios$ | async">
             <a class="nav-link" routerLink="/relatorios" routerLinkActive="active">
               Relatórios
             </a>
@@ -100,8 +123,7 @@
         <ul class="navbar-nav navbar-profile offcanvas-footer d-lg-none" *ngIf="currentUser$ | async as user">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle fs-5 me-2"></i>
-              <span><small>{{ user.nome }}</small></span>
+              <i class="bi bi-person fs-5 me-2"></i> <span><small>{{ user.nome }}</small></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="navbarUserDropdown">
               <li><a class="dropdown-item" (click)="logoutAndCloseOffcanvas()"><i class="bi bi-box-arrow-right me-2"></i> Sair</a></li>
@@ -114,8 +136,7 @@
     <ul class="navbar-nav navbar-profile d-none d-lg-flex" *ngIf="currentUser$ | async as user">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarUserDropdownDesktop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-person-circle fs-5 me-2"></i>
-          <span>
+          <i class="bi bi-person fs-5 me-2"></i> <span>
             <small>Bem-vindo,</small>
             {{ user.nome }}
           </span>

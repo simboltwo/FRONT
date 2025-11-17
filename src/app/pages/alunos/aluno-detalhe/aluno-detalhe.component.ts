@@ -1,20 +1,15 @@
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { Aluno } from '../../../core/models/aluno.model';
+import { BehaviorSubject, switchMap } from 'rxjs'; // MUDANÇA
+import { Aluno, AlunoInsert, Diagnostico } from '../../../core/models/aluno.model'; // MUDANÇA
 import { AlunoService } from '../../../core/services/aluno.service';
 
-// Importa os componentes de Atendimento
 import { AtendimentoForm } from '../../atendimentos/atendimento-form/atendimento-form.component';
 import { AtendimentoList } from '../../atendimentos/atendimento-list/atendimento-list.component';
-
-// Importe os outros componentes
 import { LaudoList } from '../../laudos/laudo-list/laudo-list.component';
 import { PeiList } from '../../peis/pei-list/pei-list.component';
 
-// MUDANÇA: Importar o Bootstrap para controlar o modal
 import * as bootstrap from 'bootstrap';
 
 @Component({
@@ -33,25 +28,83 @@ import * as bootstrap from 'bootstrap';
 })
 export class AlunoDetalheComponent implements OnInit {
   @ViewChild(AtendimentoList) private atendimentoListComponent!: AtendimentoList;
-  protected aluno$!: Observable<Aluno>;
-  protected alunoId!: number;
 
-  // MUDANÇA: Esta variável não é mais necessária
-  // protected showAtendimentoForm = false;
+  // MUDANÇA: 'aluno' agora é uma propriedade local, não um observable
+  protected aluno: Aluno | null = null;
+  protected alunoId!: number;
 
   private route = inject(ActivatedRoute);
   private alunoService = inject(AlunoService);
 
+  // MUDANÇA: Subject para forçar o recarregamento dos dados
+  private refresh$ = new BehaviorSubject<void>(undefined);
+
   ngOnInit(): void {
-    this.aluno$ = this.route.paramMap.pipe(
+    // A rota define o ID, e o refresh$ (ou o ID) recarrega os dados
+    this.route.paramMap.pipe(
       switchMap(params => {
         this.alunoId = +params.get('id')!;
-        return this.alunoService.findById(this.alunoId);
+        return this.refresh$.pipe(
+          switchMap(() => this.alunoService.findById(this.alunoId))
+        );
       })
-    );
+    ).subscribe(alunoData => {
+      this.aluno = alunoData;
+    });
   }
 
-  // MUDANÇA: Esta função agora fecha o modal
+  /**
+   * MUDANÇA: Método de Edição Inline
+   * Chamado pelas "bolinhas" e botões "Sim/Não"
+   */
+  protected updateAlunoField(field: 'prioridade' | 'provaOutroEspaco', value: any): void {
+    if (!this.aluno) return;
+
+    // 1. Otimismo: Atualiza a UI imediatamente
+    (this.aluno as any)[field] = value;
+
+    // 2. Cria o DTO de atualização a partir dos dados atuais
+    // (Usamos o modelo AlunoInsert que já criámos)
+    const alunoDTO: AlunoInsert = {
+      nome: this.aluno.nome,
+      nomeSocial: this.aluno.nomeSocial,
+      dataNascimento: this.aluno.dataNascimento,
+      cpf: this.aluno.cpf,
+      telefoneEstudante: this.aluno.telefoneEstudante,
+      matricula: this.aluno.matricula,
+      prioridade: this.aluno.prioridade,
+      provaOutroEspaco: this.aluno.provaOutroEspaco,
+      processoSipac: this.aluno.processoSipac,
+      cursoId: this.aluno.curso.id,
+      turmaId: this.aluno.turma.id,
+      diagnosticosId: this.aluno.diagnosticos.map((d: Diagnostico) => d.id),
+      anotacoesNaapi: this.aluno.anotacoesNaapi,
+      adaptacoesNecessarias: this.aluno.adaptacoesNecessarias,
+      necessidadesRelatoriosMedicos: this.aluno.necessidadesRelatoriosMedicos,
+    };
+
+    // 3. Cria o FormData (necessário pelo AlunoService)
+    const formData = new FormData();
+    formData.append('alunoDTO', new Blob([JSON.stringify(alunoDTO)], {
+      type: 'application/json'
+    }));
+
+    // 4. Chama o serviço de atualização
+    this.alunoService.updateWithFile(this.aluno.id, formData).subscribe({
+      next: (updatedAluno) => {
+        // 5. Atualiza os dados locais com a resposta (confirmação)
+        this.aluno = updatedAluno;
+        // (Aqui seria um bom local para um toast de "Salvo!")
+      },
+      error: (err) => {
+        console.error('Falha ao atualizar aluno:', err);
+        alert('Erro ao salvar. A página será recarregada para reverter a mudança.');
+        this.refresh$.next(); // Recarrega para reverter a mudança visual
+      }
+    });
+  }
+
+  // MUDANÇA: Atualiza o 'refresh$' ao salvar o atendimento
   onAtendimentoSalvo(): void {
     const modalElement = document.getElementById('modalAtendimento');
     if (modalElement) {
@@ -60,10 +113,10 @@ export class AlunoDetalheComponent implements OnInit {
         modal.hide();
       }
     }
-
-    // MUDANÇA: Chamar o método refresh() do componente filho
+    // Atualiza a lista de atendimentos E os dados do aluno
     if (this.atendimentoListComponent) {
       this.atendimentoListComponent.refresh();
     }
+    this.refresh$.next();
   }
 }

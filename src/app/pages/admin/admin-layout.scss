@@ -1,0 +1,49 @@
+/* src/app/pages/admin/_admin-layout.scss */
+@import '../../styles/modern-theme.scss';
+
+/* Container principal que usa o padding do page-container */
+.admin-layout-container {
+  width: 100%;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 3rem;
+}
+
+/* Garante que a lista tenha scroll em vez de esticar a página */
+.card-list-container {
+  max-height: 70vh;
+  .list-group {
+    overflow-y: auto;
+  }
+}
+
+/* Campos de formulário com borda normal (padrão do tema) */
+.card-form-container {
+  .form-control,
+  .form-select {
+    border: 1px solid var(--cor-borda) !important;
+    border-radius: var(--raio-borda) !important;
+    padding: 0.75rem 1rem;
+    background-color: var(--cor-fundo-card);
+  }
+  .form-control:focus,
+  .form-select:focus {
+    border-color: var(--cor-primaria) !important;
+  }
+}
+
+.card-footer {
+  background-color: var(--cor-primaria-suave);
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* Item ativo na lista */
+.list-group-item.active {
+  background-color: var(--cor-primaria-suave) !important;
+  color: var(--cor-primaria) !important;
+  border-color: var(--cor-primaria) !important;
+  border-left-width: 4px;
+  font-weight: 600;
+}

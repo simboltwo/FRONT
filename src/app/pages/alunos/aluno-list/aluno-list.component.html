@@ -1,185 +1,165 @@
 <div class="aluno-list-page animate-fadeIn">
 
-  <div class="page-container">
-
-  <div class="aluno-list-page animate-fadeIn">
-
-    <div class="page-header-container bg-color-2">
-      <h2 class="page-header-title">ALUNOS</h2>
-    </div>
-
-    </div>
-
-</div>
-
-  <div class="page-toolbar">
-    <div class="toolbar-count">
-      {{ (alunosCount$ | async) || 0 }} alunos encontrados.
-    </div>
-    <div class="toolbar-actions">
-      <div class="dropdown" [formGroup]="filterForm">
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-arrow-down-up me-1"></i> {{ getSortSelecionadoNome() }}
-        </button>
-        <ul class="dropdown-menu">
-          <li *ngFor="let opt of sortOptions">
-            <a class="dropdown-item" (click)="filterForm.get('sort')?.setValue(opt.value)">
-              {{ opt.label }}
-            </a>
-          </li>
-        </ul>
-      </div>
-      <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">
-        <i class="bi bi-funnel me-1"></i> Filtros
-      </button>
+  <div class="hero-banner" *ngIf="showBanner">
+    <div class="hero-banner-overlay"></div>
+    <div class="hero-banner-content">
+      <h1 class="hero-title">GESTÃO DE ALUNOS</h1>
+      <p class="hero-subtitle">Encontre, veja e acompanhe todos os alunos da instituição.</p>
     </div>
   </div>
 
+  <div class="page-container" [class.no-banner]="!showBanner">
 
-  <div class="carousel-container">
+    <div class="page-toolbar" [formGroup]="filterForm">
+      <div class="search-field">
+        <i class="bi bi-search"></i>
+        <input type="text"
+              class="form-control"
+              formControlName="nome"
+              placeholder="Quem você procura?">
+      </div>
 
-    <button (click)="scrollCarousel(-1)" class="carousel-arrow prev" title="Anterior">
-      <i class="bi bi-chevron-left"></i>
-    </button>
+      <div class="toolbar-actions">
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-arrow-down-up me-1"></i> {{ getSortSelecionadoNome() }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li *ngFor="let opt of sortOptions">
+              <a class="dropdown-item" (click)="filterForm.get('sort')?.setValue(opt.value)">
+                {{ opt.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-outline-secondary btn-filter" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas" aria-controls="filterOffcanvas">
+          <i class="bi bi-funnel me-1"></i> Filtros
+          <span class="badge bg-primary ms-1" *ngIf="(cursoFilterCount + diagnosticoFilterCount) > 0">
+            {{ cursoFilterCount + diagnosticoFilterCount }}
+          </span>
+        </button>
+      </div>
+    </div>
 
-    <div class="aluno-carousel-track" #carouselTrack>
-
-      <div class="carousel-item-wrapper"
-           *ngFor="let aluno of (alunos$ | async); let i = index"
+    <div class="row g-4">
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3"
+           *ngFor="let aluno of (alunos$ | async); let i = index; trackBy: trackByAlunoId"
            [style.animation-delay]="(i % 12) * 0.05 + 's'">
 
-        <div class="card aluno-card">
-          <div class="aluno-card-img-container">
-            <img [src]="aluno.foto || 'https://via.placeholder.com/400x400.png?text=Aluno'"
-                 class="card-img-top aluno-card-img" alt="Foto do Aluno" (click)="viewAluno(aluno)">
+        <div class="card aluno-card h-100" (click)="viewAluno(aluno)">
 
-            <span class="badge aluno-card-badge" (click)="viewAluno(aluno)"
-                  [ngClass]="{
-                    'text-bg-danger': aluno.prioridade === 'Alta',
-                    'text-bg-warning': aluno.prioridade === 'Média',
-                    'text-bg-success': aluno.prioridade === 'Baixa'
-                  }">
-              Prioridade {{ aluno.prioridade }}
+          <div class="card-img-container">
+            <img [src]="aluno.foto || 'https://via.placeholder.com/400x500.png?text=Aluno'"
+                class="card-img-top" alt="Foto do Aluno">
+
+            <span *ngIf="aluno.prioridade === 'Alta'" class="icon-prioridade"
+                  data-bs-toggle="tooltip" data-bs-placement="top" title="Prioridade Alta">
+              <i class="bi bi-exclamation-circle-fill"></i>
             </span>
 
-            <div class="card-action-menu dropdown">
-              <button class="btn btn-icon-light" type="button" data-bs-toggle="dropdown" aria-expanded="false" (click)="$event.stopPropagation()">
-                <i class="bi bi-three-dots-vertical"></i>
+            <div class="card-hover-actions">
+              <button class="btn btn-action-light btn-atender" (click)="atenderAluno($event, aluno)">
+                <i class="bi bi-calendar-check"></i> Atender
               </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <a class="dropdown-item" (click)="editAluno($event, aluno)">
-                    <i class="bi bi-pencil-fill"></i> Editar
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item text-danger" (click)="deleteAluno($event, aluno)">
-                    <i class="bi bi-trash-fill"></i> Excluir
-                  </a>
-                </li>
-              </ul>
+
+              <button class="btn btn-action-icon btn-primary-icon" (click)="editAluno($event, aluno)"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Editar Aluno">
+                <i class="bi bi-pencil"></i>
+              </button>
+
+              <button class="btn btn-action-icon btn-danger-icon" (click)="deleteAluno($event, aluno)"
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir Aluno">
+                <i class="bi bi-trash"></i>
+              </button>
             </div>
           </div>
 
-          <div class="card-body" (click)="viewAluno(aluno)">
-            <h5 class="card-title mb-1" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
-            <p class="card-text-matricula mb-1">{{ aluno.matricula }}</p>
-            <p class="card-text-curso">{{ aluno.curso?.nome || 'N/A' }}</p>
-            <div class="aluno-card-diagnosticos mt-2">
-              <span *ngFor="let diag of aluno.diagnosticos.slice(0, 2)"
-                    class="badge aluno-diag-badge me-1 mb-1"
-                    [ngClass]="getDiagClass(diag.sigla)"
-                    title="{{diag.nome}}">
+          <div class="card-body">
+            <h5 class="card-title" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
+            <p class="card-text card-matricula">{{ aluno.matricula }}</p>
+            <p class="card-text card-curso">{{ aluno.curso?.nome || 'N/A' }}</p>
+            <div class="card-diagnosticos">
+              <span *ngFor="let diag of aluno.diagnosticos.slice(0, 2)" class="badge-diag">
                 {{ diag.sigla || diag.nome }}
               </span>
-              <span *ngIf="aluno.diagnosticos.length > 2"
-                    class="badge aluno-diag-badge diag-default me-1 mb-1">
+              <span *ngIf="aluno.diagnosticos.length > 2" class="badge-diag">
                 +{{ aluno.diagnosticos.length - 2 }}
               </span>
             </div>
           </div>
         </div>
-
-      </div> </div> <button (click)="scrollCarousel(1)" class="carousel-arrow next" title="Próximo">
-      <i class="bi bi-chevron-right"></i>
-    </button>
-  </div>
-
-</div>
-
-<button class="fab-add-button" title="Adicionar Novo Aluno" (click)="goToNewAlunoPage()">
-  <i class="bi bi-plus-lg"></i>
-</button>
-
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filtros</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body" [formGroup]="filterForm">
-    <div class="mb-4">
-      <label for="filtroNome" class="form-label">Buscar por nome</label>
-      <input type="text" id="filtroNome" class="form-control"
-             formControlName="nome" placeholder="Digite o nome...">
+      </div>
     </div>
-    <hr class="filter-divider">
-    <div class="mb-4 filter-group">
-      <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurso" aria-expanded="true" aria-controls="collapseCurso">
-        <span class="form-label">
-          Curso
-          <small class="filter-count-badge" *ngIf="cursoFilterCount > 0">
-            {{ cursoFilterCount }}
-          </small>
-        </span>
-        <i class="bi bi-chevron-up"></i>
-      </button>
-      <div class="collapse show" id="collapseCurso">
-        <div class="filter-options-list mt-3">
-          <div *ngFor="let curso of (cursos$ | async)" class="form-check">
-            <input class="form-check-input" type="checkbox"
-                   [value]="curso.id" [id]="'curso-' + curso.id"
-                   [checked]="isCursoChecked(curso.id)"
-                   (change)="onCursoChange($event)">
-            <label class="form-check-label" [for]="'curso-' + curso.id">
-              {{ curso.nome }}
-            </label>
+  </div>
+
+  <button class="fab-add-button" title="Adicionar Novo Aluno" (click)="goToNewAlunoPage()">
+    <i class="bi bi-plus-lg"></i>
+  </button>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="filterOffcanvasLabel">Filtros</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" [formGroup]="filterForm">
+
+      <div class="filter-group">
+        <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurso" aria-expanded="true" aria-controls="collapseCurso">
+          <span class="form-label">
+            Curso
+            <small class="filter-count-badge" *ngIf="cursoFilterCount > 0">
+              {{ cursoFilterCount }}
+            </small>
+          </span>
+          <i class="bi bi-chevron-up"></i>
+        </button>
+        <div class="collapse show" id="collapseCurso">
+          <div class="filter-options-list mt-3">
+            <div *ngFor="let curso of (cursos$ | async)" class="form-check">
+              <input class="form-check-input" type="checkbox"
+                    [value]="curso.id" [id]="'curso-' + curso.id"
+                    [checked]="isCursoChecked(curso.id)"
+                    (change)="onCursoChange($event)">
+              <label class="form-check-label" [for]="'curso-' + curso.id">
+                {{ curso.nome }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiag" aria-expanded="true" aria-controls="collapseDiag">
+          <span class="form-label">
+            Diagnóstico
+            <small class="filter-count-badge" *ngIf="diagnosticoFilterCount > 0">
+              {{ diagnosticoFilterCount }}
+            </small>
+          </span>
+          <i class="bi bi-chevron-up"></i>
+        </button>
+        <div class="collapse show" id="collapseDiag">
+          <div class="filter-options-list mt-3">
+            <div *ngFor="let diag of (diagnosticos$ | async)" class="form-check">
+              <input class="form-check-input" type="checkbox"
+                    [value]="diag.id" [id]="'diag-' + diag.id"
+                    [checked]="isDiagnosticoChecked(diag.id)"
+                    (change)="onDiagnosticoChange($event)">
+              <label class="form-check-label" [for]="'diag-' + diag.id">
+                {{ diag.sigla || diag.nome }}
+              </label>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <hr class="filter-divider">
-    <div class="mb-4 filter-group">
-      <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiag" aria-expanded="true" aria-controls="collapseDiag">
-        <span class="form-label">
-          Diagnóstico
-          <small class="filter-count-badge" *ngIf="diagnosticoFilterCount > 0">
-            {{ diagnosticoFilterCount }}
-          </small>
-        </span>
-        <i class="bi bi-chevron-up"></i>
+    <div class="offcanvas-footer">
+      <button type="button" class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+        Limpar Filtros
       </button>
-      <div class="collapse show" id="collapseDiag">
-        <div class="filter-options-list mt-3">
-          <div *ngFor="let diag of (diagnosticos$ | async)" class="form-check">
-            <input class="form-check-input" type="checkbox"
-                   [value]="diag.id" [id]="'diag-' + diag.id"
-                   [checked]="isDiagnosticoChecked(diag.id)"
-                   (change)="onDiagnosticoChange($event)">
-            <label class="form-check-label" [for]="'diag-' + diag.id">
-              {{ diag.sigla || diag.nome }}
-            </label>
-          </div>
-        </div>
-      </div>
+      <button type="button" class="btn btn-primary w-100 mt-2" data-bs-dismiss="offcanvas">
+        Ver Resultados
+      </button>
     </div>
-  </div>
-  <div class="offcanvas-footer">
-    <button type="button" class="btn btn-outline-secondary w-100" (click)="clearFilters()">
-      Limpar Filtros
-    </button>
-    <button type="button" class="btn btn-primary w-100 mt-2" data-bs-dismiss="offcanvas">
-      Ver Resultados
-    </button>
   </div>
 </div>

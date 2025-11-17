@@ -1,27 +1,44 @@
-<div class="login-container">
-  <div class="login-wrapper">
+<div class="login-image-panel d-none d-lg-flex">
+  <div class="image-overlay">
+    <div class="overlay-content">
+      <img src="assets/img/CEFET-MG_simplificada-negativo-menor.png" alt="Logo CEFET" class="overlay-logo">
+      <h2 class="overlay-title">Sistema de Gestão NAAPI</h2>
+      <p class="overlay-text">
+        Gestão integrada de Alunos, Atendimentos e Diagnósticos.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="login-form-panel">
+  <div class="login-form-wrapper">
 
     <div class="form-header text-center mb-4">
       <a class="logo-link" routerLink="/">
-        <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="naapi-logo">
-        <img src="assets/img/NAAPI_completa-negativo.png" alt="Logo NAAPI" class="naapi-logo">
+        <img src="assets/img/CEFET-MG_simplificada-positivo-menor.png" alt="Logo CEFET" class="naapi-logo-form">
+        <span class="naapi-logo-text-form">NAAPI</span>
       </a>
-      <h3 class="card-title mt-3">Acesso ao Painel</h3>
-      <p class="sub-title">Use as suas credenciais para entrar.</p>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h3 class="form-title">Bem-vindo(a) de volta.</h3>
+    <p class="form-subtitle">Insira as suas credenciais para acessar o painel.</p>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-5">
+
+      <div class="mb-4 form-floating">
         <input type="email" id="email" class="form-control"
                formControlName="email" placeholder="seuemail@naapi.com">
+        <label for="email">Email</label>
       </div>
 
-      <div class="mb-3">
-        <label for="senha" class="form-label">Senha</label>
+      <div class="mb-3 form-floating">
         <input type="password" id="senha" class="form-control"
                formControlName="senha" placeholder="*******">
+        <label for="senha">Senha</label>
+      </div>
+
+      <div class="text-end mb-4">
+        <a href="#" class="form-link">Não lembro a senha</a>
       </div>
 
       <div *ngIf="errorMessage" class="alert alert-danger p-2 mt-3 text-center small">
@@ -29,9 +46,9 @@
       </div>
 
       <div class="d-grid mt-4">
-        <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || isLoading">
+        <button type="submit" class="btn btn-primary btn-lg" [disabled]="loginForm.invalid || isLoading">
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-          {{ isLoading ? 'Entrando...' : 'Entrar' }}
+          {{ isLoading ? 'Verificando...' : 'Entrar' }}
         </button>
       </div>
     </form>

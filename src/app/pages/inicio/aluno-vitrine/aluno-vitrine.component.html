@@ -1,0 +1,59 @@
+<div class="carousel-container">
+
+  <button (click)="scrollCarousel(-1)" class="carousel-arrow prev" title="Anterior">
+    <i class="bi bi-chevron-left"></i>
+  </button>
+
+  <div class="aluno-carousel-track" #carouselTrack>
+
+    <div class="carousel-item-wrapper"
+         *ngFor="let aluno of (alunos$ | async); let i = index"
+         [style.animation-delay]="(i % 12) * 0.05 + 's'">
+
+      <div class="card aluno-card h-100" (click)="viewAluno(aluno)">
+
+        <div class="card-img-container">
+          <img [src]="aluno.foto || 'https://via.placeholder.com/400x500.png?text=Aluno'"
+               class="card-img-top" alt="Foto do Aluno">
+
+          <span *ngIf="aluno.prioridade === 'Alta'" class="icon-prioridade"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Prioridade Alta">
+            <i class="bi bi-exclamation-circle-fill"></i>
+          </span>
+
+          <div class="card-hover-actions">
+            <button class="btn btn-action-light btn-atender" (click)="atenderAluno($event, aluno)">
+              <i class="bi bi-calendar-check"></i> Atender
+            </button>
+            <button class="btn btn-action-icon btn-primary-icon" (click)="editAluno($event, aluno)"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Editar Aluno">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-action-icon btn-danger-icon" (click)="deleteAluno($event, aluno)"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir Aluno">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
+          <p class="card-text card-matricula">{{ aluno.matricula }}</p>
+          <p class="card-text card-curso">{{ aluno.curso?.nome || 'N/A' }}</p>
+          <div class="card-diagnosticos">
+            <span *ngFor="let diag of aluno.diagnosticos.slice(0, 2)" class="badge-diag">
+              {{ diag.sigla || diag.nome }}
+            </span>
+            <span *ngIf="aluno.diagnosticos.length > 2" class="badge-diag">
+              +{{ aluno.diagnosticos.length - 2 }}
+            </span>
+          </div>
+        </div>
+      </div>
+      </div>
+  </div>
+
+  <button (click)="scrollCarousel(1)" class="carousel-arrow next" title="Próximo">
+    <i class="bi bi-chevron-right"></i>
+  </button>
+</div>

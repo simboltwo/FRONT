@@ -1,31 +1,38 @@
-/* aluno-form.component.scss */
+/* src/app/pages/alunos/aluno-form/aluno-form.component.scss */
 @import '../../../styles/modern-theme.scss';
+
 :host {
   display: block;
 }
+
 .wizard-container {
-  padding-top: 94px; // Altura da navbar (70px) + espaçamento (24px)
+  /* MUDANÇA: Removemos o padding-top da navbar,
+     pois o page-header-container agora faz isso */
   max-width: 900px;
   margin: 0 auto;
+  padding-bottom: 3rem;
   animation: fadeInUp 0.6s ease-out;
+
+  /* MUDANÇA: O Card agora cola no topo do container */
+  margin-top: -60px; /* Puxa o card para cima, sobrepondo o header */
+  position: relative;
+  z-index: 2;
 }
 
 .card {
   border: 1px solid var(--cor-borda);
-  box-shadow: none;
+  box-shadow: var(--sombra-lg); /* Sombra Hering */
+  /* border-radius é herdado (0px) */
 }
 
-.card-header {
-  h4 {
-    font-weight: 600;
-  }
-}
+/* MUDANÇA: card-header foi removido do HTML */
+
 .card-body {
   padding: 2.5rem;
 }
 
 /* ==============================================
- * Stepper Minimalista
+ * Stepper (com Fontes)
  * ============================================== */
 .stepper-bar {
   display: flex;
@@ -35,16 +42,17 @@
   padding: 0 0.5rem;
 }
 
-.stepper-item {
+.stepper-item .stepper-label {
+  font-family: 'Open Sans', sans-serif;
   text-align: center;
   color: var(--cor-texto-suave);
   font-size: 0.85rem;
-  font-weight: 500;
-
-  &.active {
-    color: var(--cor-primaria);
-    font-weight: 600;
-  }
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.stepper-item.active .stepper-label {
+  color: var(--cor-primaria);
+  font-weight: 700;
 }
 
 .stepper-line {
@@ -58,8 +66,8 @@
   }
 }
 
-/* Título de cada etapa */
 .step-title {
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   color: var(--cor-texto);
   border-bottom: 1px solid var(--cor-borda);
@@ -73,7 +81,7 @@
 }
 
 /* ==============================================
- * Upload de Foto (Estilo Hering)
+ * MUDANÇA: Upload de Foto (Novo Estilo de Preview)
  * ============================================== */
 .file-upload-quadrant {
   position: relative;
@@ -81,7 +89,7 @@
   padding-top: 100%; /* Quadrado */
   margin: 0 auto;
   border: 1px dashed var(--cor-borda);
-  border-radius: var(--raio-borda);
+  border-radius: var(--raio-borda); // 0px
   overflow: hidden;
   background-color: var(--cor-primaria-suave);
   transition: all 0.3s ease;
@@ -103,12 +111,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.8);
     color: var(--cor-texto);
-    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
     font-size: 0.9rem;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0; /* Escondido por padrão */
     transition: opacity 0.3s ease-in-out;
     text-align: center;
 
@@ -118,8 +126,31 @@
     }
   }
 
-  &:hover .file-upload-label {
-    opacity: 1;
+  /* ESTADO: VAZIO (Sem Preview) */
+  &:not(.has-preview) {
+    .file-upload-label {
+      opacity: 1; /* Fica visível */
+      background-color: transparent;
+      color: var(--cor-texto-suave);
+
+      i { font-size: 2rem; }
+
+      &:hover {
+        color: var(--cor-primaria);
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+
+  /* ESTADO: COM PREVIEW */
+  &.has-preview {
+    border-style: solid; /* Borda sólida */
+
+    &:hover .file-upload-label {
+      opacity: 1; /* Aparece no hover */
+      background-color: rgba(255, 255, 255, 0.8);
+      color: var(--cor-texto);
+    }
   }
 
   input[type="file"] {
@@ -127,37 +158,53 @@
   }
 }
 
-/* Campos de Texto (Textarea) - Borda normal */
-textarea.form-control {
+/* ==============================================
+ * Inputs (com Fontes)
+ * ============================================== */
+
+.form-control,
+.form-select {
+  border: 1px solid var(--cor-borda) !important;
+  border-radius: var(--raio-borda) !important; // 0px
   padding: 0.75rem 1rem;
-  min-height: 100px;
+  background-color: var(--cor-fundo-card);
+  /* Fonte herdada do modern-theme */
 }
-textarea.form-control:focus {
+.form-control:focus, .form-select:focus {
   border-color: var(--cor-primaria) !important;
 }
 
+textarea.form-control {
+  min-height: 100px;
+}
 
-/* Container dos Diagnósticos (Lista de Checkbox) */
+/* Container dos Diagnósticos (Checkbox) */
 .diagnosticos-container {
   max-height: 250px;
   overflow-y: auto;
   background-color: #fff;
   border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-borda);
+  border-radius: var(--raio-borda); // 0px
   padding: 0.5rem;
 
   .form-check {
     padding: 0.6rem 0.75rem;
-    border-radius: 4px;
+    border-radius: 0;
     &:hover {
       background-color: var(--cor-primaria-suave);
     }
+  }
+  .form-check-label {
+     font-family: 'Raleway', sans-serif;
+     font-size: 0.9rem;
+     color: var(--cor-texto);
+     margin-left: 0.5rem;
   }
 }
 
 /* Rodapé do Wizard */
 .card-footer {
-  background-color: var(--cor-fundo-card) !important;
+  background-color: var(--cor-primaria-suave) !important;
   border-top: 1px solid var(--cor-borda);
-  padding: 1rem 1.25rem;
+  padding: 1.5rem 2.5rem;
 }

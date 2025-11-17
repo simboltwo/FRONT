@@ -1,3 +1,4 @@
+/* src/app/layout/layout.component.scss */
 @import '../styles/modern-theme.scss';
 
 :host {
@@ -5,113 +6,126 @@
 }
 
 .main-navbar {
-  background-color: transparent;
+  /* ==================================
+   * ESTADO SÓLIDO (ÚNICO ESTADO)
+   * ================================== */
+  background-color: var(--cor-fundo-header); /* Sempre branco */
   box-shadow: none;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid var(--cor-borda); /* Borda Hering */
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1030;
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 
-  &.navbar-scrolled {
-    background-color: var(--cor-fundo-header);
-    box-shadow: var(--sombra-md);
-    border-bottom: 1px solid var(--cor-borda);
-  }
+  /* Mais alta */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  min-height: 80px;
 
-  .navbar-brand-container {
-    display: flex;
-  }
-  .navbar-logo {
+  transition: box-shadow 0.3s ease;
+
+  /* Logo Positivo (Azul) é o padrão */
+  .navbar-logo.logo-positivo {
+    display: inline-block;
     height: 30px;
   }
-  .main-navbar .navbar-logo {
-    width: auto;
-    margin-right: 0.5rem;
+  .navbar-logo.logo-negativo {
+    display: none;
   }
 
+  /* Título "NAAPI" (Azul) */
   .naapi-logo-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
     font-size: 1.75rem;
-    color: var(--cor-primaria);
-    letter-spacing: 0.134em;
+    color: var(--cor-primaria); /* Azul */
+    letter-spacing: 0.05em;
     line-height: 1;
   }
 
-  /* ================================== */
-  /* MUDANÇA: Links Principais da Nav   */
-  /* ================================== */
+  /* Links da Nav (Azul) */
   .nav-link {
-    font-family: 'Roboto', sans-serif;
-    /* MUDANÇA 1: Peso da fonte padrão é Regular */
-    font-weight: 400;
-    color: var(--cor-primaria);
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    color: var(--cor-primaria); /* Azul */
     font-size: 0.9rem;
-    letter-spacing: -0.035em;
-    line-height: 1.4;
-
     position: relative;
     transition: all 0.2s ease;
     padding: 0.5rem 1rem;
-    border-radius: var(--raio-borda);
+    border-radius: 0;
     padding-bottom: 6px;
+
+    /* Sublinhado Azul */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1px;
+      background-color: var(--cor-primaria);
+      transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Hover Azul Escuro */
+    &:hover {
+      color: var(--cor-primaria-hover);
+      &::after {
+        width: 100%;
+      }
+    }
+    &.active {
+      font-weight: 700;
+      color: var(--cor-primaria-hover) !important;
+      &::after {
+        width: 100%;
+      }
+    }
   }
 
-  /* Sublinhado da Nav (Fino e Preto) */
-  .main-navbar .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 1px;
-    background-color: #000000;
-    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  }
+  /* Perfil (Preto/Azul) */
+  .navbar-profile .nav-link {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+    color: var(--cor-texto); /* Preto */
+    display: flex;
+    align-items: center;
 
-  /* MUDANÇA 2: Links ficam Negritos no Hover/Active */
-  .main-navbar .nav-link:hover,
-  .main-navbar .nav-link.active {
-    font-weight: 700; // Fica Negrito
-  }
+    &::after { display: none; }
 
-  .main-navbar .nav-link:hover::after,
-  .main-navbar .nav-link.active::after {
-    width: 100%;
-  }
-
-  .main-navbar .nav-link:hover {
-    color: var(--cor-primaria-hover);
-    background-color: transparent;
-  }
-  .main-navbar .nav-link.active {
-    color: var(--cor-primaria) !important;
+    i {
+      color: var(--cor-primaria); /* Azul */
+      font-size: 1.5rem;
+    }
+    span {
+      font-weight: 600;
+      small {
+        font-weight: 400;
+        color: var(--cor-texto-suave); /* Cinza */
+      }
+    }
   }
 }
 
 /* ==============================================
- * Mega Menu (Estilo Hering)
+ * Mega Menu (Estilos Uniformizados)
+ * (Sem alteração)
  * ============================================== */
 .dropdown-mega {
   position: static !important;
 }
-
 .dropdown-menu-mega {
   width: 100%;
   left: 0;
   right: 0;
   top: 100%;
-  /* MUDANÇA 3: Padding reduzido (colunas mais próximas) */
   padding: 1.5rem !important;
   margin-top: -1px !important;
   border-top: 1px solid var(--cor-borda) !important;
   border-radius: 0 0 var(--raio-borda) var(--raio-borda) !important;
   background-color: var(--cor-fundo-card);
-
   display: block;
   opacity: 0;
   visibility: hidden;
@@ -121,10 +135,8 @@
   opacity: 1;
   visibility: visible;
 }
-
-/* Cabeçalhos do Mega Menu (ALUNOS, ACADÊMICO...) */
 .dropdown-mega .dropdown-header {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -134,115 +146,112 @@
   padding: 0.5rem 0.5rem;
   margin-bottom: 0.5rem;
 }
-
-/* Links Padrão do Mega Menu (Preto) */
-.dropdown-mega .dropdown-item {
-  font-family: 'Roboto Condensed', sans-serif;
-  font-weight: 400; // Regular
-
-  /* (Estilo "demais textos" - Novo Aluno, Diagnósticos) */
-  color: var(--cor-texto) !important; // Preto Suave
+.dropdown-mega .dropdown-item,
+.dropdown-mega .dropdown-item.item-secondary-style {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  color: var(--cor-link-claro) !important; /* Azul Claro */
   font-size: 0.85rem;
-  letter-spacing: 0.026em; // (Canva 26)
-
-  /* MUDANÇA 3: Padding vertical reduzido (linhas mais próximas) */
+  letter-spacing: 0.026em;
   padding: 0.4rem 0.5rem !important;
-  border-radius: var(--raio-borda);
-
+  border-radius: 0;
+  text-decoration: none;
+  transition: all 0.2s ease;
   &:hover {
-    background-color: var(--cor-primaria-suave) !important;
-    color: var(--cor-primaria) !important;
+    text-decoration: underline;
+    background-color: transparent !important;
+    color: var(--cor-primaria-hover) !important;
   }
-
   &.active,
   &:active {
-    background-color: var(--cor-primaria) !important;
-    color: #fff !important;
-    font-weight: 400 !important;
+    background-color: transparent !important;
+    color: var(--cor-primaria) !important;
+    font-weight: 700 !important;
+    text-decoration: underline;
+  }
+}
+.dropdown-mega .dropdown-item-special {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600 !important;
+  color: var(--cor-primaria) !important;
+  text-decoration: underline !important;
+  &::after {
+    content: ' →';
+    transition: transform 0.2s ease;
+  }
+  &:hover {
+    color: var(--cor-primaria-hover) !important;
+    text-decoration: underline !important;
+    &::after {
+      transform: translateX(4px);
+    }
   }
 }
 
-/* Links Secundários do Mega Menu (Cinza) */
-.dropdown-mega .dropdown-item.item-secondary-style {
-  /* (Estilo "Gerenciar Cursos") */
-  color: var(--cor-texto-suave) !important; // Cinza mais claro
-  letter-spacing: 0.058em; // (Canva 58)
-  font-size: 0.1rem;
-}
 
+/* ==============================================
+ * MUDANÇA: Correção Mobile / Offcanvas
+ * ============================================== */
 
-/* Perfil */
-.main-navbar .dropdown-item {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500 !important;
-  font-size: 0.9rem !important;
-}
-.navbar-profile .nav-link {
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--cor-texto-suave);
-  display: flex;
-  align-items: center;
-}
-.navbar-profile .nav-link i {
-  color: var(--cor-primaria);
-  font-size: 1.5rem;
-}
-.navbar-profile .nav-link span {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-  font-weight: 600;
-  color: var(--cor-texto);
-  small {
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--cor-texto-suave);
-  }
-}
-
-/* Ajuste do Conteúdo Principal */
+/* Conteúdo principal agora tem padding-top fixo */
 main.main-content-area {
-  padding-top: 0;
+  padding-top: 80px; /* Altura da navbar desktop */
 }
 
-/* Mobile */
 @media (max-width: 991.98px) {
   .main-navbar {
-    padding: 0.5rem 1rem;
-    background-color: var(--cor-fundo-header);
-    position: relative;
+    min-height: 70px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   main.main-content-area {
-    padding-top: 1.5rem;
+    padding-top: 70px;
   }
 
-  .main-navbar .navbar-toggler {
-    border: none;
-    padding-left: 0;
-    font-size: 2rem;
-    color: var(--cor-texto);
-  }
-  .main-navbar .navbar-toggler:focus {
-    box-shadow: none;
-  }
   .navbar-brand-container {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
   }
-  .main-navbar .nav-link::after {
-    display: none;
+
+  /* Estilo do Botão do Menu Hambúrguer (Remove borda feia) */
+  .navbar-toggler {
+    border: none !important;
+    padding: 0.5rem !important;
+    font-size: 1.5rem;
+    color: var(--cor-primaria) !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+
+    &:focus {
+      outline: 0 !important;
+      box-shadow: none !important;
+    }
   }
 }
-/* ... (o resto do SCSS do offcanvas permanece igual) ... */
+
+/* ==============================================
+ * MUDANÇA: Ajustes Finais do Offcanvas (Logo, Scroll, Bordas)
+ * ============================================== */
+
+.offcanvas-header .naapi-logo-text-mobile {
+  color: var(--cor-primaria);
+}
 .offcanvas-start {
   width: 100% !important;
 }
 .offcanvas-header {
   border-bottom: 1px solid var(--cor-borda);
   padding: 0.75rem 1.5rem;
+
+  .navbar-brand .navbar-logo {
+    height: 30px;
+    width: auto;
+  }
+  .navbar-brand .naapi-logo-text {
+    font-size: 1.5rem;
+  }
 }
 .offcanvas-header .navbar-brand {
   margin: 0;
@@ -259,17 +268,23 @@ main.main-content-area {
 .offcanvas-nav-links {
   padding: 1rem;
   flex-grow: 1;
+  overflow-y: auto; /* MUDANÇA: Permite o scroll do menu */
 }
+
+/* MUDANÇA: Remove a borda inferior de TODOS os nav-items */
 .offcanvas-nav-links .nav-item {
-  border-bottom: 1px solid var(--cor-borda);
+  border-bottom: none;
 }
+
 .offcanvas-nav-links .nav-link {
+  font-family: 'Open Sans', sans-serif;
   display: flex;
-  justify-content: space-between;
+  /* MUDANÇA: Remove o space-between, pois a seta saiu */
+  /* justify-content: space-between; */
   align-items: center;
   font-size: 1.1rem;
   color: var(--cor-texto);
-  font-weight: 500;
+  font-weight: 600;
   text-transform: none;
   padding: 1rem 0.5rem;
 }
@@ -281,6 +296,49 @@ main.main-content-area {
   font-weight: 700;
   background-color: transparent;
 }
+
+/*
+ * ESTILOS DO SUBMENU (ACORDEÃO)
+ */
+.offcanvas-nav-links .nav-item-submenu {
+  border-bottom: none;
+}
+.offcanvas-nav-links .nav-link-toggle {
+  justify-content: space-between; /* MUDANÇA: Apenas o toggle tem space-between */
+  i {
+    transition: transform 0.3s ease;
+  }
+  &[aria-expanded="true"] i {
+    transform: rotate(180deg);
+  }
+}
+.submenu-nav {
+  padding-left: 1.5rem;
+  border-bottom: 1px solid var(--cor-borda); /* MUDANÇA: Borda APÓS o grupo */
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  .nav-item {
+    border-bottom: none;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: 'Raleway', sans-serif;
+    color: var(--cor-texto-suave);
+    padding: 0.5rem 0.5rem;
+
+    &.active,
+    &:hover {
+      color: var(--cor-primaria);
+      font-weight: 500;
+      background-color: transparent;
+    }
+  }
+}
+
+/* Footer do Offcanvas */
 .offcanvas-footer {
   margin-top: auto;
   padding: 1rem;

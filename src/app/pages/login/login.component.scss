@@ -1,99 +1,169 @@
-/* login.component.scss */
-@import '../../styles/modern-theme.scss'; // Importa as variáveis
+/* src/app/pages/login/login.component.scss */
+@import '../../styles/modern-theme.scss';
 
 :host {
   display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   width: 100%;
-  background-color: var(--cor-primaria-suave); // Fundo azul claro
+  background-color: var(--cor-fundo-card); /* Fundo Hering Branco */
+}
+
+/* ==================================
+ * Painel da Esquerda (Imagem)
+ * ================================== */
+.login-image-panel {
+  flex: 1 1 50%; /* Ocupa metade da tela */
+  background-color: var(--cor-primaria); /* Fundo Azul NAAPI */
+  background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply; /* Mistura a cor azul com a imagem */
+  position: relative;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 55, 107, 0.5), var(--cor-primaria));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #fff;
+}
+
+.overlay-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.overlay-logo {
+  width: 60px;
+  height: auto;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+}
+
+.overlay-title {
+  font-family: 'Poppins', sans-serif; /* MUDANÇA */
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.overlay-text {
+  font-family: 'Raleway', sans-serif; /* MUDANÇA */
+  font-weight: 300;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* ==================================
+ * Painel da Direita (Formulário)
+ * ================================== */
+.login-form-panel {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
+  overflow-y: auto; /* Para mobile */
 }
 
-.login-container {
-  max-width: 450px;
+.login-form-wrapper {
+  max-width: 420px;
   width: 100%;
+  animation: fadeInUp 0.6s ease-out 0.2s;
+  animation-fill-mode: backwards;
 }
 
-.login-wrapper {
-  background: var(--cor-fundo-card);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-borda);
-  padding: 2.5rem 3rem;
-  box-shadow: var(--sombra-lg);
-  animation: fadeInUp 0.5s ease-out;
-}
-
-.naapi-logo {
+/* Logos no Formulário (Estilo Hering) */
+.naapi-logo-form {
+  height: 35px;
   width: auto;
-  height: 40px; /* Alinha altura dos logos */
   margin: 0 0.25rem;
 }
-
-.card-title {
-  font-weight: 400;
-  font-size: 16px;
-  color: #000404;
-  text-transform: uppercase;
-  text-align: center;
-  text-indent: 0px;
-  line-height: 24px;
-  vertical-align: baseline;
-  letter-spacing: normal;
-  word-spacing: 0px;
-  margin: 0px;
-  padding: 0px;
-  font-kerning: auto;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-variant: normal;
-  font-stretch: 100%;
+.naapi-logo-text-form {
+  font-family: 'Poppins', sans-serif; /* MUDANÇA */
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--cor-texto); /* Preto */
+  letter-spacing: 0.134em;
+  line-height: 1;
+  position: relative;
+  top: 1px;
 }
-.sub-title {
+
+/* Novos Títulos */
+.form-title {
+  font-family: 'Poppins', sans-serif; /* MUDANÇA */
+  font-weight: 600; /* Poppins SemiBold */
+  font-size: 1.75rem;
+  color: var(--cor-texto);
+  margin-top: 1.5rem;
+}
+
+.form-subtitle {
+  font-family: 'Raleway', sans-serif; /* MUDANÇA */
+  font-size: 1rem;
   color: var(--cor-texto-suave);
-  font-size: 14px;
-  line-height: 16px;
-  vertical-align: baseline;
-  letter-spacing: normal;
-  word-spacing: 0px;
-  margin: 0px;
-  padding: 0px;
-  font-kerning: auto;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-variant: normal;
-  font-stretch: 100%;
-  font-weight: 400;
-  text-align: center;
-
 }
 
-/* Inputs do Login (Com borda normal) */
-.form-control {
-
-  /* Estilos da sua imagem (image_a2dd1c.png) */
-  font-size: 14px;
-  font-weight: 400;
-  color: #000404; /* Cor do TEXTO digitado */
-
-  /* Usei o padding vertical de 12px (0.75rem)
-     e horizontal de 16px (1rem) para dar uma altura boa */
-  padding: 0.75rem 1rem;
-  line-height: 1.15; /* Ajuste para o font-size */
+/* Estilo "Floating Labels" (Mais chique) */
+.form-floating > .form-control {
+  /* Remove a borda inferior do tema e usa a borda completa */
+  border: 1px solid var(--cor-borda) !important;
+  border-radius: var(--raio-borda) !important; /* 0px */
+  height: calc(3.5rem + 2px); /* Altura padrão do Bootstrap */
+  padding: 1rem;
+  background-color: var(--cor-fundo-card);
 }
-.form-control:focus {
+.form-floating > label {
+  padding: 1rem;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+  font-family: 'Open Sans', sans-serif; /* MUDANÇA */
+}
+.form-floating > .form-control:focus {
   border-color: var(--cor-primaria) !important;
+  box-shadow: 0 0 0 0.25rem rgba(0, 55, 107, 0.15) !important;
 }
-.form-control::placeholder {
-  color:#777777; /* Cor cinza suave */
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 24px;
+
+/* Link "Esqueceu-se da senha?" */
+.form-link {
+  font-family: 'Open Sans', sans-serif; /* MUDANÇA */
+  color: var(--cor-link) !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
-/* Fim da Mudança */
 
+/* Botão de Login */
+.btn-primary.btn-lg {
+  padding: 0.9rem 1.5rem;
+  font-size: 0.9rem;
+}
 
-.btn-primary {
-  padding: 0.75rem;
+/* ==================================
+ * Responsividade (Mobile)
+ * ================================== */
+@media (max-width: 991.98px) {
+  :host {
+    flex-direction: column;
+  }
+
+  .login-image-panel {
+    display: none; /* Esconde a imagem no mobile */
+  }
+
+  .login-form-panel {
+    flex: 1 1 100%;
+    /* Adiciona padding superior no mobile (já que a imagem sumiu) */
+    padding-top: 5rem;
+  }
 }
