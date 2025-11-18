@@ -1,0 +1,109 @@
+@import '../admin-layout.scss'; // Importa o layout base
+@import '../../../styles/animations.scss'; // Importa animações
+
+/* * Estilo do Card de Ação
+ * (Quadrado grande, fundo granulado, etc)
+*/
+.action-card-admin {
+  position: relative;
+  width: 100%;
+  min-height: 350px; // Altura dos blocos
+  border-radius: var(--raio-borda);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--sombra-md);
+  border: 1px solid var(--cor-borda);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Alinha conteúdo na base */
+  padding: 2rem;
+
+  // Overlay de cor azul
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    // Gradiente azul da marca
+    background: linear-gradient(to top, rgba(0, 55, 107, 0.9), rgba(0, 36, 74, 0.5));
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+
+  // Textura granulada
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.03);
+    z-index: 1;
+  }
+
+  .card-content {
+    position: relative;
+    z-index: 2;
+    color: #fff; // Todo texto é branco
+
+    i {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      opacity: 0.8;
+    }
+
+    h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Botão padronizado (claro sobre escuro) */
+    .btn-primary-card {
+      // Importa estilos do .btn
+      font-family: 'Open Sans', sans-serif;
+      border-radius: var(--raio-borda) !important;
+      border-width: 1px !important;
+      font-weight: 700;
+      transition: all 0.2s ease-in-out;
+      box-shadow: none !important;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-size: 14px;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      display: inline-block;
+
+      // Cores (Branco no azul)
+      background-color: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.9);
+      color: var(--cor-primaria) !important; // Letra azul
+
+      &:hover {
+        background-color: #fff;
+        border-color: #fff;
+        transform: translateY(-2px);
+        box-shadow: var(--sombra-md) !important;
+      }
+    }
+  }
+
+  /* Animação de Hover */
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: var(--sombra-lg);
+    &::before {
+      opacity: 1; // Overlay fica mais forte
+    }
+  }
+}

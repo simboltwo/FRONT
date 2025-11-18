@@ -1,9 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
+// MUDANÇA: Importar FormControl
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { Aluno, AlunoInsert, Curso, Diagnostico, Turma } from '../../../core/models/aluno.model'; // Importa o modelo CORRIGIDO
+// MUDANÇA: Importar mais operadores RxJS
+import { Observable, BehaviorSubject, combineLatest, startWith, map } from 'rxjs';
+import { Aluno, AlunoInsert, Curso, Diagnostico, Turma } from '../../../core/models/aluno.model';
 import { AlunoService } from '../../../core/services/aluno.service';
 import { CursoService, DiagnosticoService, TurmaService } from '../../../core/services/api.service';
 
@@ -42,10 +44,34 @@ export class AlunoFormComponent implements OnInit {
   protected turmas$!: Observable<Turma[]>;
   protected diagnosticos$!: Observable<Diagnostico[]>;
 
+  // MUDANÇA: Controladores para o filtro de diagnóstico
+  protected diagnosticoSearch = new FormControl('');
+  protected filteredDiagnosticos$!: Observable<Diagnostico[]>;
+  // Fim da Mudança
+
   ngOnInit(): void {
     this.initForm();
     this.loadDropdownData();
     this.checkEditMode();
+
+    // MUDANÇA: Inicializa o observable de diagnósticos filtrados
+    this.filteredDiagnosticos$ = combineLatest([
+      this.diagnosticos$,
+      this.diagnosticoSearch.valueChanges.pipe(startWith(''))
+    ]).pipe(
+      map(([diagnosticos, searchTerm]) => {
+        const filter = (searchTerm || '').toLowerCase().trim();
+        if (!filter) {
+          return diagnosticos; // Retorna todos se a busca estiver vazia
+        }
+        // Filtra por nome ou sigla
+        return diagnosticos.filter(diag =>
+          diag.nome.toLowerCase().includes(filter) ||
+          diag.sigla?.toLowerCase().includes(filter)
+        );
+      })
+    );
+    // Fim da Mudança
   }
 
   // 1. Inicializa o formulário com 3 etapas
@@ -58,9 +84,9 @@ export class AlunoFormComponent implements OnInit {
         dataNascimento: [''],
         cpf: [''],
         telefoneEstudante: [''],
-        fotoFile: [null] // Control para o ficheiro
+        fotoFile: [null]
       }),
-      // Etapa 2: Dados Académicos
+      // Etapa 2: Dados Acadêmicos
       dadosAcademicos: this.fb.group({
         matricula: ['', [Validators.required]],
         cursoId: [null, [Validators.required]],
@@ -98,7 +124,6 @@ export class AlunoFormComponent implements OnInit {
   // 4. Carrega dados do Aluno
   private loadAlunoData(id: number): void {
     this.isLoading = true;
-    // Usamos o modelo 'Aluno' CORRIGIDO
     this.alunoService.findById(id).subscribe({
       next: (aluno: Aluno) => {
         this.mainForm.patchValue({
@@ -167,29 +192,24 @@ export class AlunoFormComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // --- Lógica do FormData ---
     const formData = new FormData();
 
-    // 1. Combina os dados JSON (baseado no AlunoInsert CORRIGIDO)
     const alunoData: AlunoInsert = {
       ...this.dadosPessoais.value,
       ...this.dadosAcademicos.value,
       ...this.dadosNaapi.value,
     };
-    // O 'fotoFile' não faz parte do DTO, é enviado separado
     delete (alunoData as any).fotoFile;
 
     formData.append('alunoDTO', new Blob([JSON.stringify(alunoData)], {
       type: 'application/json'
     }));
 
-    // 2. Adiciona o ficheiro da imagem (se houver um novo)
     const fotoFile = this.dadosPessoais.get('fotoFile')?.value;
     if (fotoFile) {
       formData.append('file', fotoFile);
     }
 
-    // 3. Chama o serviço de upload
     const saveAction = this.isEditMode
       ? this.alunoService.updateWithFile(this.alunoId!, formData)
       : this.alunoService.createWithFile(formData);
@@ -234,7 +254,7 @@ export class AlunoFormComponent implements OnInit {
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.previewUrl = reader.result; // Isto irá ativar o *ngIf no HTML
+        this.previewUrl = reader.result;
       };
       reader.readAsDataURL(file);
     }

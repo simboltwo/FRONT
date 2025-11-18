@@ -1,0 +1,22 @@
+<div class="toast-container position-fixed p-3 top-0 end-0">
+
+  <div *ngFor="let toast of (toasts$ | async)"
+       class="toast fade show"
+       role="alert"
+       aria-live="assertive"
+       aria-atomic="true"
+       [ngClass]="getToastClass(toast.type)">
+
+    <div class="d-flex">
+      <div class="toast-body">
+        <i [ngClass]="getIconClass(toast.type)" class="me-2"></i>
+        {{ toast.message }}
+      </div>
+
+      <button type-button class="btn-close btn-close-white me-2 m-auto"
+              (click)="removeToast(toast.id)"
+              aria-label="Close"></button>
+    </div>
+  </div>
+
+</div>

@@ -148,19 +148,22 @@
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingAtendimentos">
               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAtendimentos" aria-expanded="true" aria-controls="collapseAtendimentos">
-                Histórico de Atendimentos
+                Atendimentos Agendados
               </button>
             </h2>
             <div id="collapseAtendimentos" class="accordion-collapse collapse show" aria-labelledby="headingAtendimentos" data-bs-parent="#naapiAccordion">
               <div class="accordion-body">
                 <div class="list-section-header">
-                  <h5 class="list-title-sub">Registros</h5>
+                  <h5 class="list-title-sub">Próximos atendimentos</h5>
                   <button class="btn btn-success btn-sm"
                           data-bs-toggle="modal" data-bs-target="#modalAtendimento">
                     <i class="bi bi-plus-lg"></i> Novo
                   </button>
                 </div>
-                <app-atendimento-list [alunoId]="aluno.id"></app-atendimento-list>
+                <app-atendimento-list [alunoId]="aluno.id"
+                                      [status]="'AGENDADO'"
+                                      [title]="' '">
+                </app-atendimento-list>
               </div>
             </div>
           </div>
@@ -211,7 +214,14 @@
           </a>
         </div>
 
-      </div>
+        <div class="info-section mt-3 d-grid">
+          <button (click)="gerarRelatorioPDF()" class="btn btn-outline-primary btn-lg" [disabled]="isDownloadingPDF">
+            <span *ngIf="isDownloadingPDF" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!isDownloadingPDF" class="bi bi-file-earmark-pdf-fill me-2"></i>
+            {{ isDownloadingPDF ? 'Gerando...' : 'Gerar Relatório Histórico' }}
+          </button>
+        </div>
+        </div>
     </div>
   </div>
 </div>

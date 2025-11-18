@@ -1,3 +1,7 @@
+/*
+ * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/app.routes.ts
+ * Descrição: Registra o novo 'ATENDIMENTOS_ROUTES'.
+ */
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
@@ -13,11 +17,9 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [authGuard],
     children: [
-      // --- INÍCIO DA MUDANÇA ---
       {
-        path: 'inicio', // MUDANÇA: de 'dashboard'
-        title: 'Início',  // MUDANÇA: de 'Dashboard'
-        // MUDANÇA: Aponta para o novo componente
+        path: 'inicio',
+        title: 'Início',
         loadComponent: () => import('./pages/inicio/inicio.component').then(m => m.InicioComponent)
       },
       {
@@ -25,11 +27,18 @@ export const routes: Routes = [
         title: 'Meu Perfil',
         loadComponent: () => import('./pages/perfil/perfil.component').then(m => m.PerfilComponent)
       },
-      // --- FIM DA MUDANÇA ---
       {
         path: 'alunos',
         loadChildren: () => import('./pages/alunos.routes').then(m => m.ALUNOS_ROUTES)
       },
+
+      // --- INÍCIO DA MUDANÇA ---
+      {
+        path: 'atendimentos',
+        loadChildren: () => import('./pages/atendimentos.routes').then(m => m.ATENDIMENTOS_ROUTES)
+      },
+      // --- FIM DA MUDANÇA ---
+
       {
         path: 'cadastros',
         loadChildren: () => import('./pages/cadastros.routes').then(m => m.CADASTROS_ROUTES)
@@ -38,14 +47,11 @@ export const routes: Routes = [
         path: 'relatorios',
         loadChildren: () => import('./pages/relatorios.routes').then(m => m.RELATORIOS_ROUTES)
       },
-
-      // --- INÍCIO DA MUDANÇA ---
       {
         path: '',
-        redirectTo: 'inicio', // MUDANÇA: O padrão agora é 'inicio'
+        redirectTo: 'inicio',
         pathMatch: 'full'
       }
-      // --- FIM DA MUDANÇA ---
     ]
   },
   {

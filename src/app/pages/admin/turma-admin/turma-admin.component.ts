@@ -1,8 +1,8 @@
 // src/app/pages/admin/turma-admin/turma-admin.component.ts
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Observable, BehaviorSubject, switchMap, tap } from 'rxjs';
+import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Observable, BehaviorSubject, switchMap, tap, finalize, combineLatest, startWith, map } from 'rxjs';
 import { Turma } from '../../../core/models/aluno.model';
 import { TurmaService } from '../../../core/services/api.service';
 
@@ -18,15 +18,21 @@ export class TurmaAdminComponent implements OnInit {
   private fb = inject(FormBuilder);
   private turmaService = inject(TurmaService);
 
-  protected turmas$!: Observable<Turma[]>;
-  protected crudForm: FormGroup;
+  @ViewChild('formCard') private formCard!: ElementRef;
+
+  public turmas$!: Observable<Turma[]>;
+  public crudForm: FormGroup;
+
+  public isLoading = false;
+  public turmaSearch = new FormControl('');
+  public isMobileFormVisible = false;
 
   protected isEditMode = false;
   protected selectedTurmaId: number | null = null;
   protected errorMessage: string | null = null;
 
-  // Para forçar o recarregamento da lista
   private refresh$ = new BehaviorSubject<void>(undefined);
+  private allTurmas$!: Observable<Turma[]>;
 
   constructor() {
     this.crudForm = this.fb.group({
@@ -35,14 +41,25 @@ export class TurmaAdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.turmas$ = this.refresh$.pipe(
+    this.allTurmas$ = this.refresh$.pipe(
       switchMap(() => this.turmaService.findAll()),
-      // Ordena a lista por nome
       tap(list => list.sort((a, b) => a.nome.localeCompare(b.nome)))
+    );
+
+    this.turmas$ = combineLatest([
+      this.allTurmas$,
+      this.turmaSearch.valueChanges.pipe(startWith(''))
+    ]).pipe(
+      map(([turmas, searchTerm]) => {
+        const filter = (searchTerm || '').toLowerCase().trim();
+        if (!filter) return turmas;
+        return turmas.filter(turma =>
+          turma.nome.toLowerCase().includes(filter)
+        );
+      })
     );
   }
 
-  /** Seleciona um item da lista para edição */
   protected selectTurma(turma: Turma): void {
     this.isEditMode = true;
     this.selectedTurmaId = turma.id;
@@ -50,33 +67,41 @@ export class TurmaAdminComponent implements OnInit {
       nome: turma.nome
     });
     this.errorMessage = null;
+    this.isMobileFormVisible = true;
+    this.scrollToFormOnMobile();
   }
 
-  /** Limpa o formulário para criar um novo item */
   protected clearForm(): void {
     this.isEditMode = false;
     this.selectedTurmaId = null;
     this.crudForm.reset({ nome: '' });
     this.errorMessage = null;
+    this.isMobileFormVisible = false;
   }
 
-  /** Trata a submissão do formulário (Criar ou Atualizar) */
+  protected onNewClick(): void {
+    this.clearForm();
+    this.isMobileFormVisible = true;
+    setTimeout(() => this.scrollToFormOnMobile(), 0);
+  }
+
   protected onSubmit(): void {
-    if (this.crudForm.invalid) {
-      this.errorMessage = "Formulário inválido. Verifique os campos.";
-      return;
-    }
+    if (this.crudForm.invalid || this.isLoading) return;
+
     this.errorMessage = null;
+    this.isLoading = true;
 
     const data = this.crudForm.value;
     const save$: Observable<Turma> = this.isEditMode
       ? this.turmaService.update(this.selectedTurmaId!, data)
       : this.turmaService.create(data);
 
-    save$.subscribe({
+    save$.pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
       next: () => {
         this.clearForm();
-        this.refresh$.next(); // Força o recarregamento da lista
+        this.refresh$.next();
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Erro ao salvar turma.';
@@ -84,21 +109,32 @@ export class TurmaAdminComponent implements OnInit {
     });
   }
 
-  /** Trata a exclusão do item selecionado */
   protected onDelete(): void {
-    if (!this.isEditMode || !this.selectedTurmaId) {
-      return;
-    }
+    if (!this.isEditMode || !this.selectedTurmaId || this.isLoading) return;
 
     if (confirm('Tem certeza que deseja excluir esta turma? Esta ação não pode ser desfeita.')) {
-      this.turmaService.delete(this.selectedTurmaId).subscribe({
+      this.isLoading = true;
+      this.errorMessage = null;
+
+      this.turmaService.delete(this.selectedTurmaId).pipe(
+        finalize(() => this.isLoading = false)
+      ).subscribe({
         next: () => {
           this.clearForm();
-          this.refresh$.next(); // Força o recarregamento da lista
+          this.refresh$.next();
         },
         error: (err) => {
           this.errorMessage = err.error?.message || 'Erro ao excluir. Esta turma pode estar em uso por um aluno.';
         }
+      });
+    }
+  }
+
+  private scrollToFormOnMobile(): void {
+    if (window.innerWidth < 992 && this.formCard) {
+      this.formCard.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   }

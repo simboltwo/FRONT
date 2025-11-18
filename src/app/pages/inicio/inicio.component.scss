@@ -2,114 +2,83 @@
 @import '../../styles/modern-theme.scss';
 @import '../../styles/chart-styles.scss';
 
-/* Oculta a UI do app-aluno-list (Toolbar, Header, FAB) */
-:host ::ng-deep app-aluno-list .page-header-container,
-:host ::ng-deep app-aluno-list .page-toolbar,
-:host ::ng-deep app-aluno-list .fab-add-button {
-  display: none;
-}
-:host ::ng-deep app-aluno-list .aluno-list-page {
-  animation: none;
-}
-:host ::ng-deep app-aluno-list .page-container {
-  padding-top: 0;
-  margin-top: 0;
-}
-
+/* Removemos todos os estilos do #graphCarousel antigo */
 
 /* ==============================================
- * Carrossel (Fundo por Slide)
+ * 1. Seção Hero (Nova)
  * ============================================== */
+.hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 400px;
+  color: #fff;
+  padding: 6rem 1.5rem 8rem 1.5rem; /* Padding extra na base para a barra de stats sobrepor */
 
-#graphCarousel {
-  margin-bottom: 0;
-  background-color: var(--cor-fundo-card); /* Fundo padrão branco */
-  border-bottom: 1px solid var(--cor-borda);
-  color: var(--cor-texto); /* Texto padrão preto */
+  /* Imagem de fundo (consistente com a tela de login) */
+  background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center 40%;
+  background-attachment: fixed; /* Efeito parallax */
+}
 
-  /* Indicadores */
-  .carousel-indicators [data-bs-target] {
-    background-color: #ccc;
-  }
-  .carousel-indicators .active {
-    background-color: var(--cor-texto);
-  }
-  .carousel-indicators {
-    bottom: 20px;
-  }
-  .carousel-item {
-    height: 450px;
-  }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  /* Overlay com o azul da marca */
+  background: linear-gradient(to bottom, rgba(0, 55, 107, 0.7), var(--cor-primaria));
+  opacity: 0.9;
+}
 
-  .carousel-content-wrapper {
-    padding-top: 70px; /* MUDANÇA: Apenas a altura da navbar */
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    height: 100%; /* Ocupa os 450px */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
 
-    /* MUDANÇA: O .card agora tem a altura correta */
-    .card {
-      /* Ocupa 100% da altura restante DENTRO do wrapper (450px - 70px) */
-      height: calc(100% - 70px);
-      background-color: transparent;
-      border: none;
-    }
-
-    /* Slides de KPI (Fundo Azul Gradiente) */
-    &.slide-kpi {
-      background-color: var(--cor-primaria);
-      background-image: linear-gradient(30deg, var(--cor-primaria), var(--cor-primaria-hover));
-      color: #fff;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-
-      /* O padding-top já está no wrapper, não precisamos de altura calculada */
-      .card {
-        height: auto;
-      }
-    }
-
-    /* Slides de Gráfico (Fundo Branco) */
-    &.slide-graph {
-      background-color: var(--cor-fundo-card);
-      color: var(--cor-texto);
-
-      .card {
-        border: none; /* MUDANÇA: Remove a borda feia */
-        background-color: var(--cor-fundo-card);
-      }
-      .card-header {
-         color: var(--cor-texto);
-         /* MUDANÇA: Remove a borda do header */
-         border-bottom: none !important;
-         text-align: center;
-         font-family: 'Open Sans', sans-serif;
-         font-weight: 600;
-         font-size: 0.9rem;
-         text-transform: uppercase;
-         letter-spacing: 0.5px;
-      }
-      .bar-label { color: var(--cor-texto); }
-      .legend-label { color: var(--cor-texto); }
-      .legend-value { color: var(--cor-texto-suave); }
-    }
+  .hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
   }
 
-  .carousel-control-prev,
-  .carousel-control-next {
-    display: none;
+  .hero-subtitle {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    opacity: 0.9;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
   }
 }
 
 /* ==============================================
- * Estilo dos KPIs (Sem .card)
+ * 2. Barra de KPIs (Nova)
  * ============================================== */
-/* MUDANÇA: O .stat-card não existe mais, aplicamos no .slide-kpi */
-.slide-kpi {
+.stats-bar {
+  position: relative;
+  z-index: 3;
+  margin-top: -80px; /* <- Efeito de sobreposição */
+  padding-bottom: 2.5rem;
+
+  .stat-card {
+    background-color: var(--cor-fundo-card);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-borda);
+    box-shadow: var(--sombra-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+  }
+
   .stat-icon {
     width: 60px;
     height: 60px;
@@ -118,124 +87,152 @@
     align-items: center;
     justify-content: center;
     font-size: 1.75rem;
-    margin-bottom: 1rem;
+    flex-shrink: 0;
+    color: #fff;
 
-    &.icon-alunos {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #fff;
+    /* Cores uniformes da marca */
+    &.icon-alunos { background-color: var(--cor-primaria); }
+    &.icon-agendados { background-color: var(--cor-aviso); color: var(--cor-texto); }
+    &.icon-realizados { background-color: var(--cor-sucesso); }
+  }
+
+  .stat-content {
+    .stat-title {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--cor-texto-suave);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    &.icon-agendados {
-      background-color: var(--cor-aviso);
+    .stat-value {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
       color: var(--cor-texto);
-    }
-    &.icon-realizados {
-      background-color: var(--cor-sucesso);
-      color: #fff;
+      line-height: 1.1;
     }
   }
-  .stat-title {
+}
+
+/* ==============================================
+ * 3. Seção de Gráficos (Nova)
+ * ============================================== */
+.charts-section {
+  padding: 1.5rem 1.5rem;
+  background-color: var(--cor-fundo);
+
+  .card {
+    height: 100%;
+    box-shadow: var(--sombra-md);
+  }
+  .card-header {
+    text-align: center;
     font-family: 'Open Sans', sans-serif;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.7);
     font-weight: 600;
-    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-  .stat-value {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.1;
-  }
-  .stat-footer-link {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #fff !important;
-    text-decoration: none;
-    margin-top: 1.5rem;
-    padding: 0.5rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 0;
-    transition: all 0.2s ease;
 
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
+  // Ajusta o chart-styles.scss para o contexto do card
+  .chart-container-donut {
+    padding: 1.5rem;
+  }
+  .chart-container-bar {
+    padding: 1.5rem;
   }
 }
 
-
 /* ==================================
- * Secção de Resumo (Tipografia)
- * ==================================
-*/
-.summary-section {
-  background-color: var(--cor-primaria-suave);
-  padding: 3.5rem 1.5rem;
-  text-align: center;
-  border-bottom: 1px solid var(--cor-borda);
-}
-.summary-title {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  font-size: 1.75rem;
-  color: var(--cor-texto);
-  margin-bottom: 1rem;
-}
-.summary-text {
-  font-family: 'Raleway', sans-serif;
-  font-size: 1.1rem;
-  color: var(--cor-texto-suave);
-  line-height: 1.7;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-/* ==================================
- * Vitrine de Alunos (Estilo Hering)
+ * 4. Vitrine de Alunos (Retocada)
  * ==================================
 */
 .vitrine-header {
-  border-bottom: 1px solid var(--cor-borda);
-  padding-bottom: 0.75rem;
-  margin-bottom: 2rem;
-  margin-top: 3.5rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
   text-align: center;
+  margin: 3.5rem 0 2.5rem 0;
 
   h2 {
     font-family: 'Poppins', sans-serif;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
     color: var(--cor-texto);
     text-transform: uppercase;
     letter-spacing: 1px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.75rem;
+
+    // Linha azul sutil
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background-color: var(--cor-primaria);
+    }
   }
-  a { display: none; }
 }
 
 /* Link "Ver Todos" (abaixo do grid) */
 .ver-todos-link {
   display: block;
   text-align: center;
-  margin: 2.5rem 0 3rem 0;
+  margin: 2.5rem 0 4rem 0;
   font-family: 'Open Sans', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
   color: var(--cor-link);
+  background-color: transparent;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-borda);
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.2s ease;
 
   &:hover {
-    color: var(--cor-primaria-hover);
+    color: #fff;
+    background-color: var(--cor-primaria);
+    border-color: var(--cor-primaria);
   }
 }
 
-/* Importa os estilos dos cards de aluno */
-@import '../../styles/aluno-card.scss';
+/* ==================================
+ * Responsividade Mobile
+ * ==================================
+*/
+@media (max-width: 767.98px) {
+  .hero-section {
+    min-height: 350px;
+    padding: 4rem 1.5rem 6rem 1.5rem;
+  }
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .stats-bar {
+    margin-top: -60px; /* Sobe um pouco menos no mobile */
+  }
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem !important;
+  }
+
+  .stat-content {
+    .stat-value {
+      font-size: 2rem;
+    }
+  }
+}

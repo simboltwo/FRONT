@@ -1,6 +1,7 @@
 /* src/app/styles/aluno-card.scss */
-@import 'modern-theme.scss'; // Certifique-se de importar o tema principal
+@import 'modern-theme.scss'; // Importa o tema principal para variáveis
 
+/* Card Base */
 .aluno-card {
   border: none !important;
   background-color: #fff;
@@ -17,6 +18,7 @@
   }
 }
 
+/* Container da Imagem */
 .card-img-container {
   position: relative;
   width: 100%;
@@ -36,14 +38,22 @@
   transform: scale(1.05);
 }
 
-/* Ícone de Prioridade Padrão - Será sobrescrito no componente específico */
-.icon-prioridade {
+/*
+ * ==============================================
+ * ESTILOS MOVIDOS PARA CÁ (Centralizados)
+ * ==============================================
+*/
+
+/* Ícone de Prioridade (Sem fundo branco) */
+.card-img-container .icon-prioridade {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   color: var(--cor-perigo);
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); /* Sombra no ícone */
   border-radius: 50%;
   width: 28px;
   height: 28px;
@@ -51,7 +61,7 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  box-shadow: var(--sombra-sm);
+  animation: pulse-alta 2s infinite;
 }
 
 @keyframes pulse-alta {
@@ -60,64 +70,144 @@
   100% { transform: scale(1); }
 }
 
-/* Corpo do Card */
-.card-body {
-  padding: 1rem;
+/* Corpo do Card (Mais compacto) */
+.aluno-card .card-body {
+  padding: 0.75rem 1rem;
   text-align: left;
 }
-
-.card-title {
+.aluno-card .card-title {
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--cor-texto);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
 }
-
-.card-matricula, .card-curso {
+.aluno-card .card-matricula,
+.aluno-card .card-curso {
   font-family: 'Open Sans', sans-serif;
   color: var(--cor-texto-suave);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 400;
   margin-bottom: 0.25rem;
 }
-.card-curso {
-  margin-bottom: 0.75rem;
+.aluno-card .card-curso {
+  margin-bottom: 0.5rem;
 }
 
-.card-diagnosticos {
-  .badge-diag {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--cor-texto-suave);
-    background-color: var(--cor-primaria-suave);
-    padding: 0.3em 0.6em;
-    border-radius: 4px;
-    margin-right: 0.25rem;
-    margin-bottom: 0.25rem;
-    display: inline-block;
-  }
+/* Badges de Diagnóstico */
+.card-diagnosticos .badge-diag {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.7rem; /* Reduzido */
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+  background-color: var(--cor-primaria-suave);
+  padding: 0.3em 0.6em;
+  border-radius: 4px;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+  display: inline-block;
 }
 
-/* Ações do Card - Padrão, pode ser sobrescrito */
-.card-hover-actions {
+
+/*
+ * ==============================================
+ * Botões de Ação (Desktop Hover)
+ * ==============================================
+*/
+.card-img-container .card-hover-actions {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-  padding: 1rem;
-  padding-top: 3rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 0.75rem;
+
   display: flex;
-  flex-direction: row;
+  flex-direction: row; /* Horizontal */
   justify-content: center;
+  align-items: center;
   gap: 0.5rem;
+
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(10px);
   transition: all 0.3s ease-out;
   z-index: 3;
+}
+
+.aluno-card:hover .card-hover-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Botão Principal (Atender) */
+.btn-atender {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-align: center;
+  flex-grow: 1;
+  padding: 0.65rem;
+  height: 42px;
+  border-radius: var(--raio-borda);
+  border: none;
+  background-color: #fff;
+  color: var(--cor-texto) !important; /* Texto preto */
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f5f5f5;
+    opacity: 1;
+  }
+
+  .bi {
+    margin-right: 0.5rem;
+  }
+}
+
+/* Botões de Ícone (Base) */
+.btn-action-icon {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #fff;
+  border: none;
+  border-radius: var(--raio-borda);
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-texto) !important; /* Texto preto */
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  .bi { margin: 0; }
+}
+
+/* Botão Editar (Azul) */
+.btn-primary-icon {
+  @extend .btn-action-icon;
+  background-color: var(--cor-primaria);
+  color: #fff !important; /* Texto branco */
+
+  &:hover {
+    background-color: var(--cor-primaria-hover);
+  }
+}
+
+/* Botão Excluir (Vermelho) */
+.btn-danger-icon {
+  @extend .btn-action-icon;
+  background-color: var(--cor-perigo);
+  color: #fff !important; /* Texto branco */
+
+  &:hover {
+    background-color: var(--cor-perigo-hover); /* Tom mais escuro de vermelho */
+  }
 }

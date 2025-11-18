@@ -1,24 +1,44 @@
 /* src/app/styles/_chart-styles.scss */
 @import './modern-theme.scss';
 
-/* ... (Estilos .chart-container-bar - sem alteração) ... */
+/* ==============================================
+ * Gráfico de Barras
+ * ============================================== */
 .chart-container-bar {
   padding: 1rem;
+  width: 100%; // Garante que ocupa o espaço
 }
+
 .chart-bar-item {
   margin-bottom: 0.75rem;
+  /* MUDANÇA: Adiciona transição para o hover */
+  transition: all 0.2s ease;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--raio-borda);
+
+  /* MUDANÇA: Animação de hover */
+  &:hover {
+    background-color: var(--cor-primaria-suave);
+    .bar-label {
+      color: var(--cor-primaria);
+    }
+  }
 }
+
 .bar-label {
-  font-family: 'Raleway', sans-serif;
+  /* MUDANÇA: Fonte padronizada */
+  font-family: 'Open Sans', sans-serif;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600; /* Mais forte */
   color: var(--cor-texto);
   display: block;
   margin-bottom: 0.25rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s ease;
 }
+
 .bar-track {
   width: 100%;
   background-color: var(--cor-primaria-suave);
@@ -26,6 +46,7 @@
   height: 24px;
   overflow: hidden;
 }
+
 .bar-fill {
   height: 100%;
   background-color: var(--cor-primaria);
@@ -36,6 +57,7 @@
   min-width: 30px;
   max-width: 100%;
 }
+
 .bar-value {
   font-family: 'Open Sans', sans-serif;
   font-size: 0.8rem;
@@ -47,31 +69,67 @@
 
 /* ==============================================
  * Gráfico de Pizza (Donut/Pie)
- * (Layout vertical para corrigir o "encaixe")
+ * (Layout horizontal para desktop, vertical para mobile)
  * ============================================== */
 .chart-container-donut {
   display: flex;
-  flex-direction: column; /* <-- ESTA É A LINHA IMPORTANTE */
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  gap: 1.5rem;
+  padding: 1.5rem; // Mais padding
+  gap: 2rem; // Espaço entre gráfico e legenda
   height: 100%;
   width: 100%;
+
+  /* MUDANÇA: Layout padrão é horizontal (desktop) */
+  flex-direction: row;
+
+  /* MUDANÇA: Em telas pequenas, fica vertical */
+  @media (max-width: 1199.98px) {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
 }
 
 .pie-chart-container {
   position: relative;
   flex-shrink: 0;
+  display: flex; /* Para centrar o 'miolo' */
+  align-items: center;
+  justify-content: center;
 }
+
 .pie-chart {
-  width: 150px;
-  height: 150px;
+  /* MUDANÇA: Gráfico maior */
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   transition: all 0.5s ease-out;
+
+  /* MUDANÇA: O 'miolo' branco para o donut */
+  border: 10px solid var(--cor-fundo-card);
+  box-sizing: content-box;
 }
+
+/* NOVO: Estilo do 'miolo' do Donut */
 .pie-chart-center {
-  display: none;
+  position: absolute;
+  text-align: center;
+
+  .total-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cor-primaria);
+    line-height: 1;
+  }
+  .total-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cor-texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 }
 
 /* Legenda */
@@ -79,23 +137,25 @@
   width: 100%;
   max-width: 100%;
   overflow-y: auto;
-  max-height: 150px;
+  max-height: 180px; // Alinhado com a altura do gráfico
 
   .legend-item {
     display: flex;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem; // Mais espaço
     font-size: 0.85rem;
 
     .legend-color-dot {
-      width: 10px;
-      height: 10px;
+      width: 12px; // Ponto maior
+      height: 12px;
       border-radius: 50%;
       margin-right: 0.75rem;
       flex-shrink: 0;
     }
     .legend-label {
-      font-family: 'Raleway', sans-serif;
+      /* MUDANÇA: Fonte padronizada */
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 600;
       color: var(--cor-texto);
       white-space: nowrap;
       overflow: hidden;
@@ -104,9 +164,10 @@
       flex-grow: 1;
     }
     .legend-value {
+      /* MUDANÇA: Fonte padronizada */
       font-family: 'Open Sans', sans-serif;
-      color: var(--cor-texto-suave);
-      font-weight: 600;
+      color: var(--cor-texto);
+      font-weight: 700;
       flex-shrink: 0;
     }
   }

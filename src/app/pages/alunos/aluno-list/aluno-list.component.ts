@@ -67,40 +67,41 @@ export class AlunoListComponent implements OnInit {
     );
 
     this.alunos$ = combineLatest([filters$, this.refresh$]).pipe(
+      // --- INÍCIO DA MUDANÇA: Filtro Server-Side ---
       switchMap(([filters, _]) => {
+        // Monta o objeto de filtro para o serviço
         const filterParams: AlunoFilter = {
-          nome: filters.nome || undefined
+          nome: filters.nome || undefined,
+          cursoIds: filters.cursoIds && filters.cursoIds.length > 0 ? filters.cursoIds : undefined,
+          diagnosticoIds: filters.diagnosticoIds && filters.diagnosticoIds.length > 0 ? filters.diagnosticoIds : undefined
         };
+        // Chama o serviço (agora corrigido)
         return this.alunoService.findAll(filterParams);
       }),
+      // --- FIM DA MUDANÇA ---
+
+      // --- INÍCIO DA MUDANÇA: Remoção do Filtro Client-Side ---
       map(alunos => {
-        const { cursoIds, diagnosticoIds } = this.filterForm.value;
+        // O filtro de cursoIds e diagnosticoIds foi REMOVIDO daqui.
         let alunosFiltrados = [...alunos];
 
-        if (cursoIds && cursoIds.length > 0) {
-          alunosFiltrados = alunosFiltrados.filter(aluno =>
-            cursoIds.includes(aluno.curso.id)
-          );
-        }
-        if (diagnosticoIds && diagnosticoIds.length > 0) {
-          alunosFiltrados = alunosFiltrados.filter(aluno =>
-            aluno.diagnosticos.some(diag => diagnosticoIds.includes(diag.id))
-          );
-        }
-
+        // O filtro de prioridade (usado na Home) permanece client-side
         if (this.filterPrioridade) {
           alunosFiltrados = alunosFiltrados.filter(a => a.prioridade === this.filterPrioridade);
         }
 
+        // A ordenação permanece client-side
         const sortValue = this.filterForm.value.sort;
         alunosFiltrados = this.sortAlunos(alunosFiltrados, sortValue || 'nome-asc');
 
+        // O limite (usado na Home) permanece client-side
         if (this.limit) {
           alunosFiltrados = alunosFiltrados.slice(0, this.limit);
         }
 
         return alunosFiltrados;
       }),
+      // --- FIM DA MUDANÇA ---
       tap(alunos => this.updateAlunoCount(alunos.length))
     );
 

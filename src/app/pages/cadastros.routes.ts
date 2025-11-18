@@ -3,6 +3,12 @@ import { Routes } from '@angular/router';
 
 export const CADASTROS_ROUTES: Routes = [
   {
+    // Rota "vazia" (/cadastros) agora aponta para o novo componente
+    path: '',
+    title: 'Cadastros',
+    loadComponent: () => import('./admin/cadastros-home/cadastros-home.component').then(m => m.CadastrosHomeComponent)
+  },
+  {
     path: 'diagnosticos',
     title: 'Gerir Diagnósticos',
     loadComponent: () => import('./admin/diagnostico-admin/diagnostico-admin.component').then(m => m.DiagnosticoAdminComponent)
@@ -26,10 +32,7 @@ export const CADASTROS_ROUTES: Routes = [
     path: 'usuarios',
     title: 'Gerir Usuários',
     loadComponent: () => import('./admin/usuario-admin/usuario-admin.component').then(m => m.UsuarioAdminComponent)
-  },
-  {
-    path: '',
-    redirectTo: 'diagnosticos',
-    pathMatch: 'full'
   }
+
+  // O redirecionamento antigo foi removido, pois a rota '' agora tem um componente
 ];

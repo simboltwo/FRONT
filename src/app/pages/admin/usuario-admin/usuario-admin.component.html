@@ -1,21 +1,38 @@
 <div class="admin-page animate-fadeIn">
 
   <div class="page-container">
-    <div class="page-header-container bg-color-5"> <h2 class="page-header-title">ADMINISTRAÇÃO</h2>
+    <div class="page-header-container bg-brand-blue">
+      <h2 class="page-header-title">GERENCIAR USUÁRIOS</h2>
+      <p class="page-header-desc">
+        Adicione, edite ou remova usuários do sistema.
+      </p>
     </div>
   </div>
 
   <div class="admin-layout-container">
     <div class="row g-4">
 
-      <div class="col-lg-4">
+      <div class="col-lg-4 animate-fadeInUp" [class.mobile-hidden]="isMobileFormVisible" style="animation-delay: 0.1s;">
         <div class="card card-list-container">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            Gerir Usuários
-            <button class="btn btn-sm btn-outline-primary" (click)="clearForm()" title="Novo Usuário">
+
+          <div class="form-section-header">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-people-fill"></i>
+              <h6>Usuários Cadastrados</h6>
+            </div>
+            <button class="btn btn-primary btn-sm ms-auto" (click)="onNewClick()" title="Novo Usuário" [disabled]="isLoading">
               <i class="bi bi-plus-lg"></i> Novo
             </button>
           </div>
+
+          <div class="admin-search-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text"
+                   class="form-control"
+                   [formControl]="userSearch"
+                   placeholder="Buscar por nome ou email...">
+          </div>
+
           <div class="list-group list-group-flush">
             <ng-container *ngIf="(usuarios$ | async) as list; else loading">
               <a *ngFor="let item of list"
@@ -25,6 +42,9 @@
                 {{ item.nome }}
                 <span class="text-muted small d-block">{{ item.email }}</span>
               </a>
+               <div *ngIf="list.length === 0 && (userSearch.value || '')" class="list-group-item text-muted text-center p-3 small">
+                Nenhum usuário encontrado.
+              </div>
             </ng-container>
             <ng-template #loading>
               <div class="list-group-item text-muted">Carregando...</div>
@@ -33,67 +53,98 @@
         </div>
       </div>
 
-      <div class="col-lg-8">
+      <div class="col-lg-8 animate-fadeInUp" [class.mobile-visible]="isMobileFormVisible" style="animation-delay: 0.2s;" #formCard>
         <div class="card card-form-container">
-          <div class="card-header">
-            {{ isEditMode ? 'Editar Usuário' : 'Novo Usuário' }}
+
+          <div class="form-section-header">
+            <button type="button" class="btn-back-mobile d-lg-none" (click)="clearForm()" [disabled]="isLoading">
+              <i class="bi bi-arrow-left"></i> Voltar
+            </button>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-pencil-fill"></i>
+              <h6>{{ isEditMode ? 'Editar Usuário' : 'Novo Usuário' }}</h6>
+            </div>
           </div>
+
           <div class="card-body">
             <form [formGroup]="crudForm" (ngSubmit)="onSubmit()">
 
               <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
-              <div class="row">
-                <div class="col-md-6 mb-4">
-                  <label for="nome" class="form-label">Nome *</label>
-                  <input type="text" id="nome" class="form-control" formControlName="nome"
-                         [class.is-invalid]="crudForm.get('nome')!.invalid && crudForm.get('nome')!.touched">
+              <div class="form-section-card mb-4">
+                <div class="form-section-header">
+                  <i class="bi bi-person-lines-fill"></i>
+                  <h6>Informações Básicas</h6>
                 </div>
-                <div class="col-md-6 mb-4">
-                  <label for="email" class="form-label">Email *</label>
-                  <input type="email" id="email" class="form-control" formControlName="email"
-                         [class.is-invalid]="crudForm.get('email')!.invalid && crudForm.get('email')!.touched">
-                </div>
-              </div>
-
-              <div class="mb-4">
-                <label for="senha" class="form-label">
-                  Senha {{ isEditMode ? '(Deixe em branco para não alterar)' : '*' }}
-                </label>
-                <input type="password" id="senha" class="form-control" formControlName="senha"
-                       [class.is-invalid]="crudForm.get('senha')!.invalid && crudForm.get('senha')!.touched">
-              </div>
-
-              <div class="mb-4">
-                <label class="form-label">Papéis *</label>
-                <div class="checkbox-container">
-                  <ng-container *ngIf="(papeis$ | async) as papeisList">
-                    <div *ngFor="let papel of papeisList" class="form-check">
-                      <input class="form-check-input" type="checkbox"
-                             [value]="papel.id" [id]="'papel-' + papel.id"
-                             [checked]="isPapelChecked(papel.id)"
-                             (change)="onPapelChange($event)">
-                      <label class="form-check-label" [for]="'papel-' + papel.id">
-                        {{ papel.authority | slice:5 }} </label>
+                <div class="form-section-body">
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <label for="nome" class="form-label">Nome *</label>
+                      <input type="text" id="nome" class="form-control" formControlName="nome"
+                             [class.is-invalid]="crudForm.get('nome')!.invalid && crudForm.get('nome')!.touched">
                     </div>
-                  </ng-container>
+                    <div class="col-md-6 mb-4">
+                      <label for="email" class="form-label">Email *</label>
+                      <input type="email" id="email" class="form-control" formControlName="email"
+                             [class.is-invalid]="crudForm.get('email')!.invalid && crudForm.get('email')!.touched">
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="senha" class="form-label">
+                      Senha {{ isEditMode ? '(Deixe em branco para não alterar)' : '*' }}
+                    </label>
+                    <input type="password" id="senha" class="form-control" formControlName="senha"
+                           [class.is-invalid]="crudForm.get('senha')!.invalid && crudForm.get('senha')!.touched">
+                  </div>
                 </div>
               </div>
 
+              <div class="form-section-card mb-4">
+                <div class="form-section-header">
+                  <i class="bi bi-shield-lock-fill"></i>
+                  <h6>Papéis (Permissões) *</h6>
+                </div>
+                <div class="form-section-body">
+                  <div class="checkbox-container">
+                    <ng-container *ngIf="(papeis$ | async) as papeisList">
+                      <div *ngFor="let papel of papeisList" class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                               [value]="papel.id" [id]="'papel-' + papel.id"
+                               [checked]="isPapelChecked(papel.id)"
+                               (change)="onPapelChange($event)">
+                        <label class="form-check-label" [for]="'papel-' + papel.id">
+                          {{ papel.authority | slice:5 }}
+                        </label>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div *ngIf="crudForm.get('papeis')!.invalid && crudForm.get('papeis')!.touched"
+                       class="text-danger small mt-2">
+                    É obrigatório selecionar pelo menos um papel.
+                  </div>
+                </div>
+              </div>
 
-              <div class="card-footer d-flex justify-content-between">
-                <div>
+              <div class="card-footer footer-actions-container">
+                <div class="footer-actions-left">
                   <button type="button" class="btn btn-danger"
-                          *ngIf="isEditMode" (click)="onDelete()">
-                    Excluir
+                          *ngIf="isEditMode" (click)="onDelete()"
+                          [disabled]="isLoading">
+                    <i class="bi bi-trash"></i>
+                    <span>Excluir</span>
                   </button>
                 </div>
-                <div>
-                  <button type="button" class="btn btn-outline-secondary me-2" (click)="clearForm()">
-                    Cancelar
+                <div class="footer-actions-right">
+                  <button type="button" class="btn btn-outline-secondary" (click)="clearForm()"
+                          [disabled]="isLoading">
+                    <i class="bi bi-x-lg"></i>
+                    <span>Cancelar</span>
                   </button>
-                  <button type="submit" class="btn btn-primary" [disabled]="crudForm.invalid">
-                    Salvar
+                  <button type="submit" class="btn btn-primary" [disabled]="crudForm.invalid || isLoading">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    <i *ngIf="!isLoading" class="bi bi-check-lg"></i>
+                     <span>{{ isLoading ? 'Salvando...' : 'Salvar' }}</span>
                   </button>
                 </div>
               </div>

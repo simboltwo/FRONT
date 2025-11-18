@@ -1,0 +1,191 @@
+/*
+ * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/pages/atendimentos/atendimento-gerenciar/atendimento-gerenciar.component.scss
+ * Descrição: Adicionados estilos para a nova barra de pesquisa (page-toolbar).
+ */
+@import '../../../styles/modern-theme.scss'; // Para variáveis
+@import '../../../styles/animations.scss'; // Para animações
+
+/* ==============================================
+ * Hero Banner (Copiado de aluno-list.scss)
+ * ============================================== */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  /* Imagem de fundo diferente para variar */
+  background-image: url('https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=2070&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  /* Ajuste para a navbar fixa */
+  margin-top: 80px;
+}
+
+.hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  /* Um overlay mais escuro para esta página */
+  background: linear-gradient(to bottom, rgba(0, 30, 58, 0.6), var(--cor-primaria));
+}
+
+.hero-banner-content {
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-subtitle {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* ==============================================
+ * Layout, Toolbar e Cards
+ * ============================================== */
+.page-container {
+  /* Herda de page-container.scss, mas ajustamos o espaçamento pós-banner */
+  width: 100%;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 2.5rem; /* Espaço entre banner e cards */
+  margin-bottom: 3rem;
+}
+
+/* --- INÍCIO DA MUDANÇA: Estilos da Toolbar (copiado de aluno-list.scss) --- */
+.page-toolbar {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--cor-borda);
+  border-radius: 0;
+  padding: 0 0 1.5rem 0;
+  margin-bottom: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-field {
+  position: relative;
+  flex-grow: 1;
+  max-width: 100%; /* Ocupa a largura total */
+
+  .bi-search {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1rem;
+    color: var(--cor-texto-suave);
+    font-size: 0.9rem;
+  }
+
+  .form-control {
+    border: 1px solid var(--cor-borda) !important;
+    border-radius: var(--raio-borda) !important;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    background-color: var(--cor-fundo-card);
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+  }
+  .form-control:focus {
+    border-color: var(--cor-primaria) !important;
+  }
+}
+/* --- FIM DA MUDANÇA --- */
+
+
+.card-list-container {
+  max-height: 70vh; /* Mantém a altura máxima da lista */
+  .list-group {
+    overflow-y: auto;
+  }
+}
+
+/* Ajuste para mobile */
+@media (max-width: 991.98px) {
+  .hero-banner {
+    height: 250px;
+    margin-top: 70px;
+  }
+  .hero-title {
+    font-size: 1.75rem;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  .page-container {
+    margin-top: 1.5rem;
+  }
+
+  /* --- MUDANÇA: Ajuste da toolbar no mobile --- */
+  .page-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .search-field {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+
+/* ==============================================
+ * Estilos do Componente (Modal e Badges) - Mantidos
+ * ============================================== */
+
+.badge {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.8rem;
+  border-radius: var(--raio-borda);
+  font-weight: 600;
+  padding: 0.4em 0.7em;
+}
+
+.bg-success.text-white {
+  background-color: rgba(var(--cor-sucesso), 0.1) !important;
+  color: var(--cor-sucesso-hover) !important;
+}
+.bg-danger.text-white {
+  background-color: rgba(var(--cor-perigo), 0.1) !important;
+  color: var(--cor-perigo) !important;
+}
+.bg-secondary.text-white {
+  background-color: var(--cor-primaria-suave) !important;
+  color: var(--cor-texto-suave) !important;
+}
+
+.form-wrapper-flat {
+  .form-control,
+  .form-select {
+    border-radius: var(--raio-borda) !important;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    border: 1px solid var(--cor-borda) !important;
+  }
+
+  textarea.form-control {
+    min-height: 120px;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: var(--cor-primaria) !important;
+    box-shadow: none !important;
+  }
+}

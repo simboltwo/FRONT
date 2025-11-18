@@ -1,76 +1,83 @@
 /* src/app/pages/alunos/aluno-detalhe/aluno-detalhe.component.scss */
 @import '../../../styles/modern-theme.scss';
 
+/* Container principal da página, agora flui naturalmente
+  abaixo do page-header.
+*/
 .aluno-detalhe-page {
-  /* MUDANÇA: Removido 'margin: -1.5rem -1.5rem;' para corrigir scroll horizontal */
-  animation: fadeInUp 0.5s ease-out;
-
-  .row {
-    @media (min-width: 992px) {
-      height: 100vh;
-      max-height: 100vh;
-    }
-  }
-
-  @media (max-width: 991.98px) {
-    .row {
-      flex-direction: column;
-    }
-  }
+  /* Animação de fade-in já está no HTML */
 }
 
-/* Coluna da Esquerda: Foto (FIXA) */
+/* O .page-container global é usado para centralizar e
+  controlar o padding da página.
+*/
+
+
+/* Coluna da Esquerda: Foto (FIXA/STICKY) */
 .aluno-foto-wrapper {
   position: relative;
-  background-color: var(--cor-fundo-card);
-  display: flex;
-  align-items: stretch; /* Estica o container da imagem */
-  justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem;
 
   @media (min-width: 992px) {
     position: sticky;
-    top: 0;
-    height: 100vh;
-    padding-top: calc(80px + 1.5rem); /* Navbar + Padding */
+    top: 100px; /* 80px (navbar) + 20px (margem) */
+    height: auto;
+    padding: 2.5rem;
   }
 
   @media (max-width: 991.98px) {
-     padding-top: calc(70px + 1.5rem); /* Navbar mobile + Padding */
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 0 1.5rem;
   }
 }
 
-/* MUDANÇA: Imagem retangular (estilo Hering) */
-.aluno-foto-principal {
-  width: 100%;
-  height: 100%; /* Preenche o wrapper */
-  aspect-ratio: 3 / 4; /* MUDANÇA: Proporção 3:4 (vertical) */
-  object-fit: cover; /* MUDANÇA: 'cover' preenche e corta (não mais 'contain') */
-  background-color: var(--cor-borda);
-  border-radius: var(--raio-borda); /* 0px */
-  box-shadow: var(--sombra-md);
-  max-height: 100%;
+/* MUDANÇA: Estilo da Logo do CEFET sobreposta */
+.cefet-logo-overlay {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  width: 60px;
+  height: auto;
+  opacity: 0.7;
+  z-index: 2;
+  transition: opacity 0.2s ease;
+
+  @media (min-width: 992px) {
+    top: 3.5rem; /* 2.5rem padding + 1rem */
+    left: 3.5rem;
+  }
+
+  /* Evita que a logo atrapalhe o hover da foto (se houver) */
+  pointer-events: none;
 }
 
-/* MUDANÇA: Logo do CEFET removida (CSS removido) */
-/* .cefet-logo-overlay { ... } */
+
+.aluno-foto-principal {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background-color: var(--cor-borda);
+  border-radius: var(--raio-borda);
+  box-shadow: var(--sombra-lg);
+  border: 1px solid var(--cor-borda);
+}
+
 
 /* Coluna da Direita: Informações (SCROLLÁVEL) */
 .aluno-info-container {
   background-color: var(--cor-fundo-card);
-  padding: 1.5rem;
+  padding: 2.5rem 3rem;
 
   @media (min-width: 992px) {
-    height: 100vh;
-    overflow-y: auto;
-    padding: 2.5rem 3rem;
-    padding-top: calc(80px + 2.5rem); /* Navbar + Padding */
+    border-left: 1px solid var(--cor-borda);
+    min-height: calc(100vh - 80px);
   }
 
   @media (max-width: 991.98px) {
-     padding-top: 1.5rem;
-     height: auto; /* MUDANÇA: Corrige altura no mobile */
-     overflow-y: visible; /* MUDANÇA: Corrige scroll no mobile */
+     padding: 1.5rem;
+     border-top: 1px solid var(--cor-borda);
   }
 }
 
@@ -78,7 +85,6 @@
 .breadcrumb-container {
   margin-bottom: 2rem;
   padding-left: 0;
-
   .breadcrumb {
     padding: 0;
     margin: 0;
@@ -86,25 +92,19 @@
     display: flex;
     align-items: center;
   }
-
   .breadcrumb-item {
     font-family: 'Open Sans', sans-serif;
     font-size: 0.85rem;
     color: var(--cor-texto-suave);
-
     a {
       color: var(--cor-texto-suave);
       text-decoration: none;
-      &:hover {
-        color: var(--cor-primaria);
-      }
+      &:hover { color: var(--cor-primaria); }
     }
-
     &.active {
       color: var(--cor-texto);
       font-weight: 600;
     }
-
     & + .breadcrumb-item::before {
       content: "/";
       padding-right: 0.5rem;
@@ -113,7 +113,6 @@
     }
   }
 }
-
 
 /* Divisor de seções */
 .section-divider {
@@ -126,73 +125,56 @@
   margin-bottom: 2rem;
 }
 
-/* * ==================================
- * Tipografia e Botões
+/* ==================================
+ * Tipografia e Botões (Padronizados)
  * ==================================
- */
+*/
 
-/* Título (Poppins) */
 .aluno-nome {
   font-family: 'Poppins', sans-serif;
-  font-size: 24px;
-  color: #000404;
+  font-size: 2rem;
+  /* MUDANÇA: Cor do nome do aluno */
+  color: var(--cor-primaria);
   font-weight: 600;
-  letter-spacing: normal;
   margin: 0;
-  padding: 0;
   word-break: break-word;
 }
 
-/* Nome Social (Raleway) */
 .aluno-nome-social {
   font-family: 'Raleway', sans-serif;
-  font-size: 18px;
+  font-size: 1.25rem;
   color: var(--cor-texto-suave);
   font-weight: 400;
-  letter-spacing: normal;
   margin: 0.25rem 0 0.5rem 0;
-  padding: 0;
 }
 
-/* Matrícula (Open Sans) */
 .aluno-matricula {
   font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
+  font-size: 0.9rem;
   color: var(--cor-texto-suave);
   font-weight: 400;
-  letter-spacing: normal;
-  margin: 0;
-  padding: 0;
-}
-
-/* Botão (Open Sans) */
-.btn-primary.btn-lg {
-  background-color: var(--cor-primaria) !important;
-  border-color: var(--cor-primaria) !important;
-  color: #fff !important;
-  padding: 0.9rem 1.5rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.8px;
   text-transform: uppercase;
-  border-radius: var(--raio-borda) !important;
-}
-.btn-primary.btn-lg:hover {
-  opacity: 0.8;
-  background-color: var(--cor-primaria-hover) !important;
-  border-color: var(--cor-primaria-hover) !important;
+  letter-spacing: 0.5px;
+  margin: 0;
 }
 
-.btn-success.btn-sm {
+.btn-primary.btn-lg {
+  padding: 0.9rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* MUDANÇA: Botão "Novo" agora é azul */
+.btn-primary.btn-sm {
   font-size: 0.8rem;
   padding: 0.4rem 0.8rem;
   letter-spacing: 0.5px;
   font-weight: 600;
   text-transform: uppercase;
+  /* Cor e hover já vêm do tema .btn-primary */
 }
 
 /* ==================================
- * Estilo Hering (Prioridade, Prova Separada)
+ * Estilo (Prioridade, Prova)
  * ==================================
 */
 
@@ -213,7 +195,6 @@
   gap: 0.75rem;
 }
 
-/* "Bolinhas" de Cor (Para Prioridade) */
 .swatch-color {
   width: 32px;
   height: 32px;
@@ -223,7 +204,6 @@
   cursor: pointer;
   padding: 2px;
   transition: all 0.2s ease;
-
   span {
     display: block;
     width: 100%;
@@ -231,7 +211,6 @@
     border-radius: 50%;
     font-size: 0;
   }
-
   &.swatch-danger span { background-color: var(--cor-perigo); }
   &.swatch-warning span { background-color: var(--cor-aviso); }
   &.swatch-success span { background-color: var(--cor-sucesso); }
@@ -242,9 +221,13 @@
   &.swatch-danger.active { border-color: var(--cor-perigo); }
   &.swatch-warning.active { border-color: var(--cor-aviso); }
   &.swatch-success.active { border-color: var(--cor-sucesso); }
+
+  /* MUDANÇA: Animação de hover */
+  &:hover {
+    transform: scale(1.15);
+  }
 }
 
-/* "Caixas" de Tamanho (Para Prova Separada) */
 .swatch-size {
   font-family: 'Open Sans', sans-serif;
   font-size: 0.9rem;
@@ -260,6 +243,8 @@
   &:hover {
     border-color: var(--cor-texto);
     color: var(--cor-texto);
+    /* MUDANÇA: Animação de hover */
+    transform: scale(1.05);
   }
 
   &.active {
@@ -270,30 +255,25 @@
 }
 
 /* ==================================
- * Acordeões e Listas Filhas
+ * Lista de Dados Pessoais
  * ==================================
 */
-
-/* MUDANÇA: Lista de Dados Pessoais (Nova) */
 .dados-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: 1px solid var(--cor-borda); /* Borda superior */
-
+  border-top: 1px solid var(--cor-borda);
   li {
     display: flex;
     justify-content: space-between;
-    padding: 0.75rem 0; /* Aumenta o padding */
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--cor-borda);
-
     .label {
       font-family: 'Open Sans', sans-serif;
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--cor-texto-suave);
     }
-
     .value {
       font-family: 'Raleway', sans-serif;
       font-size: 0.9rem;
@@ -303,7 +283,10 @@
   }
 }
 
-
+/* ==================================
+ * Acordeões e Listas Filhas
+ * ==================================
+*/
 .hering-accordion {
   .accordion-item {
     border-bottom: 1px solid var(--cor-borda) !important;
@@ -354,7 +337,6 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-
   .list-title-sub {
     font-family: 'Open Sans', sans-serif;
     font-size: 1rem;
@@ -393,6 +375,8 @@
     font-size: 0.8rem;
     border-radius: var(--raio-borda);
   }
+
+  /* MUDANÇA: Atualiza os badges para o tema azul */
   .bg-success.text-white {
     background-color: var(--cor-primaria-suave) !important;
     color: var(--cor-sucesso) !important;
@@ -405,7 +389,7 @@
   }
   .bg-secondary.text-white {
     background-color: var(--cor-primaria-suave) !important;
-    color: var(--cor-secundaria) !important;
+    color: var(--cor-texto-suave) !important;
     border: 1px solid var(--cor-borda);
   }
 }
@@ -420,3 +404,5 @@
     font-family: 'Raleway', sans-serif;
   }
 }
+
+

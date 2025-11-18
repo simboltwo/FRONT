@@ -6,9 +6,11 @@ import { Aluno, AlunoInsert, AlunoStatusUpdate } from '../models/aluno.model';
 export interface AlunoFilter {
   nome?: string;
   matricula?: string;
-  cursoId?: number;
-  turmaId?: number;
-  diagnosticoId?: number;
+  // --- INÍCIO DA MUDANÇA ---
+  cursoIds?: number[];
+  turmaId?: number; // Mantido como singular
+  diagnosticoIds?: number[];
+  // --- FIM DA MUDANÇA ---
 }
 
 const API_URL = '/api/alunos';
@@ -22,11 +24,33 @@ export class AlunoService {
 
   findAll(filters: AlunoFilter = {}): Observable<Aluno[]> {
     let params = new HttpParams();
-    if (filters.nome) params = params.set('nome', filters.nome);
-    if (filters.matricula) params = params.set('matricula', filters.matricula);
-    if (filters.cursoId) params = params.set('cursoId', filters.cursoId.toString());
-    if (filters.turmaId) params = params.set('turmaId', filters.turmaId.toString());
-    if (filters.diagnosticoId) params = params.set('diagnosticoId', filters.diagnosticoId.toString());
+
+    // --- INÍCIO DA MUDANÇA ---
+    // Lógica de parâmetros atualizada para aceitar arrays
+
+    if (filters.nome) {
+      params = params.set('nome', filters.nome);
+    }
+    if (filters.matricula) {
+      params = params.set('matricula', filters.matricula);
+    }
+    if (filters.turmaId) {
+      params = params.set('turmaId', filters.turmaId.toString());
+    }
+
+    // Para arrays, usamos 'append' em vez de 'set' para cada item
+    if (filters.cursoIds && filters.cursoIds.length > 0) {
+      filters.cursoIds.forEach(id => {
+        params = params.append('cursoId', id.toString());
+      });
+    }
+    if (filters.diagnosticoIds && filters.diagnosticoIds.length > 0) {
+      filters.diagnosticoIds.forEach(id => {
+        params = params.append('diagnosticoId', id.toString());
+      });
+    }
+    // --- FIM DA MUDANÇA ---
+
     return this.http.get<Aluno[]>(API_URL, { params });
   }
 

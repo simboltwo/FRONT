@@ -17,9 +17,6 @@
           <div class="card-body">
             <form [formGroup]="detailsForm" (ngSubmit)="onDetailsSubmit()">
 
-              <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
-              <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-
               <div class="mb-4">
                 <label for="nome" class="form-label">Nome *</label>
                 <input type="text" id="nome" class="form-control" formControlName="nome"
@@ -49,9 +46,6 @@
           </div>
           <div class="card-body">
             <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
-
-              <div *ngIf="passwordSuccessMessage" class="alert alert-success">{{ passwordSuccessMessage }}</div>
-              <div *ngIf="passwordErrorMessage" class="alert alert-danger">{{ passwordErrorMessage }}</div>
 
               <div class="mb-4">
                 <label for="senhaAtual" class="form-label">Senha Atual *</label>

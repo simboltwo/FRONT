@@ -3,7 +3,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable, map } from 'rxjs';
 import { RelatorioAlunosPorCursoDTO, RelatorioAlunosPorDiagnosticoDTO, RelatorioService } from '../../core/services/api.service';
-import { saveAs } from 'file-saver'; // Precisaremos de uma lib para salvar ficheiros
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-relatorio',
@@ -20,7 +20,9 @@ export class RelatorioComponent implements OnInit {
   protected relatorioCursos$!: Observable<RelatorioAlunosPorCursoDTO[]>;
   protected relatorioDiagnosticos$!: Observable<RelatorioAlunosPorDiagnosticoDTO[]>;
 
-  // Propriedades para os gráficos (copiadas do Dashboard)
+  // MUDANÇA: Nova propriedade para o total
+  protected totalDiagnosticosAlunos = 0;
+
   protected diagnosticoChartStyle: string = '';
   protected maxCursoCount = 0;
   protected chartColors: string[] = [
@@ -40,7 +42,7 @@ export class RelatorioComponent implements OnInit {
     // Gráfico 2: Alunos por Diagnóstico
     this.relatorioDiagnosticos$ = this.relatorioService.getAlunosPorDiagnostico().pipe(
       map(data => {
-        this.buildDonutChart(data);
+        this.buildDonutChart(data); // Este método agora calcula o total
         return data;
       })
     );
@@ -62,7 +64,7 @@ export class RelatorioComponent implements OnInit {
     });
   }
 
-  // --- Métodos auxiliares para os gráficos (copiados do Dashboard) ---
+  // --- Métodos auxiliares para os gráficos ---
 
   protected getBarPercentage(value: number, max: number): string {
     if (max === 0) return '0%';
@@ -73,9 +75,14 @@ export class RelatorioComponent implements OnInit {
   private buildDonutChart(data: RelatorioAlunosPorDiagnosticoDTO[]): void {
     if (!data || data.length === 0) {
       this.diagnosticoChartStyle = 'var(--cor-borda)';
+      this.totalDiagnosticosAlunos = 0; // MUDANÇA
       return;
     }
     const total = data.reduce((sum, item) => sum + item.totalAlunos, 0);
+
+    // MUDANÇA: Armazena o total
+    this.totalDiagnosticosAlunos = total;
+
     let cumulativePercent = 0;
     const gradientParts: string[] = [];
 

@@ -1,3 +1,7 @@
+/*
+ * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/pages/atendimentos/atendimento-list/atendimento-list.component.ts
+ * Descrição: Adicionado @Input() 'status' e 'title', e modificado o serviço para usar o filtro.
+ */
 // src/app/pages/atendimentos/atendimento-list/atendimento-list.component.ts
 import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -10,8 +14,9 @@ import { Atendimento } from '../../../core/models/atendimento.model';
   selector: 'app-atendimento-list',
   standalone: true,
   imports: [CommonModule],
+  // --- MUDANÇA NO TEMPLATE ---
   template: `
-    <h5 class="mt-4">Histórico de Atendimentos</h5>
+    <h5 class="mt-4">{{ title }}</h5>
     <div *ngIf="atendimentos$ | async as atendimentos; else loading">
       <div *ngIf="atendimentos.length > 0; else noAtendimentos" class="list-group">
         <div *ngFor="let item of atendimentos" class="list-group-item">
@@ -22,7 +27,7 @@ import { Atendimento } from '../../../core/models/atendimento.model';
               {{ item.status }}
             </span>
           </div>
-          <p class="mb-1">{{ item.descricao }}</p>
+          <p class="mb-1">{{ item.descricao || 'Nenhuma descrição informada.' }}</p>
           <small class="text-muted">
             Em: {{ item.dataHora | date: 'dd/MM/yyyy HH:mm' }}
             - Por: {{ item.responsavelNome }}
@@ -30,27 +35,30 @@ import { Atendimento } from '../../../core/models/atendimento.model';
         </div>
       </div>
       <ng-template #noAtendimentos>
-        <p class="text-muted">Nenhum atendimento registrado para este aluno.</p>
+        <p class="text-muted">Nenhum atendimento encontrado para esta visualização.</p>
       </ng-template>
     </div>
-    <ng-template #loading><p>Carregando histórico...</p></ng-template>
+    <ng-template #loading><p>Carregando...</p></ng-template>
   `
 })
 export class AtendimentoList implements OnChanges {
   @Input() alunoId!: number;
+  // --- NOVOS INPUTS ---
+  @Input() status: string | null = null;
+  @Input() title: string = 'Histórico de Atendimentos';
+  // --- FIM DOS NOVOS INPUTS ---
 
   protected atendimentos$!: Observable<Atendimento[]>;
   private atendimentoService = inject(AtendimentoService);
 
-  // BehaviorSubject para recarregar a lista quando o ID mudar
-  private alunoId$ = new BehaviorSubject<number | null>(null);
+  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
 
   constructor() {
-    this.atendimentos$ = this.alunoId$.pipe(
-      switchMap(id => {
-        if (id) {
-          // Chama a API
-          return this.atendimentoService.findByAlunoId(id);
+    this.atendimentos$ = this.refreshTrigger$.pipe(
+      switchMap(() => {
+        if (this.alunoId) {
+          // --- MUDANÇA: Passa o status para o serviço ---
+          return this.atendimentoService.findByAlunoId(this.alunoId, this.status);
         }
         return [];
       })
@@ -58,14 +66,15 @@ export class AtendimentoList implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['alunoId'] && this.alunoId) {
-      this.alunoId$.next(this.alunoId);
+    // Se o ID do aluno ou o status mudarem, recarrega a lista
+    if (changes['alunoId'] || changes['status']) {
+      this.refresh();
     }
   }
 
   public refresh(): void {
     // Re-emite o ID atual para forçar o switchMap a recarregar
-    this.alunoId$.next(this.alunoId);
+    this.refreshTrigger$.next();
   }
 
   protected getStatusClass(status: string): string {

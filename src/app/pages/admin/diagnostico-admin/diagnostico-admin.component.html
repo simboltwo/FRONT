@@ -1,22 +1,38 @@
 <div class="admin-page animate-fadeIn">
 
   <div class="page-container">
-    <div class="page-header-container bg-color-10">
-      <h2 class="page-header-title">CADASTROS</h2>
+    <div class="page-header-container bg-brand-blue">
+      <h2 class="page-header-title">GERENCIAR DIAGNÓSTICOS</h2>
+      <p class="page-header-desc">
+        Adicione, edite ou remova os diagnósticos (ex: TEA, TDAH).
+      </p>
     </div>
   </div>
 
   <div class="admin-layout-container">
     <div class="row g-4">
 
-      <div class="col-lg-4">
+      <div class="col-lg-4 animate-fadeInUp" [class.mobile-hidden]="isMobileFormVisible" style="animation-delay: 0.1s;">
         <div class="card card-list-container">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            Gerir Diagnósticos
-            <button class="btn btn-sm btn-outline-primary" (click)="clearForm()" title="Novo Diagnóstico">
+
+          <div class="form-section-header">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-heart-pulse-fill"></i>
+              <h6>Diagnósticos</h6>
+            </div>
+            <button class="btn btn-primary btn-sm ms-auto" (click)="onNewClick()" title="Novo Diagnóstico" [disabled]="isLoading">
               <i class="bi bi-plus-lg"></i> Novo
             </button>
           </div>
+
+          <div class="admin-search-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text"
+                   class="form-control"
+                   [formControl]="diagnosticoSearch"
+                   placeholder="Buscar por nome, sigla ou CID...">
+          </div>
+
           <div class="list-group list-group-flush">
             <ng-container *ngIf="(diagnosticos$ | async) as list; else loading">
               <a *ngFor="let item of list"
@@ -24,8 +40,15 @@
                  [class.active]="item.id === selectedDiagnosticoId"
                  (click)="selectDiagnostico(item)">
                 {{ item.nome }}
-                <span *ngIf="item.sigla" class="text-muted small">({{ item.sigla }})</span>
+                <span *ngIf="item.sigla || item.cid" class="text-muted small d-block">
+                  {{ item.sigla ? item.sigla : '' }}
+                  {{ (item.sigla && item.cid) ? ' | ' : '' }}
+                  {{ item.cid ? item.cid : '' }}
+                </span>
               </a>
+              <div *ngIf="list.length === 0 && (diagnosticoSearch.value || '')" class="list-group-item text-muted text-center p-3 small">
+                Nenhum diagnóstico encontrado.
+              </div>
             </ng-container>
             <ng-template #loading>
               <div class="list-group-item text-muted">Carregando...</div>
@@ -34,11 +57,19 @@
         </div>
       </div>
 
-      <div class="col-lg-8">
+      <div class="col-lg-8 animate-fadeInUp" [class.mobile-visible]="isMobileFormVisible" style="animation-delay: 0.2s;" #formCard>
         <div class="card card-form-container">
-          <div class="card-header">
-            {{ isEditMode ? 'Editar Diagnóstico' : 'Novo Diagnóstico' }}
+
+          <div class="form-section-header">
+            <button type="button" class="btn-back-mobile d-lg-none" (click)="clearForm()" [disabled]="isLoading">
+              <i class="bi bi-arrow-left"></i> Voltar
+            </button>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-pencil-fill"></i>
+              <h6>{{ isEditMode ? 'Editar Diagnóstico' : 'Novo Diagnóstico' }}</h6>
+            </div>
           </div>
+
           <div class="card-body">
             <form [formGroup]="crudForm" (ngSubmit)="onSubmit()">
 
@@ -61,19 +92,22 @@
                 </div>
               </div>
 
-              <div class="card-footer d-flex justify-content-between">
-                <div>
+              <div class="card-footer footer-actions-container">
+                <div class="footer-actions-left">
                   <button type="button" class="btn btn-danger"
-                          *ngIf="isEditMode" (click)="onDelete()">
+                          *ngIf="isEditMode" (click)="onDelete()"
+                          [disabled]="isLoading">
                     Excluir
                   </button>
                 </div>
-                <div>
-                  <button type="button" class="btn btn-outline-secondary me-2" (click)="clearForm()">
+                <div class="footer-actions-right">
+                  <button type="button" class="btn btn-outline-secondary" (click)="clearForm()"
+                          [disabled]="isLoading">
                     Cancelar
                   </button>
-                  <button type="submit" class="btn btn-primary" [disabled]="crudForm.invalid">
-                    Salvar
+                  <button type="submit" class="btn btn-primary" [disabled]="crudForm.invalid || isLoading">
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    {{ isLoading ? 'Salvando...' : 'Salvar' }}
                   </button>
                 </div>
               </div>

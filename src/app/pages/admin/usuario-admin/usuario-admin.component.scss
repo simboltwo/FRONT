@@ -1,23 +1,53 @@
 /* src/app/pages/admin/usuario-admin/usuario-admin.component.scss */
 @import '../admin-layout.scss';
+@import '../../../styles/animations.scss';
 
-/* Estilo específico para a lista de checkboxes */
+/*
+ * Estilo para a lista de checkboxes
+*/
 .checkbox-container {
   max-height: 200px;
   overflow-y: auto;
-  background-color: #fff;
+  background-color: var(--cor-fundo); // Fundo cinza claro
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-borda);
   padding: 0.5rem;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Duas colunas */
+  grid-template-columns: 1fr; /* 1 coluna por padrão */
   gap: 0.5rem;
 
   .form-check {
     padding: 0.6rem 0.75rem;
     border-radius: 4px;
+
+    /* MUDANÇA ESTÁ AQUI:
+      - Usamos flex para alinhar o input e o label verticalmente.
+    */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; // Espaço entre a caixa e o texto
+
     &:hover {
       background-color: var(--cor-primaria-suave);
     }
+
+    .form-check-input {
+      margin-top: 0; // Reseta o margin-top padrão que causa o desalinhamento
+      float: none; // Remove o float (se houver)
+    }
+
+    .form-check-label {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: none;
+      padding-left: 0; // Reseta o padding
+      margin-left: 0; // Reseta a margem
+    }
+  }
+
+  // 2 colunas em telas maiores
+  @media (min-width: 576px) {
+     grid-template-columns: 1fr 1fr;
   }
 }

@@ -10,6 +10,44 @@
 
   <div class="page-container" [class.no-banner]="!showBanner">
 
+    <div class="quick-actions-bar">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a (click)="goToNewAlunoPage()" class="action-card">
+            <div class="icon">
+              <i class="bi bi-person-plus-fill"></i>
+            </div>
+            <div class="content">
+              <h5>Adicionar Novo Aluno</h5>
+              <p>Cadastrar um novo aluno no sistema.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a routerLink="/relatorios" class="action-card">
+            <div class="icon">
+              <i class="bi bi-bar-chart-line-fill"></i>
+            </div>
+            <div class="content">
+              <h5>Ver Relatórios</h5>
+              <p>Analisar dados e métricas da plataforma.</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a routerLink="/cadastros" class="action-card">
+            <div class="icon">
+              <i class="bi bi-gear-fill"></i>
+            </div>
+            <div class="content">
+              <h5>Gerir Cadastros</h5>
+              <p>Editar diagnósticos, cursos e turmas.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
     <div class="page-toolbar" [formGroup]="filterForm">
       <div class="search-field">
         <i class="bi bi-search"></i>
@@ -18,7 +56,6 @@
               formControlName="nome"
               placeholder="Quem você procura?">
       </div>
-
       <div class="toolbar-actions">
         <div class="dropdown">
           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,38 +79,29 @@
     </div>
 
     <div class="row g-4">
-      <div class="col-12 col-md-6 col-lg-4 col-xl-3"
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3 animate-fadeInUp"
            *ngFor="let aluno of (alunos$ | async); let i = index; trackBy: trackByAlunoId"
            [style.animation-delay]="(i % 12) * 0.05 + 's'">
 
         <div class="card aluno-card h-100" (click)="viewAluno(aluno)">
-
           <div class="card-img-container">
             <img [src]="aluno.foto || 'https://via.placeholder.com/400x500.png?text=Aluno'"
                 class="card-img-top" alt="Foto do Aluno">
-
             <span *ngIf="aluno.prioridade === 'Alta'" class="icon-prioridade"
                   data-bs-toggle="tooltip" data-bs-placement="top" title="Prioridade Alta">
               <i class="bi bi-exclamation-circle-fill"></i>
             </span>
-
             <div class="card-hover-actions">
-              <button class="btn btn-action-light btn-atender" (click)="atenderAluno($event, aluno)">
-                <i class="bi bi-calendar-check"></i> Atender
-              </button>
-
               <button class="btn btn-action-icon btn-primary-icon" (click)="editAluno($event, aluno)"
                       data-bs-toggle="tooltip" data-bs-placement="top" title="Editar Aluno">
                 <i class="bi bi-pencil"></i>
               </button>
-
               <button class="btn btn-action-icon btn-danger-icon" (click)="deleteAluno($event, aluno)"
                       data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir Aluno">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
           </div>
-
           <div class="card-body">
             <h5 class="card-title" title="{{ aluno.nome }}">{{ aluno.nome }}</h5>
             <p class="card-text card-matricula">{{ aluno.matricula }}</p>
@@ -102,7 +130,6 @@
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body" [formGroup]="filterForm">
-
       <div class="filter-group">
         <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurso" aria-expanded="true" aria-controls="collapseCurso">
           <span class="form-label">
@@ -127,7 +154,6 @@
           </div>
         </div>
       </div>
-
       <div class="filter-group">
         <button class="filter-group-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDiag" aria-expanded="true" aria-controls="collapseDiag">
           <span class="form-label">

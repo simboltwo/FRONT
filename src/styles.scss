@@ -2,7 +2,7 @@
  * STYLES.SCSS (Global)
  * =================================================================== */
 
-/* 2. Importa o TEMA NAAPI (Fundo branco/Hering + Azul #00376b) */
+/* 2. Importa o TEMA NAAPI */
 @import 'app/styles/modern-theme';
 
 /* 3. Importa as animações */
@@ -17,8 +17,14 @@
 body.naapi-body-bg {
   font-family: 'Raleway', sans-serif;
   font-weight: 400; /* Raleway regular */
-  background-color: var(--cor-fundo); /* <- CORRIGIDO para #f5f5f5 (Cinza Hering) */
+  background-color: var(--cor-fundo);
   color: var(--cor-texto);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* MUDANÇA: Adiciona a textura granulada/sutil ao fundo.
+    Esta é uma textura clássica e leve.
+  */
+  background-image: url('https://www.transparenttextures.com/patterns/subtle-grey.png');
+  background-repeat: repeat;
 }

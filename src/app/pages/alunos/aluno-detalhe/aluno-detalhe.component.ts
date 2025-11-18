@@ -1,7 +1,11 @@
+/*
+ * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/pages/alunos/aluno-detalhe/aluno-detalhe.component.ts
+ * Descrição: Injetado RelatorioService e ToastService, adicionado método 'gerarRelatorioPDF'.
+ */
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { BehaviorSubject, switchMap, Observable, map } from 'rxjs';
+import { BehaviorSubject, switchMap, Observable, map, finalize } from 'rxjs'; // Importar finalize
 import { Aluno, AlunoStatusUpdate, Diagnostico } from '../../../core/models/aluno.model';
 import { AlunoService } from '../../../core/services/aluno.service';
 
@@ -14,6 +18,13 @@ import { PeiForm } from '../../peis/pei-form/pei-form.component';
 import { AuthService } from '../../../core/services/auth.service';
 
 import * as bootstrap from 'bootstrap';
+
+// --- INÍCIO DA MUDANÇA ---
+import { RelatorioService } from '../../../core/services/api.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { saveAs } from 'file-saver';
+// --- FIM DA MUDANÇA ---
+
 
 @Component({
   selector: 'app-aluno-detalhe',
@@ -39,11 +50,17 @@ export class AlunoDetalheComponent implements OnInit {
   protected aluno: Aluno | null = null;
   protected alunoId!: number;
   protected canEditPei$!: Observable<boolean>;
+  protected isDownloadingPDF = false; // --- INÍCIO DA MUDANÇA ---
 
   private route = inject(ActivatedRoute);
   private alunoService = inject(AlunoService);
   private authService = inject(AuthService);
   private refresh$ = new BehaviorSubject<void>(undefined);
+
+  // --- INÍCIO DA MUDANÇA ---
+  private relatorioService = inject(RelatorioService);
+  private toastService = inject(ToastService);
+  // --- FIM DA MUDANÇA ---
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
@@ -87,14 +104,37 @@ export class AlunoDetalheComponent implements OnInit {
     this.alunoService.updateStatus(this.aluno.id, updatePayload).subscribe({
       next: (updatedAluno) => {
         this.aluno = updatedAluno;
+        this.toastService.show('Status do aluno atualizado!', 'success'); // Feedback
       },
       error: (err) => {
+        this.toastService.show('Erro ao salvar. A página será recarregada.', 'danger');
         console.error('Falha ao atualizar aluno:', err);
-        alert('Erro ao salvar. A página será recarregada para reverter a mudança.');
         this.refresh$.next();
       }
     });
   }
+
+  // --- INÍCIO DA MUDANÇA: Novo método para PDF ---
+  protected gerarRelatorioPDF(): void {
+    if (!this.aluno) return;
+
+    this.isDownloadingPDF = true;
+
+    this.relatorioService.downloadHistoricoAlunoPDF(this.aluno.id).pipe(
+      finalize(() => this.isDownloadingPDF = false)
+    ).subscribe({
+      next: (blob) => {
+        // Usa o file-saver para salvar o arquivo
+        saveAs(blob, `Relatorio-Historico-${this.aluno?.matricula}.pdf`);
+        this.toastService.show('Relatório PDF gerado com sucesso!', 'success');
+      },
+      error: (err) => {
+        this.toastService.show('Erro ao gerar o relatório PDF.', 'danger');
+        console.error(err);
+      }
+    });
+  }
+  // --- FIM DA MUDANÇA ---
 
   onAtendimentoSalvo(): void {
     const modalElement = document.getElementById('modalAtendimento');
@@ -108,6 +148,7 @@ export class AlunoDetalheComponent implements OnInit {
       this.atendimentoListComponent.refresh();
     }
     this.refresh$.next();
+    this.toastService.show('Agendamento salvo com sucesso!', 'success'); // Feedback
   }
 
   onLaudoSalvo(): void {
@@ -121,6 +162,7 @@ export class AlunoDetalheComponent implements OnInit {
     if (this.laudoListComponent) {
       this.laudoListComponent.refresh();
     }
+    this.toastService.show('Laudo salvo com sucesso!', 'success'); // Feedback
   }
 
   onPeiSalvo(): void {
@@ -134,5 +176,6 @@ export class AlunoDetalheComponent implements OnInit {
     if (this.peiListComponent) {
       this.peiListComponent.refresh();
     }
+    this.toastService.show('PEI salvo com sucesso!', 'success'); // Feedback
   }
 }

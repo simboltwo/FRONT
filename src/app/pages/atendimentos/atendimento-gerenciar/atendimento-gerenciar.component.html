@@ -1,0 +1,153 @@
+<div class="atendimento-gerenciar-page animate-fadeIn">
+
+  <div class="hero-banner">
+    <div class="hero-banner-overlay"></div>
+    <div class="hero-banner-content">
+      <h1 class="hero-title">MEUS ATENDIMENTOS</h1>
+      <p class="hero-subtitle">Gerencie seus agendamentos e registre o histórico de cada aluno.</p>
+    </div>
+  </div>
+
+  <div class="page-container">
+
+    <div class="page-toolbar" [formGroup]="filterForm">
+      <div class="search-field">
+        <i class="bi bi-search"></i>
+        <input type="text"
+              class="form-control"
+              formControlName="alunoNome"
+              placeholder="Buscar por nome do aluno...">
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card card-list-container">
+          <div class="card-header">
+            <i class="bi bi-calendar-check-fill me-2 text-primary"></i>
+            Agendados (Para Realizar)
+          </div>
+          <div class="list-group list-group-flush">
+            <ng-container *ngIf="(atendimentosAgendados$ | async) as list; else loading">
+              <div *ngIf="list.length > 0; else noDataAgendados">
+                <a *ngFor="let item of list"
+                   class="list-group-item list-group-item-action"
+                   (click)="openUpdateModal(item)"
+                   title="Realizar Atendimento">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="mb-1">{{ item.alunoNome }}</h6>
+                    <span class="badge bg-secondary text-white">{{ item.status }}</span>
+                  </div>
+                  <p class="mb-1">{{ item.tipoAtendimentoNome }}</p>
+                  <small class="text-muted">
+                    {{ item.dataHora | date: 'dd/MM/yyyy HH:mm' }}
+                  </small>
+                </a>
+              </div>
+              <ng-template #noDataAgendados>
+                <div class="list-group-item text-muted text-center p-4">
+                  Nenhum atendimento agendado.
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-template #loading>
+              <div class="list-group-item text-muted">Carregando...</div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card card-list-container">
+          <div class="card-header">
+            <i class="bi bi-clock-history me-2 text-muted"></i>
+            Histórico (Realizados/Cancelados)
+          </div>
+          <div class="list-group list-group-flush">
+            <ng-container *ngIf="(atendimentosHistorico$ | async) as list; else loading">
+              <div *ngIf="list.length > 0; else noDataHistorico">
+                <a *ngFor="let item of list"
+                   class="list-group-item"
+                   (click)="router.navigate(['/alunos', 'detalhe', item.alunoId])"
+                   title="Ver detalhes do aluno">
+                  <div class="d-flex justify-content-between">
+                    <h6 class="mb-1">{{ item.alunoNome }}</h6>
+                    <span class="badge" [ngClass]="getStatusClass(item.status)">{{ item.status }}</span>
+                  </div>
+                  <p class="mb-1">{{ item.tipoAtendimentoNome }}</p>
+                  <small class="text-muted">
+                    {{ item.dataHora | date: 'dd/MM/yyyy HH:mm' }}
+                  </small>
+                </a>
+              </div>
+              <ng-template #noDataHistorico>
+                <div class="list-group-item text-muted text-center p-4">
+                  Nenhum atendimento no histórico.
+                </div>
+              </ng-template>
+            </ng-container>
+            <ng-template #loading>
+              <div class="list-group-item text-muted">Carregando...</div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalConductAtendimento" tabindex="-1" aria-labelledby="modalConductLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" *ngIf="selectedAtendimento">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalConductLabel">Registrar Atendimento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-wrapper-flat">
+
+          <div class="mb-3">
+            <strong>Aluno:</strong> {{ selectedAtendimento.alunoNome }} <br>
+            <strong>Agendado para:</strong> {{ selectedAtendimento.dataHora | date: 'dd/MM/yyyy HH:mm' }} <br>
+            <strong>Tipo:</strong> {{ selectedAtendimento.tipoAtendimentoNome }}
+          </div>
+          <hr>
+
+          <form [formGroup]="updateForm" (ngSubmit)="onSubmitUpdate()">
+
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+            <div class="mb-3">
+              <label for="descricao" class="form-label">Descrição / Observações *</label>
+              <textarea class="form-control" id="descricao" rows="6" formControlName="descricao"
+                        placeholder="Digite as observações do atendimento realizado..."
+                        [class.is-invalid]="updateForm.get('descricao')!.invalid && updateForm.get('descricao')!.touched"></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Concluir como *</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="statusRealizado" value="REALIZADO" formControlName="status">
+                  <label class="form-check-label" for="statusRealizado">Realizado</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="statusCancelado" value="CANCELADO" formControlName="status">
+                  <label class="form-check-label" for="statusCancelado">Cancelado</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary" [disabled]="updateForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                {{ isLoading ? 'Salvando...' : 'Salvar Atendimento' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

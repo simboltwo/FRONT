@@ -1,25 +1,66 @@
 <div class="relatorio-page animate-fadeIn">
 
   <div class="page-container">
-    <div class="page-header-container bg-color-7"> <h2 class="page-header-title">RELATÓRIOS</h2>
+    <div class="page-header-container bg-color-7">
+      <h2 class="page-header-title">RELATÓRIOS</h2>
+      <p class="page-header-desc">
+        Visualize e exporte métricas essenciais sobre alunos, cursos e diagnósticos.
+      </p>
+    </div>
+  </div>
+
+  <div class="admin-layout-container">
+
+    <div class="quick-actions-bar">
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-6 col-lg-5 animate-fadeInUp" style="animation-delay: 0.1s;">
+          <a (click)="downloadCursoCSV()" class="action-card-report">
+            <div class="icon">
+              <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+            </div>
+            <div class="content">
+              <h5>Exportar Alunos por Curso</h5>
+              <p>Baixar um arquivo CSV com o total de alunos em cada curso.</p>
+              <span class="action-link">Baixar Relatório <i class="bi bi-download"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-6 col-lg-5 animate-fadeInUp" style="animation-delay: 0.2s;">
+          <a (click)="downloadDiagnosticoCSV()" class="action-card-report">
+            <div class="icon">
+              <i class="bi bi-file-earmark-medical-fill"></i>
+            </div>
+            <div class="content">
+              <h5>Exportar Alunos por Diagnóstico</h5>
+              <p>Baixar um arquivo CSV com o total de alunos para cada diagnóstico.</p>
+              <span class="action-link">Baixar Relatório <i class="bi bi-download"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
 
-    <div class="chart-layout-container">
+    <hr class="section-divider">
+
+    <div class="chart-layout-container animate-fadeInUp" style="animation-delay: 0.3s;">
       <div class="row g-4">
 
         <div class="col-lg-6">
           <div class="card h-100">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header">
               Alunos por Diagnóstico
-              <button class="btn btn-sm btn-outline-primary" (click)="downloadDiagnosticoCSV()">
-                <i class="bi bi-download me-2"></i> Exportar CSV
-              </button>
             </div>
             <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loading">
               <div *ngIf="diagnosticos.length > 0; else noData">
+
                 <div class="pie-chart-container">
                   <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
+                  <div class="pie-chart-center">
+                    <span class="total-value">{{ totalDiagnosticosAlunos }}</span>
+                    <span class="total-label">Alunos</span>
+                  </div>
                 </div>
+
                 <div class="pie-chart-legend">
                   <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
                     <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
@@ -38,11 +79,8 @@
 
         <div class="col-lg-6">
           <div class="card h-100">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header">
               Alunos por Curso
-              <button class="btn btn-sm btn-outline-primary" (click)="downloadCursoCSV()">
-                <i class="bi bi-download me-2"></i> Exportar CSV
-              </button>
             </div>
             <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loading">
               <div *ngIf="cursos.length > 0; else noData">

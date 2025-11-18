@@ -1,125 +1,120 @@
-<div class="inicio-page animate-fadeIn">
+<div class="inicio-page">
 
-  <div id="graphCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-      <button type="button" data-bs-target="#graphCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
-    </div>
-
-    <div class="carousel-inner">
-
-      <div class="carousel-item active">
-        <div class="carousel-content-wrapper slide-kpi">
-          <div class="stat-icon icon-alunos">
-            <i class="bi bi-people-fill"></i>
-          </div>
-          <div class="stat-content">
-            <h6 class="stat-title">Total de Alunos</h6>
-            <span class="stat-value">{{ (totalAlunos$ | async) || 0 }}</span>
-          </div>
-          <a routerLink="/alunos" class="stat-footer-link">
-            Ver Alunos <i class="bi bi-arrow-right-short"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="carousel-content-wrapper slide-kpi">
-          <div class="stat-icon icon-agendados">
-            <i class="bi bi-calendar-check"></i>
-          </div>
-          <div class="stat-content">
-            <h6 class="stat-title">Atendimentos Agendados</h6>
-            <span class="stat-value">{{ (totalAgendados$ | async) || 0 }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="carousel-content-wrapper slide-kpi">
-          <div class="stat-icon icon-realizados">
-            <i class="bi bi-check-circle-fill"></i>
-          </div>
-          <div class="stat-content">
-            <h6 class="stat-title">Atendimentos Realizados</h6>
-            <span class="stat-value">{{ (totalRealizados$ | async) || 0 }}</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="carousel-content-wrapper slide-graph">
-          <div class="card h-100">
-            <div class="card-header">
-              Alunos por Diagnóstico
-            </div>
-            <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingDiag">
-              <div *ngIf="diagnosticos.length > 0; else noDataDiag">
-                <div class="pie-chart-container">
-                  <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
-                </div>
-                <div class="pie-chart-legend">
-                  <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
-                    <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
-                    <span class="legend-label" [title]="item.diagnosticoNome">{{ item.diagnosticoNome }}</span>
-                    <span class="legend-value">{{ item.totalAlunos }}</span>
-                  </div>
-                </div>
-              </div>
-              <ng-template #noDataDiag><p class="text-muted text-center m-5">Sem dados de diagnósticos.</p></ng-template>
-            </div>
-            <ng-template #loadingDiag>
-              <div class="card-body text-center p-5"><span class="spinner-border spinner-border-sm"></span></div>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item">
-        <div class="carousel-content-wrapper slide-graph">
-          <div class="card h-100">
-            <div class="card-header">
-              Alunos por Curso
-            </div>
-            <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loading">
-              <div *ngIf="cursos.length > 0; else noData">
-                <div *ngFor="let item of cursos" class="chart-bar-item">
-                  <span class="bar-label">{{ item.cursoNome }}</span>
-                  <div class="bar-track">
-                    <div class="bar-fill" [style.width]="getBarPercentage(item.totalAlunos, maxCursoCount)">
-                      <span class="bar-value">{{ item.totalAlunos }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <ng-template #noData><p class="text-muted text-center m-0">Sem dados de cursos.</p></ng-template>
-            </div>
-            <ng-template #loading>
-              <div class="card-body text-center p-3"><span class="spinner-border spinner-border-sm"></span></div>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="summary-section">
-    <div class="container-fluid">
-      <h2 class="summary-title">Gestão e Acolhimento.</h2>
-      <p class="summary-text">
+  <div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content animate-fadeInUp">
+      <h1 class="hero-title">Bem-vindo ao Painel NAAPI</h1>
+      <p class="hero-subtitle">
         O sistema de gestão do NAAPI centraliza as informações vitais dos alunos,
         permitindo um acompanhamento individualizado e eficiente.
-        Visualize históricos, diagnósticos e acesse relatórios com facilidade.
       </p>
+      <a routerLink="/alunos" class="btn btn-primary btn-lg mt-3">
+        <i class="bi bi-people-fill me-2"></i> Ver Alunos
+      </a>
     </div>
   </div>
 
-  <div class="container-fluid mt-4 mb-5">
+  <div class="stats-bar animate-fadeInUp" style="animation-delay: 0.1s;">
+    <div class="container-fluid">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-icon icon-alunos">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-content">
+              <h6 class="stat-title">Total de Alunos Ativos</h6>
+              <span class="stat-value">{{ (totalAlunos$ | async) || 0 }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-icon icon-agendados">
+              <i class="bi bi-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+              <h6 class="stat-title">Atendimentos Agendados</h6>
+              <span class="stat-value">{{ (totalAgendados$ | async) || 0 }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-icon icon-realizados">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div class="stat-content">
+              <h6 class="stat-title">Atendimentos Realizados</h6>
+              <span class="stat-value">{{ (totalRealizados$ | async) || 0 }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-section container-fluid animate-fadeInUp" style="animation-delay: 0.2s;">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header">
+            Alunos por Diagnóstico
+          </div>
+          <div class="card-body chart-container-donut" *ngIf="(relatorioDiagnosticos$ | async) as diagnosticos; else loadingDiag">
+            <div *ngIf="diagnosticos.length > 0; else noDataDiag">
+
+              <div class="pie-chart-container">
+                <div class="pie-chart" [style.background]="diagnosticoChartStyle"></div>
+                <div class="pie-chart-center">
+                  <span class="total-value">{{ totalDiagnosticosAlunos }}</span>
+                  <span class="total-label">Alunos</span>
+                </div>
+              </div>
+
+              <div class="pie-chart-legend">
+                <div *ngFor="let item of diagnosticos; let i = index; trackBy: trackByNome" class="legend-item">
+                  <span class="legend-color-dot" [style.background-color]="chartColors[i % chartColors.length]"></span>
+                  <span class="legend-label" [title]="item.diagnosticoNome">{{ item.diagnosticoNome }}</span>
+                  <span class="legend-value">{{ item.totalAlunos }}</span>
+                </div>
+              </div>
+            </div>
+            <ng-template #noDataDiag><p class="text-muted text-center m-5">Sem dados de diagnósticos.</p></ng-template>
+          </div>
+          <ng-template #loadingDiag>
+            <div class="card-body text-center p-5"><span class="spinner-border spinner-border-sm"></span></div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header">
+            Alunos por Curso
+          </div>
+          <div class="card-body chart-container-bar" *ngIf="(relatorioCursos$ | async) as cursos; else loadingCurso">
+            <div *ngIf="cursos.length > 0; else noDataCurso">
+              <div *ngFor="let item of cursos" class="chart-bar-item">
+                <span class="bar-label">{{ item.cursoNome }}</span>
+                <div class="bar-track">
+                  <div class="bar-fill" [style.width]="getBarPercentage(item.totalAlunos, maxCursoCount)">
+                    <span class="bar-value">{{ item.totalAlunos }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noDataCurso><p class="text-muted text-center m-0">Sem dados de cursos.</p></ng-template>
+          </div>
+          <ng-template #loadingCurso>
+            <div class="card-body text-center p-3"><span class="spinner-border spinner-border-sm"></span></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid animate-fadeInUp" style="animation-delay: 0.3s;">
     <div class="vitrine-header">
       <h2>Acompanhamento Prioritário</h2>
     </div>

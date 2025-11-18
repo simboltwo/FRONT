@@ -29,6 +29,11 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" routerLink="/atendimentos" routerLinkActive="active" (click)="closeOffcanvas()">
+              Atendimentos
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" routerLink="/alunos" routerLinkActive="active" (click)="closeOffcanvas()">
               Alunos
             </a>
@@ -74,6 +79,11 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
               Início
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/atendimentos" routerLinkActive="active">
+              Atendimentos
             </a>
           </li>
           <li class="nav-item">
@@ -160,4 +170,6 @@
 
 <main class="main-content-area">
   <router-outlet></router-outlet>
-</main>
+
+  <app-toast></app-toast>
+  </main>

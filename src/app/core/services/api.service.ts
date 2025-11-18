@@ -1,3 +1,7 @@
+/*
+ * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/core/services/api.service.ts
+ * Descrição: Adicionado 'downloadHistoricoAlunoPDF' ao RelatorioService.
+ */
 // src/app/core/services/api.service.ts
 
 import { HttpClient } from '@angular/common/http';
@@ -22,9 +26,8 @@ export interface RelatorioKpiDTO {
   total: number;
 }
 
-// =======================================================
-// MUDANÇA: Adicionados métodos create, update, delete
-// =======================================================
+// ... (CursoService, TurmaService, DiagnosticoService, TipoAtendimentoService, UsuarioService, PapelService) ...
+// (Nenhuma alteração nesses serviços)
 
 @Injectable({ providedIn: 'root' })
 export class CursoService {
@@ -51,7 +54,6 @@ export class DiagnosticoService {
   private url = `${API_URL}/diagnosticos`;
   constructor(private http: HttpClient) {}
   findAll(): Observable<Diagnostico[]> { return this.http.get<Diagnostico[]>(this.url); }
-  // O DTO do Diagnóstico é mais complexo
   create(data: Partial<Diagnostico>): Observable<Diagnostico> { return this.http.post<Diagnostico>(this.url, data); }
   update(id: number, data: Partial<Diagnostico>): Observable<Diagnostico> { return this.http.put<Diagnostico>(`${this.url}/${id}`, data); }
   delete(id: number): Observable<void> { return this.http.delete<void>(`${this.url}/${id}`); }
@@ -67,43 +69,27 @@ export class TipoAtendimentoService {
   delete(id: number): Observable<void> { return this.http.delete<void>(`${this.url}/${id}`); }
 }
 
-// =======================================================
-// (O restante dos serviços não precisa de alteração)
-// =======================================================
-
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private url = `${API_URL}/usuarios`;
   constructor(private http: HttpClient) {}
-
-  // Busca o usuário logado
-  getMe(): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.url}/me`);
-  }
-
-  updateSelfDetails(data: UsuarioSelfUpdate): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.url}/me/detalhes`, data);
-  }
-
-  updateSelfPassword(data: UsuarioPasswordUpdate): Observable<void> {
-    return this.http.put<void>(`${this.url}/me/senha`, data);
-  }
-
-  // Métodos CRUD para o admin
-  findAll(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.url);
-  }
-  create(data: UsuarioInsert): Observable<Usuario> {
-    return this.http.post<Usuario>(this.url, data);
-  }
-  update(id: number, data: UsuarioUpdate): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.url}/${id}`, data);
-  }
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
-  }
+  getMe(): Observable<Usuario> { return this.http.get<Usuario>(`${this.url}/me`); }
+  updateSelfDetails(data: UsuarioSelfUpdate): Observable<Usuario> { return this.http.put<Usuario>(`${this.url}/me/detalhes`, data); }
+  updateSelfPassword(data: UsuarioPasswordUpdate): Observable<void> { return this.http.put<void>(`${this.url}/me/senha`, data); }
+  findAll(): Observable<Usuario[]> { return this.http.get<Usuario[]>(this.url); }
+  create(data: UsuarioInsert): Observable<Usuario> { return this.http.post<Usuario>(this.url, data); }
+  update(id: number, data: UsuarioUpdate): Observable<Usuario> { return this.http.put<Usuario>(`${this.url}/${id}`, data); }
+  delete(id: number): Observable<void> { return this.http.delete<void>(`${this.url}/${id}`); }
 }
 
+@Injectable({ providedIn: 'root' })
+export class PapelService {
+  private url = `${API_URL}/papeis`;
+  constructor(private http: HttpClient) {}
+  findAll(): Observable<Papel[]> { return this.http.get<Papel[]>(this.url); }
+}
+
+// --- INÍCIO DA MUDANÇA ---
 @Injectable({ providedIn: 'root' })
 export class RelatorioService {
   constructor(private http: HttpClient) {}
@@ -122,27 +108,23 @@ export class RelatorioService {
 
   exportarAlunosPorCursoCSV(): Observable<string> {
     return this.http.get(`${API_URL}/relatorios/alunos-por-curso/csv`, {
-      responseType: 'text' // Diz ao Angular para esperar uma string, não JSON
+      responseType: 'text'
     });
   }
 
-  /**
-   * Busca os dados do relatório de Diagnósticos como uma string CSV.
-   * Baseado no endpoint: GET /relatorios/alunos-por-diagnostico/csv
-   */
   exportarAlunosPorDiagnosticoCSV(): Observable<string> {
     return this.http.get(`${API_URL}/relatorios/alunos-por-diagnostico/csv`, {
       responseType: 'text'
     });
   }
+
+  /**
+   * NOVO: Baixa o relatório histórico em PDF de um aluno.
+   */
+  downloadHistoricoAlunoPDF(alunoId: number): Observable<Blob> {
+    return this.http.get(`${API_URL}/relatorios/historico-aluno/${alunoId}/pdf`, {
+      responseType: 'blob' // Importante: o Angular tratará a resposta como um arquivo binário
+    });
+  }
 }
-
-@Injectable({ providedIn: 'root' })
-export class PapelService {
-  private url = `${API_URL}/papeis`; // Assumindo que o endpoint de papéis é /papeis
-  constructor(private http: HttpClient) {}
-  findAll(): Observable<Papel[]> { return this.http.get<Papel[]>(this.url); }
-}
-
-
-
+// --- FIM DA MUDANÇA ---

@@ -1,15 +1,18 @@
+/*
+ * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/layout/layout.component.ts
+ * Descrição: Importado o novo ToastComponent.
+ */
 // src/app/layout/layout.component.ts
 
 import { Component, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
-// --- INÍCIO DA MUDANÇA: Importar 'map' ---
 import { Observable, map } from 'rxjs';
-// --- FIM DA MUDANÇA ---
 import { Usuario } from '../core/models/usuario.model';
 import * as bootstrap from 'bootstrap';
 import { AlunoListComponent } from "../pages/alunos/aluno-list/aluno-list.component";
+import { ToastComponent } from './toast/toast.component'; // --- INÍCIO DA MUDANÇA ---
 
 @Component({
   selector: 'app-layout',
@@ -19,7 +22,8 @@ import { AlunoListComponent } from "../pages/alunos/aluno-list/aluno-list.compon
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    AlunoListComponent
+    AlunoListComponent,
+    ToastComponent // --- INÍCIO DA MUDANÇA ---
   ],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
@@ -29,18 +33,14 @@ export class LayoutComponent {
   protected router = inject(Router);
   protected currentUser$: Observable<Usuario | null>;
 
-  // --- INÍCIO DA MUDANÇA: Observables de Permissão ---
   protected isCoordenador$: Observable<boolean>;
   protected isMembroOuCoordenador$: Observable<boolean>;
   protected canViewRelatorios$: Observable<boolean>;
   protected canEditAlunos$: Observable<boolean>;
-  // --- FIM DA MUDANÇA ---
 
 
   constructor() {
     this.currentUser$ = this.authService.currentUser$;
-
-    // --- INÍCIO DA MUDANÇA: Definir a lógica dos papéis ---
 
     // 1. O utilizador é Coordenador? (Acesso máximo)
     this.isCoordenador$ = this.currentUser$.pipe(
@@ -73,7 +73,6 @@ export class LayoutComponent {
         p.authority === 'ROLE_ESTAGIARIO_NAAPI'
       ) || false)
     );
-    // --- FIM DA MUDANÇA ---
   }
 
   logout(): void {
