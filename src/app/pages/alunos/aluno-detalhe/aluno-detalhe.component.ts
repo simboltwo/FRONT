@@ -1,11 +1,8 @@
-/*
- * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/pages/alunos/aluno-detalhe/aluno-detalhe.component.ts
- * Descrição: Injetado RelatorioService e ToastService, adicionado método 'gerarRelatorioPDF'.
- */
 import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { BehaviorSubject, switchMap, Observable, map, finalize } from 'rxjs'; // Importar finalize
+import { BehaviorSubject, switchMap, Observable, map } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { Aluno, AlunoStatusUpdate, Diagnostico } from '../../../core/models/aluno.model';
 import { AlunoService } from '../../../core/services/aluno.service';
 
@@ -17,13 +14,14 @@ import { PeiList } from '../../peis/pei-list/pei-list.component';
 import { PeiForm } from '../../peis/pei-form/pei-form.component';
 import { AuthService } from '../../../core/services/auth.service';
 
+import { HistoricoListComponent } from '../historico-list/historico-list.component';
+import { HistoricoFormComponent } from '../historico-form/historico-form.component';
+
 import * as bootstrap from 'bootstrap';
 
-// --- INÍCIO DA MUDANÇA ---
 import { RelatorioService } from '../../../core/services/api.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { saveAs } from 'file-saver';
-// --- FIM DA MUDANÇA ---
 
 
 @Component({
@@ -37,7 +35,9 @@ import { saveAs } from 'file-saver';
     LaudoList,
     LaudoForm,
     PeiList,
-    PeiForm
+    PeiForm,
+    HistoricoListComponent,
+    HistoricoFormComponent
   ],
   templateUrl: './aluno-detalhe.component.html',
   styleUrls: ['./aluno-detalhe.component.scss']
@@ -46,6 +46,7 @@ export class AlunoDetalheComponent implements OnInit {
   @ViewChild(AtendimentoList) private atendimentoListComponent!: AtendimentoList;
   @ViewChild(LaudoList) private laudoListComponent!: LaudoList;
   @ViewChild(PeiList) private peiListComponent!: PeiList;
+  @ViewChild(HistoricoListComponent) private historicoListComponent!: HistoricoListComponent;
 
   protected aluno: Aluno | null = null;
   protected alunoId!: number;
@@ -82,16 +83,11 @@ export class AlunoDetalheComponent implements OnInit {
     );
   }
 
-  /**
-   * MÉTODO REFATORADO (PATCH)
-   */
   protected updateAlunoField(field: 'prioridade' | 'provaOutroEspaco', value: any): void {
     if (!this.aluno) return;
 
-    // 1. Otimismo na UI
     (this.aluno as any)[field] = value;
 
-    // 2. DTO Leve
     const updatePayload: AlunoStatusUpdate = {};
     if (field === 'prioridade') {
       updatePayload.prioridade = value;
@@ -100,7 +96,6 @@ export class AlunoDetalheComponent implements OnInit {
       updatePayload.provaOutroEspaco = value;
     }
 
-    // 3. Chama o novo serviço PATCH
     this.alunoService.updateStatus(this.aluno.id, updatePayload).subscribe({
       next: (updatedAluno) => {
         this.aluno = updatedAluno;
@@ -114,7 +109,6 @@ export class AlunoDetalheComponent implements OnInit {
     });
   }
 
-  // --- INÍCIO DA MUDANÇA: Novo método para PDF ---
   protected gerarRelatorioPDF(): void {
     if (!this.aluno) return;
 
@@ -124,7 +118,6 @@ export class AlunoDetalheComponent implements OnInit {
       finalize(() => this.isDownloadingPDF = false)
     ).subscribe({
       next: (blob) => {
-        // Usa o file-saver para salvar o arquivo
         saveAs(blob, `Relatorio-Historico-${this.aluno?.matricula}.pdf`);
         this.toastService.show('Relatório PDF gerado com sucesso!', 'success');
       },
@@ -134,7 +127,6 @@ export class AlunoDetalheComponent implements OnInit {
       }
     });
   }
-  // --- FIM DA MUDANÇA ---
 
   onAtendimentoSalvo(): void {
     const modalElement = document.getElementById('modalAtendimento');
@@ -177,5 +169,19 @@ export class AlunoDetalheComponent implements OnInit {
       this.peiListComponent.refresh();
     }
     this.toastService.show('PEI salvo com sucesso!', 'success'); // Feedback
+  }
+
+  onHistoricoSalvo(): void {
+    const modalElement = document.getElementById('modalHistorico');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) {
+        modal.hide();
+      }
+    }
+    if (this.historicoListComponent) {
+      this.historicoListComponent.refresh();
+    }
+    this.toastService.show('Registro acadêmico salvo com sucesso!', 'success');
   }
 }

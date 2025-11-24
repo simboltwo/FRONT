@@ -1,4 +1,3 @@
-// src/app/pages/inicio/inicio.component.ts
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
@@ -9,22 +8,19 @@ import { RouterLink } from '@angular/router';
 import { AlunoListComponent } from '../alunos/aluno-list/aluno-list.component';
 import { AlunoVitrineComponent } from './aluno-vitrine/aluno-vitrine.component';
 
-
 @Component({
-  selector: 'app-inicio', // MUDANÇA
+  selector: 'app-inicio',
   standalone: true,
   imports: [CommonModule, RouterLink, AlunoListComponent, AlunoVitrineComponent],
-  templateUrl: './inicio.component.html', // MUDANÇA
-  styleUrls: ['./inicio.component.scss']  // MUDANÇA
+  templateUrl: './inicio.component.html',
+  styleUrls: ['./inicio.component.scss']
 })
-export class InicioComponent implements OnInit { // MUDANÇA
+export class InicioComponent implements OnInit {
   private relatorioService = inject(RelatorioService);
   private alunoService = inject(AlunoService);
 
-  // O resto da lógica (ngOnInit, observables, funções de gráfico)
-  // permanece exatamente igual. Não precisamos mudar nada aqui.
-
-  protected totalAlunos$!: Observable<number>;
+  protected totalAgendadosHoje$!: Observable<number>;
+  protected totalRealizadosHoje$!: Observable<number>;
   protected totalAgendados$!: Observable<number>;
   protected totalRealizados$!: Observable<number>;
   protected relatorioCursos$!: Observable<RelatorioAlunosPorCursoDTO[]>;
@@ -36,11 +32,14 @@ export class InicioComponent implements OnInit { // MUDANÇA
     'var(--cor-grafico-4)', 'var(--cor-grafico-5)', 'var(--cor-grafico-6)'
   ];
   protected maxCursoCount = 0;
+  private todayISO: string = '';
 
   ngOnInit(): void {
-    this.totalAlunos$ = this.alunoService.findAll().pipe(map(alunos => alunos.length));
-    this.totalAgendados$ = this.relatorioService.getTotalAtendimentosPorStatus('AGENDADO').pipe(map(dto => dto.total));
-    this.totalRealizados$ = this.relatorioService.getTotalAtendimentosPorStatus('REALIZADO').pipe(map(dto => dto.total));
+    this.todayISO = new Date().toISOString().split('T')[0];
+
+
+    this.totalAgendadosHoje$ = this.relatorioService.getTotalAtendimentosPorData(this.todayISO, 'AGENDADO').pipe(map(dto => dto.total));
+    this.totalRealizadosHoje$ = this.relatorioService.getTotalAtendimentosPorData(this.todayISO, 'REALIZADO').pipe(map(dto => dto.total));
 
     this.relatorioCursos$ = this.relatorioService.getAlunosPorCurso().pipe(
       map(data => {

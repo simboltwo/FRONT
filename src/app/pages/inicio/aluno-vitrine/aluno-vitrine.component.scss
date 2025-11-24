@@ -78,3 +78,27 @@
     display: none !important;
   }
 }
+
+// ... (código existente)
+
+/* ==============================================
+ * 3. NOVO: Estilos para o Ícone "Agendado Hoje"
+ * ============================================== */
+.card-img-container {
+    /* O estilo base para .icon-prioridade está em _aluno-card.scss */
+
+    .icon-agendado {
+        /* Sobrescreve a cor para verde (sucesso) */
+        color: var(--cor-sucesso);
+        /* Remove a animação de pulsação */
+        animation: none;
+
+        /* Adiciona um fundo e sombra leves para destacar o ícone */
+        box-shadow: var(--sombra-md);
+
+        /* Aumenta um pouco o ícone para destacar o agendamento */
+        width: 32px;
+        height: 32px;
+        font-size: 1.75rem;
+    }
+}

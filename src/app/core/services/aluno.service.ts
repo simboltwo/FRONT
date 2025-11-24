@@ -6,11 +6,11 @@ import { Aluno, AlunoInsert, AlunoStatusUpdate } from '../models/aluno.model';
 export interface AlunoFilter {
   nome?: string;
   matricula?: string;
-  // --- INÍCIO DA MUDANÇA ---
   cursoIds?: number[];
-  turmaId?: number; // Mantido como singular
+  turmaId?: number;
   diagnosticoIds?: number[];
-  // --- FIM DA MUDANÇA ---
+  atendimentoData?: string;
+  atendimentoStatus?: string;
 }
 
 const API_URL = '/api/alunos';
@@ -25,9 +25,6 @@ export class AlunoService {
   findAll(filters: AlunoFilter = {}): Observable<Aluno[]> {
     let params = new HttpParams();
 
-    // --- INÍCIO DA MUDANÇA ---
-    // Lógica de parâmetros atualizada para aceitar arrays
-
     if (filters.nome) {
       params = params.set('nome', filters.nome);
     }
@@ -38,7 +35,6 @@ export class AlunoService {
       params = params.set('turmaId', filters.turmaId.toString());
     }
 
-    // Para arrays, usamos 'append' em vez de 'set' para cada item
     if (filters.cursoIds && filters.cursoIds.length > 0) {
       filters.cursoIds.forEach(id => {
         params = params.append('cursoId', id.toString());
@@ -49,7 +45,12 @@ export class AlunoService {
         params = params.append('diagnosticoId', id.toString());
       });
     }
-    // --- FIM DA MUDANÇA ---
+    if (filters.atendimentoData) {
+      params = params.set('atendimentoData', filters.atendimentoData);
+    }
+    if (filters.atendimentoStatus) {
+      params = params.set('atendimentoStatus', filters.atendimentoStatus);
+    }
 
     return this.http.get<Aluno[]>(API_URL, { params });
   }
@@ -62,7 +63,6 @@ export class AlunoService {
     return this.http.delete<void>(`${API_URL}/${id}`);
   }
 
-  // --- MÉTODOS ANTIGOS (Mantidos para referência, mas não usados pelo novo form) ---
   create(aluno: AlunoInsert): Observable<Aluno> {
     console.warn('O método "create" está obsoleto. Use "createWithFile".');
     return this.http.post<Aluno>(API_URL, aluno);
@@ -76,21 +76,17 @@ export class AlunoService {
     return this.http.patch<Aluno>(`${API_URL}/${id}/status`, data);
   }
 
-  // --- NOVOS MÉTODOS PARA UPLOAD DE FICHEIRO ---
 
   /**
-   * Cria um novo aluno enviando FormData (DTO + Ficheiro)
-   * @param formData O FormData contendo 'alunoDTO' (JSON) e 'file' (Imagem)
+   * @param formData
    */
   createWithFile(formData: FormData): Observable<Aluno> {
-    // Não definimos Content-Type, o navegador faz isso automaticamente para FormData
     return this.http.post<Aluno>(API_URL, formData);
   }
 
   /**
-   * Atualiza um aluno enviando FormData (DTO + Ficheiro)
-   * @param id O ID do aluno
-   * @param formData O FormData contendo 'alunoDTO' (JSON) e 'file' (Imagem)
+   * @param id
+   * @param formData
    */
   updateWithFile(id: number, formData: FormData): Observable<Aluno> {
     return this.http.put<Aluno>(`${API_URL}/${id}`, formData);

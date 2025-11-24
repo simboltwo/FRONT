@@ -17,36 +17,24 @@
   <div class="stats-bar animate-fadeInUp" style="animation-delay: 0.1s;">
     <div class="container-fluid">
       <div class="row g-4">
-        <div class="col-md-4">
-          <div class="stat-card">
-            <div class="stat-icon icon-alunos">
-              <i class="bi bi-people-fill"></i>
-            </div>
-            <div class="stat-content">
-              <h6 class="stat-title">Total de Alunos Ativos</h6>
-              <span class="stat-value">{{ (totalAlunos$ | async) || 0 }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="stat-card">
+
+        <div class="col-md-6"> <div class="stat-card">
             <div class="stat-icon icon-agendados">
               <i class="bi bi-calendar-check"></i>
             </div>
             <div class="stat-content">
-              <h6 class="stat-title">Atendimentos Agendados</h6>
-              <span class="stat-value">{{ (totalAgendados$ | async) || 0 }}</span>
+              <h6 class="stat-title">Agendados P/ Hoje</h6>
+              <span class="stat-value">{{ (totalAgendadosHoje$ | async) || 0 }}</span>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="stat-card">
+        <div class="col-md-6"> <div class="stat-card">
             <div class="stat-icon icon-realizados">
               <i class="bi bi-check-circle-fill"></i>
             </div>
             <div class="stat-content">
-              <h6 class="stat-title">Atendimentos Realizados</h6>
-              <span class="stat-value">{{ (totalRealizados$ | async) || 0 }}</span>
+              <h6 class="stat-title">Realizados Hoje</h6>
+              <span class="stat-value">{{ (totalRealizadosHoje$ | async) || 0 }}</span>
             </div>
           </div>
         </div>

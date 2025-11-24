@@ -8,8 +8,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UsuarioService } from '../../core/services/api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Usuario } from '../../core/models/usuario.model';
-import { finalize } from 'rxjs';
-import { ToastService } from '../../core/services/toast.service'; // --- INÍCIO DA MUDANÇA ---
+import { finalize } from 'rxjs/operators';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-perfil',

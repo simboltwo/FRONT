@@ -118,13 +118,19 @@ export class RelatorioService {
     });
   }
 
-  /**
-   * NOVO: Baixa o relatório histórico em PDF de um aluno.
-   */
   downloadHistoricoAlunoPDF(alunoId: number): Observable<Blob> {
     return this.http.get(`${API_URL}/relatorios/historico-aluno/${alunoId}/pdf`, {
       responseType: 'blob' // Importante: o Angular tratará a resposta como um arquivo binário
     });
   }
+
+  /**
+   * @param data
+   * @param status
+   */
+  getTotalAtendimentosPorData(data: string, status: 'AGENDADO' | 'REALIZADO'): Observable<RelatorioKpiDTO> {
+    return this.http.get<RelatorioKpiDTO>(`${API_URL}/relatorios/total-atendimentos-por-data`, {
+      params: { data: data, status: status }
+    });
+  }
 }
-// --- FIM DA MUDANÇA ---

@@ -1,8 +1,3 @@
-/*
- * Arquivo: simboltwo/front/FRONT-6ada510ac5875a89a10169e7efd5d09b58529961/src/app/app.routes.ts
- * Descrição: Registra o novo 'ATENDIMENTOS_ROUTES'.
- */
-// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './layout/layout.component';
@@ -31,14 +26,10 @@ export const routes: Routes = [
         path: 'alunos',
         loadChildren: () => import('./pages/alunos.routes').then(m => m.ALUNOS_ROUTES)
       },
-
-      // --- INÍCIO DA MUDANÇA ---
       {
         path: 'atendimentos',
         loadChildren: () => import('./pages/atendimentos.routes').then(m => m.ATENDIMENTOS_ROUTES)
       },
-      // --- FIM DA MUDANÇA ---
-
       {
         path: 'cadastros',
         loadChildren: () => import('./pages/cadastros.routes').then(m => m.CADASTROS_ROUTES)
@@ -55,7 +46,7 @@ export const routes: Routes = [
     ]
   },
   {
-    path: '**', // Rota coringa
+    path: '**',
     redirectTo: ''
   }
 ];

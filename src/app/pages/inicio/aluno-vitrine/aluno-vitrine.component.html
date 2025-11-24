@@ -16,9 +16,9 @@
           <img [src]="aluno.foto || 'https://via.placeholder.com/400x500.png?text=Aluno'"
                class="card-img-top" alt="Foto do Aluno">
 
-          <span *ngIf="aluno.prioridade === 'Alta'" class="icon-prioridade"
-                data-bs-toggle="tooltip" data-bs-placement="top" title="Prioridade Alta">
-            <i class="bi bi-exclamation-circle-fill"></i>
+          <span class="icon-prioridade icon-agendado"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Agendado para Hoje">
+            <i class="bi bi-calendar-check-fill"></i>
           </span>
 
           <div class="card-hover-actions">

@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, tap, catchError, of, map } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { Usuario } from '../models/usuario.model';
 
-// Chave para salvar o TOKEN
 const AUTH_TOKEN_KEY = 'naapi_auth_token';
 const API_URL = '/api';
 
@@ -22,13 +22,18 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
+  private isInitializingSubject = new BehaviorSubject<boolean>(true);
+  public isInitializing$ = this.isInitializingSubject.asObservable();
+
   private currentToken: string | null = null;
 
   constructor() {
     const savedToken = localStorage.getItem(AUTH_TOKEN_KEY);
     if (savedToken) {
       this.currentToken = savedToken;
-      this.validateTokenAndLoadUser();
+      this.validateTokenAndLoadUser(true);
+    } else {
+      this.isInitializingSubject.next(false);
     }
   }
 
@@ -70,15 +75,27 @@ export class AuthService {
     return 'Bearer ' + this.currentToken;
   }
 
-  public validateTokenAndLoadUser(): void {
-    // É público para que o PerfilComponent possa chamá-lo
-    this.http.get<Usuario>(`${API_URL}/usuarios/me`).subscribe({
-      next: (user) => {
-        this.currentUserSubject.next(user);
-      },
-      error: () => {
+  public validateTokenAndLoadUser(isInitialLoad: boolean = false): void {
+    if (this.currentToken) {
+        this.http.get<Usuario>(`${API_URL}/usuarios/me`).pipe(
+            finalize(() => {
+              if (isInitialLoad) {
+                this.isInitializingSubject.next(false);
+              }
+            })
+        ).subscribe({
+          next: (user: Usuario) => {
+            this.currentUserSubject.next(user);
+          },
+          error: () => {
+            this.logoutInternal();
+          }
+        });
+    } else {
         this.logoutInternal();
-      }
-    });
+        if (isInitialLoad) {
+          this.isInitializingSubject.next(false);
+        }
+    }
   }
 }
