@@ -277,5 +277,10 @@
 
 <div class="modal fade" id="modalHistorico" tabindex="-1" aria-labelledby="modalHistoricoLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    </div>
+    <app-historico-form
+      *ngIf="alunoId"
+      [alunoId]="alunoId"
+      (historicoSalvo)="onHistoricoSalvo()">
+    </app-historico-form>
+  </div>
 </div>

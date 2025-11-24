@@ -1,35 +1,28 @@
-// src/app/core/models/usuario.model.ts
-
-// --- INÍCIO DA MUDANÇA: Adicionar Papel ---
-// Baseado em PapelDTO.java
+import { Turma } from './aluno.model';
 export interface Papel {
   id: number;
   authority: string;
 }
-// --- FIM DA MUDANÇA ---
 
-// Baseado em UsuarioDTO.java
 export interface Usuario {
   id: number;
   nome: string;
   email: string;
-  papeis: Papel[]; // Atualizado para usar a interface
+  papeis: Papel[];
+  turmasLecionadas: Turma[];
 }
 
-// --- INÍCIO DA MUDANÇA: Adicionar DTOs de Insert e Update ---
-// Baseado em UsuarioInsertDTO.java
 export interface UsuarioInsert {
   nome: string;
   email: string;
-  senha?: string; // Senha é opcional no formulário, mas obrigatória na API
-  papeis: number[]; // Enviamos apenas os IDs
+  senha?: string;
+  papeis: number[];
 }
 
-// Baseado em UsuarioUpdateDTO.java
 export interface UsuarioUpdate {
   nome: string;
   email: string;
-  papeis: number[]; // Enviamos apenas os IDs
+  papeis: number[];
 }
 
 export interface UsuarioSelfUpdate {
@@ -42,4 +35,3 @@ export interface UsuarioPasswordUpdate {
   novaSenha: string;
   confirmacaoNovaSenha: string;
 }
-// --- FIM DA MUDANÇA ---

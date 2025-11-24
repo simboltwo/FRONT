@@ -5,6 +5,10 @@ import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators } 
 import { Observable, BehaviorSubject, switchMap, tap, finalize, combineLatest, startWith, map } from 'rxjs';
 import { Turma } from '../../../core/models/aluno.model';
 import { TurmaService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service'; // MUDANÇA 1: Importar AuthService
+import { catchError } from 'rxjs/operators'; // MUDANÇA 2: Importar catchError
+import { of } from 'rxjs';
+
 
 @Component({
   selector: 'app-turma-admin',
@@ -17,6 +21,7 @@ export class TurmaAdminComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private turmaService = inject(TurmaService);
+  private authService = inject(AuthService); // MUDANÇA 1: Injetar AuthService
 
   @ViewChild('formCard') private formCard!: ElementRef;
 
@@ -117,14 +122,28 @@ export class TurmaAdminComponent implements OnInit {
       this.errorMessage = null;
 
       this.turmaService.delete(this.selectedTurmaId).pipe(
-        finalize(() => this.isLoading = false)
+        finalize(() => this.isLoading = false),
+        // MUDANÇA 2: Trata o erro 401/Token Expirado
+        catchError(err => {
+            if (err.status === 401) {
+                this.errorMessage = 'Sessão expirada. Redirecionando para login.';
+                this.authService.logout(); // Força o logout
+                return of(null); // Retorna um Observable vazio para não quebrar a subscribe
+            }
+            // Para outros erros (ex: Business Exception 422 - Turma em uso)
+            this.errorMessage = err.error?.message || 'Erro ao excluir. Esta turma pode estar em uso por um aluno.';
+            return of(null);
+        })
       ).subscribe({
-        next: () => {
-          this.clearForm();
-          this.refresh$.next();
+        next: (result) => {
+          if (result !== null) { // Se não foi erro 401
+              this.clearForm();
+              this.refresh$.next();
+          }
         },
         error: (err) => {
-          this.errorMessage = err.error?.message || 'Erro ao excluir. Esta turma pode estar em uso por um aluno.';
+            // Este bloco agora só é acionado se o catchError falhar (o que é raro)
+            this.errorMessage = 'Erro desconhecido ao excluir turma.';
         }
       });
     }

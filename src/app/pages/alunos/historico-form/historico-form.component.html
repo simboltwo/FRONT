@@ -1,0 +1,53 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Novo Registro Acadêmico</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+      <div class="row g-3">
+        <div class="col-md-6 mb-3">
+          <label for="cursoId" class="form-label">Curso *</label>
+          <select id="cursoId" class="form-select" formControlName="cursoId"
+                  [class.is-invalid]="form.get('cursoId')!.invalid && form.get('cursoId')!.touched">
+            <option [ngValue]="null" disabled>Selecione o Curso...</option>
+            <ng-container *ngIf="cursos$ | async as cursos">
+              <option *ngFor="let curso of cursos" [ngValue]="curso.id">{{ curso.nome }}</option>
+            </ng-container>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="turmaId" class="form-label">Turma (Opcional)</label>
+          <select id="turmaId" class="form-select" formControlName="turmaId">
+            <option [ngValue]="null">Selecione a Turma...</option>
+            <ng-container *ngIf="turmas$ | async as turmas">
+              <option *ngFor="let turma of turmas" [ngValue]="turma.id">{{ turma.nome }}</option>
+            </ng-container>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6 mb-3">
+          <label for="dataInicio" class="form-label">Data de Início *</label>
+          <input type="date" class="form-control" id="dataInicio" formControlName="dataInicio"
+                [class.is-invalid]="form.get('dataInicio')!.invalid && form.get('dataInicio')!.touched">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="dataFim" class="form-label">Data de Fim (Deixe vazio para 'Atual')</label>
+          <input type="date" class="form-control" id="dataFim" formControlName="dataFim">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" [disabled]="isLoading">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ isLoading ? 'Salvando...' : 'Salvar Registro' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

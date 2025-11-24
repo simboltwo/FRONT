@@ -12,7 +12,8 @@
 
     <div class="quick-actions-bar">
       <div class="row g-4">
-        <div class="col-md-4">
+
+        <div class="col-md-4" *ngIf="canEditAlunos$ | async">
           <a (click)="goToNewAlunoPage()" class="action-card">
             <div class="icon">
               <i class="bi bi-person-plus-fill"></i>
@@ -23,7 +24,8 @@
             </div>
           </a>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-4" *ngIf="canViewReportsAsStaff$ | async">
           <a routerLink="/relatorios" class="action-card">
             <div class="icon">
               <i class="bi bi-bar-chart-line-fill"></i>
@@ -34,7 +36,8 @@
             </div>
           </a>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-4" *ngIf="isMembroOuCoordenador$ | async">
           <a routerLink="/cadastros" class="action-card">
             <div class="icon">
               <i class="bi bi-gear-fill"></i>
@@ -91,7 +94,8 @@
                   data-bs-toggle="tooltip" data-bs-placement="top" title="Prioridade Alta">
               <i class="bi bi-exclamation-circle-fill"></i>
             </span>
-            <div class="card-hover-actions">
+
+            <div class="card-hover-actions" *ngIf="canEditAlunos$ | async">
               <button class="btn btn-action-icon btn-primary-icon" (click)="editAluno($event, aluno)"
                       data-bs-toggle="tooltip" data-bs-placement="top" title="Editar Aluno">
                 <i class="bi bi-pencil"></i>
@@ -120,7 +124,7 @@
     </div>
   </div>
 
-  <button class="fab-add-button" title="Adicionar Novo Aluno" (click)="goToNewAlunoPage()">
+  <button class="fab-add-button" title="Adicionar Novo Aluno" (click)="goToNewAlunoPage()" *ngIf="canEditAlunos$ | async">
     <i class="bi bi-plus-lg"></i>
   </button>
 

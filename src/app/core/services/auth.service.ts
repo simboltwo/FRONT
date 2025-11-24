@@ -78,14 +78,17 @@ export class AuthService {
   public validateTokenAndLoadUser(isInitialLoad: boolean = false): void {
     if (this.currentToken) {
         this.http.get<Usuario>(`${API_URL}/usuarios/me`).pipe(
-            finalize(() => {
-              if (isInitialLoad) {
-                this.isInitializingSubject.next(false);
-              }
-            })
+          finalize(() => {
+            if (isInitialLoad) {
+              this.isInitializingSubject.next(false);
+            }
+          })
         ).subscribe({
           next: (user: Usuario) => {
             this.currentUserSubject.next(user);
+            if (!isInitialLoad) {
+                this.redirectToLandingPage(user);
+            }
           },
           error: () => {
             this.logoutInternal();
@@ -98,4 +101,16 @@ export class AuthService {
         }
     }
   }
+
+  public isProfessor(user: Usuario | null): boolean {
+    return user?.papeis.some(p => p.authority === 'ROLE_PROFESSOR') || false;
+  }
+
+  public redirectToLandingPage(user: Usuario): void {
+      if (this.isProfessor(user)) {
+        this.router.navigate(['/alunos']);
+      } else {
+        this.router.navigate(['/inicio']);
+      }
+    }
 }

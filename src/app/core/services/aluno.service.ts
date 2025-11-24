@@ -11,6 +11,7 @@ export interface AlunoFilter {
   diagnosticoIds?: number[];
   atendimentoData?: string;
   atendimentoStatus?: string;
+  turmasLecionadasId?: number[];
 }
 
 const API_URL = '/api/alunos';
@@ -50,6 +51,11 @@ export class AlunoService {
     }
     if (filters.atendimentoStatus) {
       params = params.set('atendimentoStatus', filters.atendimentoStatus);
+    }
+    if (filters.turmasLecionadasId && filters.turmasLecionadasId.length > 0) {
+      filters.turmasLecionadasId.forEach(id => {
+        params = params.append('turmasLecionadasId', id.toString());
+      });
     }
 
     return this.http.get<Aluno[]>(API_URL, { params });

@@ -23,12 +23,12 @@
 
       <div class="offcanvas-body">
         <ul class="navbar-nav offcanvas-nav-links d-lg-none">
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="!(isProfessor$ | async)">
             <a class="nav-link" routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeOffcanvas()">
               Início
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="!(isProfessor$ | async)">
             <a class="nav-link" routerLink="/atendimentos" routerLinkActive="active" (click)="closeOffcanvas()">
               Atendimentos
             </a>
@@ -59,9 +59,6 @@
                 <li class="nav-item">
                   <a class="nav-link" routerLink="/cadastros/turmas" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Turmas</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" routerLink="/cadastros/tipos-atendimento" routerLinkActive="active" (click)="closeOffcanvas()">Tipos de Atendimento</a>
-                </li>
                 <li class="nav-item" *ngIf="isCoordenador$ | async">
                   <a class="nav-link" routerLink="/cadastros/usuarios" routerLinkActive="active" (click)="closeOffcanvas()">Gerenciar Usuários</a>
                 </li>
@@ -69,19 +66,20 @@
             </div>
           </li>
 
-          <li class="nav-item" *ngIf="canViewRelatorios$ | async">
+          <li class="nav-item" *ngIf="!(isProfessor$ | async) && (canViewRelatorios$ | async)">
             <a class="nav-link" routerLink="/relatorios" routerLinkActive="active" (click)="closeOffcanvas()">
               Relatórios
             </a>
           </li>
           </ul>
+
         <ul class="navbar-nav ms-lg-4 d-none d-lg-flex">
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="!(isProfessor$ | async)">
             <a class="nav-link" routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
               Início
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="!(isProfessor$ | async)">
             <a class="nav-link" routerLink="/atendimentos" routerLinkActive="active">
               Atendimentos
             </a>
@@ -123,7 +121,7 @@
               </div>
             </div>
           </li>
-          <li class="nav-item" *ngIf="canViewRelatorios$ | async">
+          <li class="nav-item" *ngIf="!(isProfessor$ | async) && (canViewRelatorios$ | async)">
             <a class="nav-link" routerLink="/relatorios" routerLinkActive="active">
               Relatórios
             </a>
